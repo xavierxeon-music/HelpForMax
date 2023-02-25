@@ -17,9 +17,11 @@ public:
    MainWindow();
 
 private slots:
-   void slotOpenPackage();
+   void slotNew();
+   void slotOpen();
    void slotReload();
    void slotSave();
+   void slotAbout();
 
 private:
    void setPackagePath(QString packageDir) override;

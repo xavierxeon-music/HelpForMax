@@ -46,10 +46,12 @@ MainWindow::MainWindow()
    QToolBar* toolBar = addToolBar("Main");
    toolBar->setMovable(false);
 
-   toolBar->addAction(QIcon(":/Open.svg"), "Open", this, &MainWindow::slotOpenPackage);
+   toolBar->addAction(QIcon(":/New.svg"), "New", this, &MainWindow::slotNew);
+   toolBar->addAction(QIcon(":/Open.svg"), "Open", this, &MainWindow::slotOpen);
    toolBar->addAction(QIcon(":/Reload.svg"), "Reload", this, &MainWindow::slotReload);
    QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save", this, &MainWindow::slotSave);
    saveAction->setShortcut(QKeySequence::Save);
+   toolBar->addAction(QIcon(":/About.svg"), "Reload", this, &MainWindow::slotAbout);
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
@@ -62,7 +64,11 @@ MainWindow::MainWindow()
    }
 }
 
-void MainWindow::slotOpenPackage()
+void MainWindow::slotNew()
+{
+}
+
+void MainWindow::slotOpen()
 {
    const QString fileName = QFileDialog::getOpenFileName(this, "package", QString(), "package-info.json");
    if (fileName.isEmpty())
@@ -84,6 +90,10 @@ void MainWindow::slotReload()
 void MainWindow::slotSave()
 {
    savePatchStructures();
+}
+
+void MainWindow::slotAbout()
+{
 }
 
 void MainWindow::setPackagePath(QString packageDir)
