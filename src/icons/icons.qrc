@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Delete.svg</file>
+        <file>MPA.svg</file>
+        <file>New.svg</file>
+        <file>Open.svg</file>
+        <file>Reload.svg</file>
+        <file>Save.svg</file>
+        <file>Message.svg</file>
+    </qresource>
+</RCC>
