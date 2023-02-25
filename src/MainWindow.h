@@ -6,7 +6,7 @@
 #include <Central.h>
 
 class MainWindow : public QMainWindow,
-                   private Central::FunctionHub
+                   public Central
 {
    Q_OBJECT
 

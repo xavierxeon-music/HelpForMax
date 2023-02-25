@@ -1,30 +1,27 @@
-#ifndef HelpPageAttributeH
-#define HelpPageAttributeH
+#ifndef PageAttributeH
+#define PageAttributeH
 
-#include "HelpPageAbstract.h"
-#include "ui_HelpPageAttribute.h"
+#include "PageAbstract.h"
+#include "ui_PageAttribute.h"
 
-#include "HelpDescriptionHighlighter.h"
+#include "DescriptionHighlighter.h"
 
-namespace Help
+namespace Page
 {
-   namespace Page
+   class Attribute : public Abstract, private Ui::Attribute
    {
-      class Attribute : public Abstract, private Ui::Attribute
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Attribute(Persona* persona, const PatchParser::Marker& marker);
+   public:
+      Attribute(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
-      private:
-         void update(const QVariant& data) override;
+   private:
+      void update(const QVariant& data) override;
 
-      private:
-         DescriptionHighlighter* highlighter;
-         QString attributeName;
-      };
-   } // namespace Page
-} // namespace Help
+   private:
+      DescriptionHighlighter* highlighter;
+      QString attributeName;
+   };
+} // namespace Page
 
-#endif // NOT HelpPageAttributeH
+#endif // NOT PageAttributeH

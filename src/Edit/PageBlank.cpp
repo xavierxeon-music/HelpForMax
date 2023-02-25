@@ -1,12 +1,12 @@
-#include "HelpPageBlank.h"
+#include "PageBlank.h"
 
-Help::Page::Blank::Blank(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+Page::Blank::Blank(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
 {
    setupUi(this);
 }
 
-void Help::Page::Blank::update(const QVariant& data)
+void Page::Blank::update(const QVariant& data)
 {
    Q_UNUSED(data)
    // do nothing

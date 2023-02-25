@@ -1,30 +1,27 @@
-#ifndef HelpPageOutputH
-#define HelpPageOutputH
+#ifndef PageOutputH
+#define PageOutputH
 
-#include "HelpPageAbstract.h"
-#include "ui_HelpPageOutput.h"
+#include "PageAbstract.h"
+#include "ui_PageOutput.h"
 
-#include "HelpDescriptionHighlighter.h"
+#include "DescriptionHighlighter.h"
 
-namespace Help
+namespace Page
 {
-   namespace Page
+   class Output : public Abstract, private Ui::Output
    {
-      class Output : public Abstract, private Ui::Output
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Output(Persona* persona, const PatchParser::Marker& marker);
+   public:
+      Output(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
-      private:
-         void update(const QVariant& data) override;
+   private:
+      void update(const QVariant& data) override;
 
-      private:
-         DescriptionHighlighter* highlighter;
-         int outputIndex;
-      };
-   } // namespace Page
-} // namespace Help
+   private:
+      DescriptionHighlighter* highlighter;
+      int outputIndex;
+   };
+} // namespace Page
 
-#endif // NOT HelpPageOutputH
+#endif // NOT PageOutputH

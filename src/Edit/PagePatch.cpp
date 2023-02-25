@@ -1,9 +1,11 @@
-#include "HelpPagePatch.h"
+#include "PagePatch.h"
 
 #include <QButtonGroup>
 
-Help::Page::Patch::Patch(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+#include "MainWindow.h"
+
+Page::Patch::Patch(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , standardMethodGroup(nullptr)
 {
@@ -22,18 +24,18 @@ Help::Page::Patch::Patch(Persona* persona, const PatchParser::Marker& marker)
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 }
 
-void Help::Page::Patch::slotAddStandardMethond(int type)
+void Page::Patch::slotAddStandardMethond(int type)
 {
    qDebug() << __FUNCTION__ << type;
 }
 
-void Help::Page::Patch::update(const QVariant& data)
+void Page::Patch::update(const QVariant& data)
 {
    Q_UNUSED(data)
 
-   keyInfo->setText("patch @ " + persona->getCurrentKey());
-   monitor(metaTagEdit, &persona->parserRef().metaTagList);
-   monitor(digestEdit, &persona->parserRef().patchDigest.text);
-   monitor(descrptionEdit, &persona->parserRef().patchDigest.description);
-   monitor(seeAlsoEdit, &persona->parserRef().seeAlsoList);
+   keyInfo->setText("patch @ " + mainWindow->getCurrentKey());
+   monitor(metaTagEdit, &mainWindow->parserRef().metaTagList);
+   monitor(digestEdit, &mainWindow->parserRef().patchDigest.text);
+   monitor(descrptionEdit, &mainWindow->parserRef().patchDigest.description);
+   monitor(seeAlsoEdit, &mainWindow->parserRef().seeAlsoList);
 }

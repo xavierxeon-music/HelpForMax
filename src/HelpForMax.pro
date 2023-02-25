@@ -35,3 +35,6 @@ SOURCES += \
    PatchParser.cpp \
    SelectModel.cpp \
    SelectView.cpp
+
+RESOURCES += \
+   icons/icons.qrc

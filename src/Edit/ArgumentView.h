@@ -1,5 +1,5 @@
-#ifndef HelpArgumentViewH
-#define HelpArgumentViewH
+#ifndef ArgumentViewH
+#define ArgumentViewH
 
 #include <QStyledItemDelegate>
 #include <QTreeView>
@@ -8,48 +8,44 @@
 
 #include "PatchStructure.h"
 
-namespace Help
+class ArgumentView : public QTreeView
 {
+   Q_OBJECT
 
-   class ArgumentView : public QTreeView
-   {
-      Q_OBJECT
+public:
+   ArgumentView(QWidget* parent);
 
-   public:
-      ArgumentView(QWidget* parent);
+public:
+   void allowNameEdit(bool allow);
+   void clearMonitors();
+   void monitor(PatchStructure::Argument* argument);
 
-   public:
-      void allowNameEdit(bool allow);
-      void clearMonitors();
-      void monitor(PatchStructure::Argument* argument);
+private:
+   friend class TypeDelegate;
 
-   private:
-      friend class TypeDelegate;
+private slots:
+   void slotItemChanged(QStandardItem* item);
 
-   private slots:
-      void slotItemChanged(QStandardItem* item);
+private:
+   QList<PatchStructure::Argument*> argumentList;
+   QStandardItemModel* argumentModel;
+   bool nameEditable;
+};
 
-   private:
-      QList<PatchStructure::Argument*> argumentList;
-      QStandardItemModel* argumentModel;
-      bool nameEditable;
-   };
+class TypeDelegate : public QStyledItemDelegate
+{
+   Q_OBJECT
+public:
+   TypeDelegate(ArgumentView* view);
 
-   class TypeDelegate : public QStyledItemDelegate
-   {
-      Q_OBJECT
-   public:
-      TypeDelegate(ArgumentView* view);
+public:
+   QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+   void setEditorData(QWidget* editor, const QModelIndex& index) const override;
+   void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
+   void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
-   public:
-      QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-      void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-      void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
-      void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+private:
+   ArgumentView* view;
+};
 
-   private:
-      ArgumentView* view;
-   };
-} // namespace Help
-
-#endif // NOT HelpArgumentViewH
+#endif // NOT ArgumentViewH

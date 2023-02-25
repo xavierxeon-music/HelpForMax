@@ -1,40 +1,35 @@
-#ifndef HelpEditWidgetH
-#define HelpEditWidgetH
+#ifndef EditWidgetH
+#define EditWidgetH
 
 #include <QStackedWidget>
 
-#include "HelpPageAbstract.h"
-#include "HelpPatchParser.h"
+#include "Edit/PageAbstract.h"
+#include "PatchParser.h"
 
-namespace Help
+namespace Edit
 {
-   class Persona;
-
-   namespace Edit
+   class Widget : public QStackedWidget,
+                  private FunctionHub
    {
-      class Widget : public QStackedWidget,
-                     private Persona::FunctionHub
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Widget(Persona* persona);
+   public:
+      Widget(MainWindow* mainWindow);
 
-      private:
-         using EditorMap = QMap<PatchParser::Marker, Page::Abstract*>;
+   private:
+      using EditorMap = QMap<PatchParser::Marker, Page::Abstract*>;
 
-      private:
-         template <typename EditorType>
-         void addEditor(const PatchParser::Marker& marker);
+   private:
+      template <typename EditorType>
+      void addEditor(const PatchParser::Marker& marker);
 
-         void patchSelected(QString patchPath, QString key) override;
-         void componentSelected(PatchParser::Marker marker, QVariant data) override;
+      void patchSelected(QString patchPath, QString key) override;
+      void componentSelected(PatchParser::Marker marker, QVariant data) override;
 
-      private:
-         Persona* persona;
-         EditorMap editorMap;
-      };
-   } // namespace Edit
-} // namespace Help
+   private:
+      MainWindow* mainWindow;
+      EditorMap editorMap;
+   };
+} // namespace Edit
 
-#endif // NOT HelpEditWidgetH
+#endif // NOT EditWidgetH

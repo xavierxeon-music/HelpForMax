@@ -1,30 +1,27 @@
-#ifndef HelpPageArgumentH
-#define HelpPageArgumentH
+#ifndef PageArgumentH
+#define PageArgumentH
 
-#include "HelpPageAbstract.h"
-#include "ui_HelpPageArgument.h"
+#include "PageAbstract.h"
+#include "ui_PageArgument.h"
 
-#include "HelpDescriptionHighlighter.h"
+#include "DescriptionHighlighter.h"
 
-namespace Help
+namespace Page
 {
-   namespace Page
+   class Argument : public Abstract, private Ui::Argument
    {
-      class Argument : public Abstract, private Ui::Argument
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Argument(Persona* persona, const PatchParser::Marker& marker);
+   public:
+      Argument(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
-      private:
-         void update(const QVariant& data) override;
+   private:
+      void update(const QVariant& data) override;
 
-      private:
-         DescriptionHighlighter* highlighter;
-         int argumentIndex;
-      };
-   } // namespace Page
-} // namespace Help
+   private:
+      DescriptionHighlighter* highlighter;
+      int argumentIndex;
+   };
+} // namespace Page
 
-#endif // NOT HelpPageArgumentH
+#endif // NOT PageArgumentH

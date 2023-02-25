@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Help::Page::Attribute</class>
- <widget class="QWidget" name="Help::Page::Attribute">
+ <class>Page::Attribute</class>
+ <widget class="QWidget" name="Page::Attribute">
   <property name="geometry">
    <rect>
     <x>0</x>

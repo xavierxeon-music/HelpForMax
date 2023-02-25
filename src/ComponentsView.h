@@ -1,24 +1,21 @@
-#ifndef HelpComponentsViewH
-#define HelpComponentsViewH
+#ifndef ComponentsViewH
+#define ComponentsViewH
 
 #include <AbstractItemTreeView.h>
 
-#include "HelpPersona.h"
+#include <Central.h>
 
-namespace Help
+class ComponentsModel;
+
+class ComponentsView : public Abstract::ItemTreeView,
+                       private FunctionHub
 {
-   class ComponentsModel;
+   Q_OBJECT
+public:
+   ComponentsView(QWidget* parent, ComponentsModel* model);
 
-   class ComponentsView : public Abstract::ItemTreeView,
-                          private Persona::FunctionHub
-   {
-      Q_OBJECT
-   public:
-      ComponentsView(QWidget* parent, ComponentsModel* model);
+private:
+   void clicked(ModelItem* item) override;
+};
 
-   private:
-      void clicked(ModelItem* item) override;
-   };
-} // namespace Help
-
-#endif // NOT HelpComponentsViewH
+#endif // NOT ComponentsViewH

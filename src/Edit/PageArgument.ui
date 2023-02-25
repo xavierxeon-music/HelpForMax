@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Help::Page::Argument</class>
- <widget class="QWidget" name="Help::Page::Argument">
+ <class>Page::Argument</class>
+ <widget class="QWidget" name="Page::Argument">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,7 +34,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="Help::ArgumentView" name="argumentView">
+       <widget class="ArgumentView" name="argumentView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -87,9 +87,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Help::ArgumentView</class>
+   <class>ArgumentView</class>
    <extends>QTreeView</extends>
-   <header>Help/HelpArgumentView.h</header>
+   <header>Edit/ArgumentView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

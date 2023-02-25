@@ -1,28 +1,25 @@
-#ifndef HelpDescriptionHighlighterH
-#define HelpDescriptionHighlighterH
+#ifndef DescriptionHighlighterH
+#define DescriptionHighlighterH
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>
 
-namespace Help
+class DescriptionHighlighter : public QSyntaxHighlighter
 {
-   class DescriptionHighlighter : public QSyntaxHighlighter
-   {
-      Q_OBJECT
+   Q_OBJECT
 
-   public:
-      DescriptionHighlighter(QTextDocument* document);
+public:
+   DescriptionHighlighter(QTextDocument* document);
 
-   protected:
-      void highlightBlock(const QString& text) override;
+protected:
+   void highlightBlock(const QString& text) override;
 
-   private:
-      QTextCharFormat tagFormat;
-      QTextCharFormat contentFormat;
-      QTextCharFormat errorFormat;
-      QRegularExpression tagStartExpression;
-      QRegularExpression tagEndExpression;
-   };
-} // namespace Help
+private:
+   QTextCharFormat tagFormat;
+   QTextCharFormat contentFormat;
+   QTextCharFormat errorFormat;
+   QRegularExpression tagStartExpression;
+   QRegularExpression tagEndExpression;
+};
 
-#endif // NOT HelpDescriptionHighlighterH
+#endif // NOT DescriptionHighlighterH

@@ -12,7 +12,7 @@
 
 MainWindow::MainWindow()
    : QMainWindow(nullptr)
-   , Central::FunctionHub()
+   , Central()
 {
    setWindowTitle("Help For Max");
 
@@ -24,7 +24,7 @@ MainWindow::MainWindow()
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
 
-   callOnAllHubInstances(&Central::FunctionHub::laod);
+   callOnAllHubInstances(&FunctionHub::laod);
 }
 
 void MainWindow::setPackagePath(QString packageDir)
@@ -46,7 +46,7 @@ void MainWindow::closeEvent(QCloseEvent* ce)
    widgetSettings.write("Geometry", saveGeometry());
    widgetSettings.write("State", saveState());
 
-   callOnAllHubInstances(&Central::FunctionHub::save);
+   callOnAllHubInstances(&FunctionHub::save);
 
    ce->accept();
 }

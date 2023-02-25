@@ -1,28 +1,25 @@
-#ifndef HelpSelectViewH
-#define HelpSelectViewH
+#ifndef SelectViewH
+#define SelectViewH
 
-#include "HelpPersona.h"
+#include <Central.h>
 #include <AbstractItemTreeView.h>
 
-namespace Help
+class SelectModel;
+class Persona;
+
+class SelectView : public Abstract::ItemTreeView,
+                   private FunctionHub
 {
-   class SelectModel;
-   class Persona;
+   Q_OBJECT
+public:
+   SelectView(MainWindow* mainWindow, SelectModel* model);
 
-   class SelectView : public Abstract::ItemTreeView,
-                      private Persona::FunctionHub
-   {
-      Q_OBJECT
-   public:
-      SelectView(Persona* persona, SelectModel* model);
+private:
+   void clicked(ModelItem* item) override;
+   void doubleClicked(ModelItem* item) override;
 
-   private:
-      void clicked(ModelItem* item) override;
-      void doubleClicked(ModelItem* item) override;
+private:
+   MainWindow* mainWindow;
+};
 
-   private:
-      Persona* persona;
-   };
-} // namespace Help
-
-#endif // NOT HelpSelectViewH
+#endif // NOT SelectViewH

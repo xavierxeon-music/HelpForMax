@@ -1,23 +1,24 @@
-#include "HelpPageAbstract.h"
+#include "PageAbstract.h"
 
-#include "HelpPersona.h"
+#include <Central.h>
 
-Help::Page::Abstract::Abstract(Persona* persona, const PatchParser::Marker& marker)
-   : QWidget(persona)
-   , Persona::FunctionHub()
-   , Central::FunctionHub()
-   , persona(persona)
+#include <MainWindow.h>
+
+Page::Abstract::Abstract(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : QWidget(mainWindow)
+   , FunctionHub()
+   , mainWindow(mainWindow)
    , editMarker(marker)
    , connectionMap()
    , blocked(false)
 {
 }
 
-Help::Page::Abstract::~Abstract()
+Page::Abstract::~Abstract()
 {
 }
 
-void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
+void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
 {
    auto update = [&, lineEdit, variable]()
    {
@@ -27,7 +28,7 @@ void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
          return;
 
       *variable = newText;
-      Central::FunctionHub::callOnAllHubInstances(&Central::FunctionHub::setModified, true);
+      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -37,7 +38,7 @@ void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
    connectionMap[lineEdit] = connect(lineEdit, &QLineEdit::textChanged, update);
 }
 
-void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
+void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
 {
    auto update = [&, lineEdit, variable]()
    {
@@ -47,7 +48,7 @@ void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
          return;
 
       *variable = newText.split(";");
-      Central::FunctionHub::callOnAllHubInstances(&Central::FunctionHub::setModified, true);
+      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -57,7 +58,7 @@ void Help::Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
    connectionMap[lineEdit] = connect(lineEdit, &QLineEdit::textChanged, update);
 }
 
-void Help::Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
+void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
 {
    auto update = [&, textEdit, variable]()
    {
@@ -67,7 +68,7 @@ void Help::Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
          return;
 
       *variable = newText;
-      Central::FunctionHub::callOnAllHubInstances(&Central::FunctionHub::setModified, true);
+      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(textEdit))
@@ -77,7 +78,7 @@ void Help::Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
    connectionMap[textEdit] = connect(textEdit, &QPlainTextEdit::textChanged, update);
 }
 
-void Help::Page::Abstract::componentSelected(PatchParser::Marker marker, QVariant data)
+void Page::Abstract::componentSelected(PatchParser::Marker marker, QVariant data)
 {
    if (editMarker != marker)
       return;

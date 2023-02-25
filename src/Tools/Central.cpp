@@ -2,26 +2,51 @@
 
 #include <Settings.h>
 
-void Central::FunctionHub::setPackagePath(QString packageDir)
+// function hub
+
+void FunctionHub::setPackagePath(QString packageDir)
 {
    // do nothing
    Q_UNUSED(packageDir);
 }
 
-void Central::FunctionHub::setModified(bool enabled)
+void FunctionHub::setModified(bool enabled)
 {
    // do nothing
    Q_UNUSED(enabled);
 }
 
-void Central::FunctionHub::laod()
+void FunctionHub::patchSelected(QString patchPath, QString key)
+{
+   // do nothing
+   Q_UNUSED(patchPath)
+   Q_UNUSED(key)
+}
+
+void FunctionHub::componentSelected(PatchParser::Marker marker, QVariant data)
+{
+   // do nothing
+   Q_UNUSED(marker)
+   Q_UNUSED(data)
+}
+
+void FunctionHub::laod()
 {
    // do nothing
 }
 
-void Central::FunctionHub::save()
+void FunctionHub::save()
 {
    // do nothing
+}
+
+// central
+
+Central::Central()
+   : FunctionHub()
+   , currentKey()
+   , parserMap()
+{
 }
 
 QString Central::getPackagePath()
@@ -40,4 +65,35 @@ QString Central::getAuthor()
 QString Central::getPackageName()
 {
    return "WaMaxPackage";
+}
+
+const QString& Central::getCurrentKey() const
+{
+   return currentKey;
+}
+
+PatchParser Central::parser() const
+{
+   return parserMap[currentKey];
+}
+
+PatchParser& Central::parserRef()
+{
+   return parserMap[currentKey];
+}
+
+void Central::buildPatchStructure(QString patchPath, const QString& key)
+{
+   currentKey = key;
+
+   if (!parserMap.contains(key))
+      parserMap[key] = PatchParser(patchPath);
+}
+
+void Central::savePatchStructures()
+{
+   for (PatchParser& parser : parserMap)
+      parser.writeXML();
+
+   callOnAllHubInstances(&FunctionHub::setModified, false);
 }

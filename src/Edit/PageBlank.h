@@ -1,25 +1,22 @@
-#ifndef HelpPageBlankH
-#define HelpPageBlankH
+#ifndef PageBlankH
+#define PageBlankH
 
-#include "HelpPageAbstract.h"
-#include "ui_HelpPageBlank.h"
+#include "PageAbstract.h"
+#include "ui_PageBlank.h"
 
-namespace Help
+namespace Page
 {
-   namespace Page
+   class Blank : public Abstract, private Ui::Blank
    {
-      class Blank : public Abstract, private Ui::Blank
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Blank(Persona* persona, const PatchParser::Marker& marker);
+   public:
+      Blank(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
-      private:
-         void update(const QVariant& data) override;
-      };
+   private:
+      void update(const QVariant& data) override;
+   };
 
-   } // namespace Page
-} // namespace Help
+} // namespace Page
 
 #endif // HelpPageBlankH

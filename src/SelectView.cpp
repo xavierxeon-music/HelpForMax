@@ -1,20 +1,21 @@
-#include "HelpSelectView.h"
+#include "SelectView.h"
 
 #include <QApplication>
 #include <QDesktopServices>
 #include <QUrl>
 
-#include "HelpSelectModel.h"
+#include "MainWindow.h"
+#include "SelectModel.h"
 
-Help::SelectView::SelectView(Persona* persona, SelectModel* model)
-   : Abstract::ItemTreeView(persona, model)
-   , Persona::FunctionHub()
-   , persona(persona)
+SelectView::SelectView(MainWindow* mainWindow, SelectModel* model)
+   : Abstract::ItemTreeView(mainWindow, model)
+   , FunctionHub()
+   , mainWindow(mainWindow)
 {
    setHeaderHidden(true);
 }
 
-void Help::SelectView::clicked(ModelItem* item)
+void SelectView::clicked(ModelItem* item)
 {
    const QVariant data = item->data(SelectModel::RolePatchPath);
    if (!data.isValid())
@@ -24,13 +25,13 @@ void Help::SelectView::clicked(ModelItem* item)
    const QString key = item->data(SelectModel::RoleKey).toString();
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
-   persona->buildPatchStructure(patchPath, key);
+   mainWindow->buildPatchStructure(patchPath, key);
    QApplication::restoreOverrideCursor();
 
    callOnAllHubInstances(&SelectView::patchSelected, patchPath, key);
 }
 
-void Help::SelectView::doubleClicked(ModelItem* item)
+void SelectView::doubleClicked(ModelItem* item)
 {
    const QVariant data = item->data(SelectModel::RolePatchPath);
    if (!data.isValid())

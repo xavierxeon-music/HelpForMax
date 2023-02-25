@@ -1,16 +1,16 @@
-#include "HelpComponentsView.h"
+#include "ComponentsView.h"
 
-#include "HelpComponentsModel.h"
-#include "HelpPatchParser.h"
+#include "ComponentsModel.h"
+#include "PatchParser.h"
 
-Help::ComponentsView::ComponentsView(QWidget* parent, ComponentsModel* model)
+ComponentsView::ComponentsView(QWidget* parent, ComponentsModel* model)
    : Abstract::ItemTreeView(parent, model)
-   , Persona::FunctionHub()
+   , FunctionHub()
 {
    setHeaderHidden(true);
 }
 
-void Help::ComponentsView::clicked(ModelItem* item)
+void ComponentsView::clicked(ModelItem* item)
 {
    const QVariant markerVariant = item->data(PatchParser::RoleMarker);
    if (!markerVariant.isValid())

@@ -1,16 +1,16 @@
-#include "HelpSelectModel.h"
+#include "SelectModel.h"
 
 #include <QDir>
 
 #include <ModelItem.h>
 
-Help::SelectModel::SelectModel(QObject* parent)
+SelectModel::SelectModel(QObject* parent)
    : QStandardItemModel(parent)
-   , Central::FunctionHub()
+   , FunctionHub()
 {
 }
 
-void Help::SelectModel::setPackagePath(QString packageDir)
+void SelectModel::setPackagePath(QString packageDir)
 {
    beginResetModel();
 
@@ -53,7 +53,7 @@ void Help::SelectModel::setPackagePath(QString packageDir)
    endResetModel();
 }
 
-void Help::SelectModel::recursiveSearch(const QString& path, InfoMap& infoMap)
+void SelectModel::recursiveSearch(const QString& path, InfoMap& infoMap)
 {
    const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files | QDir::Dirs;
    for (QFileInfo fileInfo : QDir(path).entryInfoList(filters))

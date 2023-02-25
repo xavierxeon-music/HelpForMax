@@ -1,7 +1,9 @@
-#include "HelpPageAttribute.h"
+#include "PageAttribute.h"
 
-Help::Page::Attribute::Attribute(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+#include "MainWindow.h"
+
+Page::Attribute::Attribute(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , attributeName()
 {
@@ -11,11 +13,11 @@ Help::Page::Attribute::Attribute(Persona* persona, const PatchParser::Marker& ma
    keyInfo->setText("ATTRIBUTE");
 }
 
-void Help::Page::Attribute::update(const QVariant& data)
+void Page::Attribute::update(const QVariant& data)
 {
    attributeName = data.toString();
-   PatchStructure::Attribute& attribute = persona->parserRef().attributeMap[attributeName];
-   keyInfo->setText("attribute " + attributeName + " @ " + persona->getCurrentKey());
+   PatchStructure::Attribute& attribute = mainWindow->parserRef().attributeMap[attributeName];
+   keyInfo->setText("attribute " + attributeName + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &attribute.digest.text);
    monitor(descrptionEdit, &attribute.digest.description);

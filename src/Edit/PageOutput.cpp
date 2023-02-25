@@ -1,7 +1,9 @@
-#include "HelpPageOutput.h"
+#include "PageOutput.h"
 
-Help::Page::Output::Output(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+#include "MainWindow.h"
+
+Page::Output::Output(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , outputIndex()
 {
@@ -11,11 +13,11 @@ Help::Page::Output::Output(Persona* persona, const PatchParser::Marker& marker)
    keyInfo->setText("OUTPUT");
 }
 
-void Help::Page::Output::update(const QVariant& data)
+void Page::Output::update(const QVariant& data)
 {
    outputIndex = data.toInt();
-   PatchStructure::Output& output = persona->parserRef().outputMap[outputIndex];
-   keyInfo->setText("output " + QString::number(outputIndex) + " @ " + persona->getCurrentKey());
+   PatchStructure::Output& output = mainWindow->parserRef().outputMap[outputIndex];
+   keyInfo->setText("output " + QString::number(outputIndex) + " @ " + mainWindow->getCurrentKey());
 
    monitor(descrptionEdit, &output.digest.description);
 }

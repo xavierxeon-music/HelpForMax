@@ -1,36 +1,33 @@
-#ifndef HelpSelectModelH
-#define HelpSelectModelH
+#ifndef SelectModelH
+#define SelectModelH
 
 #include <Central.h>
 #include <QStandardItemModel>
 
-#include "HelpPersona.h"
+#include <Central.h>
 #include <QFileInfo>
 
-namespace Help
+class SelectModel : public QStandardItemModel,
+                    private FunctionHub
 {
-   class SelectModel : public QStandardItemModel,
-                       private Central::FunctionHub
+   Q_OBJECT
+
+public:
+   enum Role
    {
-      Q_OBJECT
-
-   public:
-      enum Role
-      {
-         RolePatchPath = Qt::UserRole + 1,
-         RoleKey = Qt::UserRole + 2
-      };
-
-   public:
-      SelectModel(QObject* parent);
-
-   private:
-      using InfoMap = QMap<QString, QFileInfo>;
-
-   private:
-      void setPackagePath(QString packageDir) override;
-      void recursiveSearch(const QString& path, InfoMap& infoMap);
+      RolePatchPath = Qt::UserRole + 1,
+      RoleKey = Qt::UserRole + 2
    };
-} // namespace Help
 
-#endif // NOT HelpSelectModelH
+public:
+   SelectModel(QObject* parent);
+
+private:
+   using InfoMap = QMap<QString, QFileInfo>;
+
+private:
+   void setPackagePath(QString packageDir) override;
+   void recursiveSearch(const QString& path, InfoMap& infoMap);
+};
+
+#endif // NOT SelectModelH

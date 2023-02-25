@@ -1,5 +1,5 @@
-#ifndef HelpPageAbstractH
-#define HelpPageAbstractH
+#ifndef PageAbstractH
+#define PageAbstractH
 
 #include <QWidget>
 
@@ -8,46 +8,40 @@
 
 #include <Central.h>
 
-#include "HelpPatchParser.h"
-#include "HelpPersona.h"
+#include "PatchParser.h"
+#include <Central.h>
 
-namespace Help
+namespace Page
 {
-   class Persona;
-
-   namespace Page
+   class Abstract : public QWidget,
+                    protected FunctionHub
    {
-      class Abstract : public QWidget,
-                       protected Persona::FunctionHub,
-                       private Central::FunctionHub
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Abstract(Persona* persona, const PatchParser::Marker& marker);
-         virtual ~Abstract();
+   public:
+      Abstract(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      virtual ~Abstract();
 
-      protected:
-         virtual void update(const QVariant& data) = 0;
-         void monitor(QLineEdit* lineEdit, QString* variable);
-         void monitor(QLineEdit* lineEdit, QStringList* variable);
-         void monitor(QPlainTextEdit* textEdit, QString* variable);
+   protected:
+      virtual void update(const QVariant& data) = 0;
+      void monitor(QLineEdit* lineEdit, QString* variable);
+      void monitor(QLineEdit* lineEdit, QStringList* variable);
+      void monitor(QPlainTextEdit* textEdit, QString* variable);
 
-      protected:
-         Persona* persona;
-         const PatchParser::Marker editMarker;
+   protected:
+      MainWindow* mainWindow;
+      const PatchParser::Marker editMarker;
 
-      private:
-         using ConnectionMap = QMap<QWidget*, QMetaObject::Connection>;
+   private:
+      using ConnectionMap = QMap<QWidget*, QMetaObject::Connection>;
 
-      private:
-         void componentSelected(PatchParser::Marker marker, QVariant data) override final;
+   private:
+      void componentSelected(PatchParser::Marker marker, QVariant data) override final;
 
-      private:
-         ConnectionMap connectionMap;
-         bool blocked;
-      };
-   } // namespace Page
-} // namespace Help
+   private:
+      ConnectionMap connectionMap;
+      bool blocked;
+   };
+} // namespace Page
 
-#endif // NOT HelpPageAbstractH
+#endif // NOT PageAbstractH

@@ -1,10 +1,10 @@
-#include "HelpArgumentView.h"
+#include "ArgumentView.h"
 
 #include <QComboBox>
 
 // view
 
-Help::ArgumentView::ArgumentView(QWidget* parent)
+ArgumentView::ArgumentView(QWidget* parent)
    : QTreeView(parent)
    , argumentList()
    , argumentModel(nullptr)
@@ -19,19 +19,19 @@ Help::ArgumentView::ArgumentView(QWidget* parent)
    setItemDelegateForColumn(2, new TypeDelegate(this));
 }
 
-void Help::ArgumentView::allowNameEdit(bool allow)
+void ArgumentView::allowNameEdit(bool allow)
 {
    nameEditable = allow;
 }
 
-void Help::ArgumentView::clearMonitors()
+void ArgumentView::clearMonitors()
 {
    argumentList.clear();
    argumentModel->clear();
    argumentModel->setHorizontalHeaderLabels({"O", "Name", "Type"});
 }
 
-void Help::ArgumentView::monitor(PatchStructure::Argument* argument)
+void ArgumentView::monitor(PatchStructure::Argument* argument)
 {
    QStandardItem* optionalItem = new QStandardItem();
    optionalItem->setCheckable(true);
@@ -49,20 +49,20 @@ void Help::ArgumentView::monitor(PatchStructure::Argument* argument)
    resizeColumnToContents(1);
 }
 
-void Help::ArgumentView::slotItemChanged(QStandardItem* item)
+void ArgumentView::slotItemChanged(QStandardItem* item)
 {
    qDebug() << __FUNCTION__ << item->column() << item->text();
 }
 
 // delegate
 
-Help::TypeDelegate::TypeDelegate(ArgumentView* view)
+TypeDelegate::TypeDelegate(ArgumentView* view)
    : QStyledItemDelegate(view)
    , view(view)
 {
 }
 
-QWidget* Help::TypeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+QWidget* TypeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
    Q_UNUSED(option)
    Q_UNUSED(index)
@@ -88,7 +88,7 @@ QWidget* Help::TypeDelegate::createEditor(QWidget* parent, const QStyleOptionVie
    return comboBox;
 }
 
-void Help::TypeDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
+void TypeDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
    QComboBox* comboBox = qobject_cast<QComboBox*>(editor);
 
@@ -97,7 +97,7 @@ void Help::TypeDelegate::setEditorData(QWidget* editor, const QModelIndex& index
    comboBox->setCurrentIndex(typeIndex);
 }
 
-void Help::TypeDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+void TypeDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
    QComboBox* comboBox = qobject_cast<QComboBox*>(editor);
    const QString typeText = comboBox->currentText();
@@ -105,7 +105,7 @@ void Help::TypeDelegate::setModelData(QWidget* editor, QAbstractItemModel* model
    model->setData(index, comboBox->currentText(), Qt::DisplayRole);
 }
 
-void Help::TypeDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void TypeDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
    Q_UNUSED(index)
 

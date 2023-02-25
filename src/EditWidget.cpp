@@ -1,18 +1,20 @@
-#include "HelpEditWidget.h"
+#include "EditWidget.h"
 
-#include "HelpPersona.h"
+#include <Central.h>
 
-#include "HelpPageArgument.h"
-#include "HelpPageAttribute.h"
-#include "HelpPageBlank.h"
-#include "HelpPageMessage.h"
-#include "HelpPageOutput.h"
-#include "HelpPagePatch.h"
+#include "MainWindow.h"
 
-Help::Edit::Widget::Widget(Persona* persona)
-   : QStackedWidget(persona)
-   , Persona::FunctionHub()
-   , persona(persona)
+#include "Edit/PageArgument.h"
+#include "Edit/PageAttribute.h"
+#include "Edit/PageBlank.h"
+#include "Edit/PageMessage.h"
+#include "Edit/PageOutput.h"
+#include "Edit/PagePatch.h"
+
+Edit::Widget::Widget(MainWindow* mainWindow)
+   : QStackedWidget(mainWindow)
+   , FunctionHub()
+   , mainWindow(mainWindow)
    , editorMap()
 {
    addEditor<Page::Blank>(PatchParser::Marker::Undefined);
@@ -24,15 +26,15 @@ Help::Edit::Widget::Widget(Persona* persona)
 }
 
 template <typename EditorType>
-void Help::Edit::Widget::addEditor(const PatchParser::Marker& marker)
+void Edit::Widget::addEditor(const PatchParser::Marker& marker)
 {
-   Page::Abstract* abstract = new EditorType(persona, marker);
+   Page::Abstract* abstract = new EditorType(mainWindow, marker);
    addWidget(abstract);
 
    editorMap[marker] = abstract;
 }
 
-void Help::Edit::Widget::patchSelected(QString patchPath, QString key)
+void Edit::Widget::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(patchPath)
    Q_UNUSED(key)
@@ -40,7 +42,7 @@ void Help::Edit::Widget::patchSelected(QString patchPath, QString key)
    setCurrentWidget(editorMap.value(PatchParser::Marker::Undefined));
 }
 
-void Help::Edit::Widget::componentSelected(PatchParser::Marker marker, QVariant data)
+void Edit::Widget::componentSelected(PatchParser::Marker marker, QVariant data)
 {
    Q_UNUSED(data);
 

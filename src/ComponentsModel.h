@@ -1,26 +1,23 @@
-#ifndef HelpComponentsModelH
-#define HelpComponentsModelH
+#ifndef ComponentsModelH
+#define ComponentsModelH
 
-#include "HelpPersona.h"
+#include <Central.h>
 #include <QStandardItemModel>
 
-namespace Help
+class ComponentsModel : public QStandardItemModel,
+                        private FunctionHub
 {
-   class ComponentsModel : public QStandardItemModel,
-                           private Persona::FunctionHub
-   {
-      Q_OBJECT
+   Q_OBJECT
 
-   public:
-      ComponentsModel(Persona* persona);
+public:
+   ComponentsModel(MainWindow* mainWindow);
 
-   private:
-      void patchSelected(QString patchPath, QString key) override;
-      void rebuild();
+private:
+   void patchSelected(QString patchPath, QString key) override;
+   void rebuild();
 
-   private:
-      Persona* persona;
-   };
-} // namespace Help
+private:
+   MainWindow* mainWindow;
+};
 
-#endif // NOT HelpComponentsModelH
+#endif // NOT ComponentsModelH

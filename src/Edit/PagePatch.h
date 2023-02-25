@@ -1,33 +1,30 @@
-#ifndef HelpPagePatchH
-#define HelpPagePatchH
+#ifndef PagePatchH
+#define PagePatchH
 
-#include "HelpPageAbstract.h"
-#include "ui_HelpPagePatch.h"
+#include "PageAbstract.h"
+#include "ui_PagePatch.h"
 
-#include "HelpDescriptionHighlighter.h"
+#include "DescriptionHighlighter.h"
 
-namespace Help
+namespace Page
 {
-   namespace Page
+   class Patch : public Abstract, private Ui::Patch
    {
-      class Patch : public Abstract, private Ui::Patch
-      {
-         Q_OBJECT
+      Q_OBJECT
 
-      public:
-         Patch(Persona* persona, const PatchParser::Marker& marker);
+   public:
+      Patch(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
-      private slots:
-         void slotAddStandardMethond(int type);
+   private slots:
+      void slotAddStandardMethond(int type);
 
-      private:
-         void update(const QVariant& data) override;
+   private:
+      void update(const QVariant& data) override;
 
-      private:
-         DescriptionHighlighter* highlighter;
-         QButtonGroup* standardMethodGroup;
-      };
-   } // namespace Page
-} // namespace Help
+   private:
+      DescriptionHighlighter* highlighter;
+      QButtonGroup* standardMethodGroup;
+   };
+} // namespace Page
 
-#endif // NOT HelpPagePatchH
+#endif // NOT PagePatchH

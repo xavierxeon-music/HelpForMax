@@ -1,7 +1,9 @@
-#include "HelpPageArgument.h"
+#include "PageArgument.h"
 
-Help::Page::Argument::Argument(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+#include "MainWindow.h"
+
+Page::Argument::Argument(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , argumentIndex()
 {
@@ -12,11 +14,11 @@ Help::Page::Argument::Argument(Persona* persona, const PatchParser::Marker& mark
    argumentView->allowNameEdit(true);
 }
 
-void Help::Page::Argument::update(const QVariant& data)
+void Page::Argument::update(const QVariant& data)
 {
    argumentIndex = data.toInt();
-   PatchStructure::Argument& argument = persona->parserRef().argumentList[argumentIndex];
-   keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + persona->getCurrentKey());
+   PatchStructure::Argument& argument = mainWindow->parserRef().argumentList[argumentIndex];
+   keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &argument.digest.text);
    monitor(descrptionEdit, &argument.digest.description);

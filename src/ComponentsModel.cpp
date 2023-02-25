@@ -1,15 +1,17 @@
-#include "HelpComponentsModel.h"
+#include "ComponentsModel.h"
 
 #include <ModelItem.h>
 
-Help::ComponentsModel::ComponentsModel(Persona* persona)
-   : QStandardItemModel(persona)
-   , Persona::FunctionHub()
-   , persona(persona)
+#include "MainWindow.h"
+
+ComponentsModel::ComponentsModel(MainWindow* mainWindow)
+   : QStandardItemModel(mainWindow)
+   , FunctionHub()
+   , mainWindow(mainWindow)
 {
 }
 
-void Help::ComponentsModel::patchSelected(QString patchPath, QString key)
+void ComponentsModel::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(patchPath)
    Q_UNUSED(key)
@@ -17,13 +19,13 @@ void Help::ComponentsModel::patchSelected(QString patchPath, QString key)
    rebuild();
 }
 
-void Help::ComponentsModel::rebuild()
+void ComponentsModel::rebuild()
 {
    beginResetModel();
 
    clear();
 
-   const PatchStructure structure = persona->parser();
+   const PatchStructure structure = mainWindow->parser();
 
    auto addMarker = [](const PatchParser::Marker& marker, const QVariant& data, ModelItem* item1, ModelItem* item2)
    {

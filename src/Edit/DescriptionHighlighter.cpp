@@ -1,8 +1,8 @@
-#include "HelpDescriptionHighlighter.h"
+#include "DescriptionHighlighter.h"
 
-#include "HelpPatchParser.h"
+#include "PatchParser.h"
 
-Help::DescriptionHighlighter::DescriptionHighlighter(QTextDocument* document)
+DescriptionHighlighter::DescriptionHighlighter(QTextDocument* document)
    : QSyntaxHighlighter(document)
    , tagFormat()
    , contentFormat()
@@ -34,7 +34,7 @@ Help::DescriptionHighlighter::DescriptionHighlighter(QTextDocument* document)
    tagEndExpression.setPattern(patternEnd);
 }
 
-void Help::DescriptionHighlighter::highlightBlock(const QString& text)
+void DescriptionHighlighter::highlightBlock(const QString& text)
 {
    using ContentMap = QMap<int, bool>;
    ContentMap contentMap;

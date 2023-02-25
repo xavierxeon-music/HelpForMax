@@ -1,7 +1,9 @@
-#include "HelpPageMessage.h"
+#include "PageMessage.h"
 
-Help::Page::Message::Message(Persona* persona, const PatchParser::Marker& marker)
-   : Abstract(persona, marker)
+#include "MainWindow.h"
+
+Page::Message::Message(MainWindow* mainWindow, const PatchParser::Marker& marker)
+   : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , messageName()
 {
@@ -11,11 +13,11 @@ Help::Page::Message::Message(Persona* persona, const PatchParser::Marker& marker
    keyInfo->setText("MESSAGE");
 }
 
-void Help::Page::Message::update(const QVariant& data)
+void Page::Message::update(const QVariant& data)
 {
    messageName = data.toString();
-   PatchStructure::Message& message = persona->parserRef().messageFreeMap[messageName];
-   keyInfo->setText("messsage " + messageName + " @ " + persona->getCurrentKey());
+   PatchStructure::Message& message = mainWindow->parserRef().messageFreeMap[messageName];
+   keyInfo->setText("messsage " + messageName + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &message.digest.text);
    monitor(descrptionEdit, &message.digest.description);
