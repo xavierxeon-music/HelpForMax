@@ -1,20 +1,29 @@
 #ifndef ModelItemH
 #define ModelItemH
 
+#include <QSortFilterProxyModel>
 #include <QStandardItem>
 
 class ModelItem : public QStandardItem
 {
-public:
-   static const int VisibleRole;
-
 public:
    ModelItem();
    ModelItem(const QString& text);
    ModelItem(const QIcon& icon, const QString& text);
 
 public:
-   void setVisble(bool enabled);
+   void setVisible(bool enabled);
+};
+
+class FilteredModel : public QSortFilterProxyModel
+{
+   Q_OBJECT
+
+public:
+   FilteredModel(QObject* parent);
+
+private:
+   bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 };
 
 #endif // NOT ModelItemH

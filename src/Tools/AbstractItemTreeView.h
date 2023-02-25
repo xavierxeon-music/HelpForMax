@@ -3,6 +3,7 @@
 
 #include <QTreeView>
 
+#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 
 #include <ModelItem.h>
@@ -13,7 +14,7 @@ namespace Abstract
    {
       Q_OBJECT
    public:
-      ItemTreeView(QWidget* parent, QStandardItemModel* model);
+      ItemTreeView(QWidget* parent, QStandardItemModel* model, bool createFilterMdoel = false);
 
    public:
       template <typename ItemModel>
@@ -22,6 +23,7 @@ namespace Abstract
    protected:
       virtual void clicked(ModelItem* item);
       virtual void doubleClicked(ModelItem* item);
+      void updateFilter();
 
    private slots:
       void slotClicked(const QModelIndex& index);
@@ -29,7 +31,11 @@ namespace Abstract
       void slotResizeAllColumns();
 
    private:
+      QModelIndex modelIndex(const QModelIndex& index) const;
+
+   private:
       QStandardItemModel* model;
+      FilteredModel* filter;
    };
 
 } // namespace Abstract

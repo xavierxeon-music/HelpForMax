@@ -1,6 +1,8 @@
 #include "ModelItem.h"
 
-const int ModelItem::VisibleRole = Qt::UserRole + 100;
+static constexpr int VisibleRole = Qt::UserRole + 100;
+
+// ModelItem
 
 ModelItem::ModelItem()
    : ModelItem(QIcon(), QString())
@@ -16,10 +18,28 @@ ModelItem::ModelItem(const QIcon& icon, const QString& text)
    : QStandardItem(icon, text)
 {
    setEditable(false);
-   setVisble(true);
+   setVisible(true);
 }
 
-void ModelItem::setVisble(bool enabled)
+void ModelItem::setVisible(bool enabled)
 {
-   setData(VisibleRole, enabled);
+   setData(enabled, VisibleRole);
+}
+
+// FilteredModel
+
+FilteredModel::FilteredModel(QObject* parent)
+   : QSortFilterProxyModel(parent)
+{
+}
+
+bool FilteredModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+   QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+   QVariant visibleData = sourceModel()->data(sourceIndex, VisibleRole);
+   if (visibleData.isNull())
+      return true;
+
+   const bool visible = visibleData.toBool();
+   return visible;
 }

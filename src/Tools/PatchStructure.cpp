@@ -1,10 +1,10 @@
 #include "PatchStructure.h"
 
 const QMap<PatchStructure::Type, QString> PatchStructure::typeNameMap = {{Type::Unkown, "???"}, // must be max names!
-                                                                         {Type::Symbol, "symbol"},
-                                                                         {Type::Float, "float"},
-                                                                         {Type::Integer, "int"},
                                                                          {Type::Bang, "bang"},
+                                                                         {Type::Integer, "int"},
+                                                                         {Type::Float, "float"},
+                                                                         {Type::Symbol, "symbol"},
                                                                          {Type::List, "list"},
                                                                          {Type::Signal, "signal"}};
 

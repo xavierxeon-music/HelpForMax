@@ -24,9 +24,15 @@ Page::Patch::Patch(MainWindow* mainWindow, const PatchParser::Marker& marker)
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 }
 
-void Page::Patch::slotAddStandardMethond(int type)
+void Page::Patch::slotAddStandardMethond(int typeId)
 {
-   qDebug() << __FUNCTION__ << type;
+   const PatchStructure::Type type = static_cast<PatchStructure::Type>(typeId);
+   if (mainWindow->parser().messageStandardMap.contains(type))
+      return;
+
+   mainWindow->parserRef().messageStandardMap[type] = PatchStructure::Message{};
+   qDebug() << typeId << PatchStructure::typeName(type);
+   callOnOtherHubInstances(&Central::setModified, true);
 }
 
 void Page::Patch::update(const QVariant& data)

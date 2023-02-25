@@ -2,7 +2,7 @@
 #define ComponentsModelH
 
 #include <Central.h>
-#include <QSortFilterProxyModel>
+
 #include <QStandardItemModel>
 
 class ComponentsModel : public QStandardItemModel,
@@ -23,17 +23,6 @@ private:
 
 private:
    MainWindow* mainWindow;
-};
-
-class ComponentsModel::Filtered : public QSortFilterProxyModel
-{
-   Q_OBJECT
-
-public:
-   Filtered(MainWindow* mainWindow);
-
-private:
-   ComponentsModel* internal;
 };
 
 #endif // NOT ComponentsModelH

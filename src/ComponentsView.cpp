@@ -4,7 +4,7 @@
 #include "PatchParser.h"
 
 ComponentsView::ComponentsView(QWidget* parent, ComponentsModel* model)
-   : Abstract::ItemTreeView(parent, model)
+   : Abstract::ItemTreeView(parent, model, true)
    , FunctionHub()
 {
    setHeaderHidden(true);

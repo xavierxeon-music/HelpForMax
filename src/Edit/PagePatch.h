@@ -16,7 +16,7 @@ namespace Page
       Patch(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
    private slots:
-      void slotAddStandardMethond(int type);
+      void slotAddStandardMethond(int typeId);
 
    private:
       void update(const QVariant& data) override;
