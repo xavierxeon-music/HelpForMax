@@ -18,7 +18,6 @@ private slots:
    void slotOpen();
    void slotReload();
    void slotSave();
-   void slotAbout();
 
 private:
    void setPackagePath(QString packageDir) override;

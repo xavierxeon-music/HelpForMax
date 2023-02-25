@@ -40,7 +40,6 @@ public:
 
 private:
    using TagMap = QMap<QString, QString>;
-   friend class Persona;
 
 private:
    QDomElement createSubElement(QDomElement parent, const QString& name, const QString& text = QString(), const TagMap& tagMap = TagMap());

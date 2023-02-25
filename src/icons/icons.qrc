@@ -5,6 +5,6 @@
         <file>Open.svg</file>
         <file>Reload.svg</file>
         <file>Save.svg</file>
-        <file>About.svg</file>
+        <file>External.svg</file>
     </qresource>
 </RCC>

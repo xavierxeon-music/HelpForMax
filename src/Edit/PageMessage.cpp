@@ -21,4 +21,8 @@ void Page::Message::update(const QVariant& data)
 
    monitor(digestEdit, &message.digest.text);
    monitor(descrptionEdit, &message.digest.description);
+
+   argumentView->clearMonitors();
+   for (PatchStructure::Argument& argument : message.arguments)
+      argumentView->monitor(&argument);
 }

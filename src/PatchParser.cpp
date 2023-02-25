@@ -111,11 +111,11 @@ void PatchParser::writeXML()
    {
       QDomElement messageListElement = createSubElement(rootElement, "methodlist");
 
-      auto addMessage = [&](const Message& message, const QString& name, const bool isStandaard)
+      auto addMessage = [&](const Message& message, const QString& name, const bool isStandard)
       {
          QDomElement messageElement = createSubElement(messageListElement, "method");
          messageElement.setAttribute("name", name);
-         messageElement.setAttribute("standard", isStandaard);
+         messageElement.setAttribute("standard", isStandard);
 
          if (!message.arguments.empty())
          {
@@ -136,7 +136,7 @@ void PatchParser::writeXML()
       {
          const Message& message = it.value();
          const QString& name = typeName(it.key());
-         addMessage(message, name, false);
+         addMessage(message, name, true);
       }
 
       for (Message::FreeMap::ConstIterator it = messageFreeMap.constBegin(); it != messageFreeMap.constEnd(); it++)

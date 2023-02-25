@@ -17,7 +17,8 @@ HEADERS += \
    $$PWD/ModelItem.h \
    $$PWD/PatchStructure.h \
    $$PWD/Settings.h \
-   $$PWD/SpacerToolBar.h
+   $$PWD/SpacerToolBar.h \
+   $$PWD/TypeDelegate.h
 
 SOURCES += \
    $$PWD/AbstractItemTreeView.cpp \
@@ -27,4 +28,5 @@ SOURCES += \
    $$PWD/ModelItem.cpp \
    $$PWD/PatchStructure.cpp \
    $$PWD/Settings.cpp \
-   $$PWD/SpacerToolBar.cpp
+   $$PWD/SpacerToolBar.cpp \
+   $$PWD/TypeDelegate.cpp

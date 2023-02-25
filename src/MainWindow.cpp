@@ -42,14 +42,20 @@ MainWindow::MainWindow()
    }
 
    QToolBar* toolBar = addToolBar("Main");
+   toolBar->setObjectName("main_toolbar");
    toolBar->setMovable(false);
 
    toolBar->addAction(QIcon(":/New.svg"), "New", this, &MainWindow::slotNew);
    toolBar->addAction(QIcon(":/Open.svg"), "Open", this, &MainWindow::slotOpen);
-   toolBar->addAction(QIcon(":/Reload.svg"), "Reload", this, &MainWindow::slotReload);
+
+   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload", this, &MainWindow::slotReload);
+   reloadAction->setShortcut(QKeySequence::Refresh);
+
    QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save", this, &MainWindow::slotSave);
    saveAction->setShortcut(QKeySequence::Save);
-   toolBar->addAction(QIcon(":/About.svg"), "Reload", this, &MainWindow::slotAbout);
+
+   QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "External", componentsView, &ComponentsView::slotOpenInExternalEditor);
+   editorAction->setShortcut(QKeySequence::Print);
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
@@ -91,9 +97,6 @@ void MainWindow::slotSave()
    callOnAllHubInstances(&Central::setModified, false);
 }
 
-void MainWindow::slotAbout()
-{
-}
 
 void MainWindow::setPackagePath(QString packageDir)
 {

@@ -1,11 +1,8 @@
 #include "ArgumentView.h"
 
-#include <QComboBox>
-
-// view
-
 ArgumentView::ArgumentView(QWidget* parent)
    : QTreeView(parent)
+   , TypeDelegate::Proxy()
    , FunctionHub()
    , argumentList()
    , argumentModel(nullptr)
@@ -17,7 +14,7 @@ ArgumentView::ArgumentView(QWidget* parent)
    connect(argumentModel, &QStandardItemModel::itemChanged, this, &ArgumentView::slotItemChanged);
    setModel(argumentModel);
 
-   setItemDelegateForColumn(2, new TypeDelegate(this));
+   setItemDelegateForColumn(2, new TypeDelegate(this, this));
 }
 
 void ArgumentView::allowNameEdit(bool allow)
@@ -80,54 +77,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
    }
 }
 
-// delegate
-
-TypeDelegate::TypeDelegate(ArgumentView* view)
-   : QStyledItemDelegate(view)
-   , view(view)
+PatchStructure::Type ArgumentView::getType(const int index)
 {
-}
-
-QWidget* TypeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-   Q_UNUSED(option)
-   Q_UNUSED(index)
-
-   QComboBox* comboBox = new QComboBox(parent);
-   comboBox->setFrame(false);
-   for (const PatchStructure::Type& type : PatchStructure::typeList())
-   {
-      comboBox->addItem(PatchStructure::typeName(type));
-   }
-
-   for (int index = 0; index < comboBox->count(); index++)
-   {
-      comboBox->setItemData(index, Qt::AlignCenter, Qt::TextAlignmentRole);
-   }
-
-   return comboBox;
-}
-
-void TypeDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
-{
-   QComboBox* comboBox = qobject_cast<QComboBox*>(editor);
-
-   const PatchStructure::Type type = view->argumentList.at(index.row())->type;
-   const int typeIndex = comboBox->findText(PatchStructure::typeName(type));
-   comboBox->setCurrentIndex(typeIndex);
-}
-
-void TypeDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
-{
-   QComboBox* comboBox = qobject_cast<QComboBox*>(editor);
-   const QString typeText = comboBox->currentText();
-
-   model->setData(index, comboBox->currentText(), Qt::DisplayRole);
-}
-
-void TypeDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-   Q_UNUSED(index)
-
-   editor->setGeometry(option.rect);
+   return argumentList.at(index)->type;
 }
