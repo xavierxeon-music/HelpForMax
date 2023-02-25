@@ -5,9 +5,6 @@
 
 #include <Central.h>
 
-class SelectModel;
-class ComponentsModel;
-
 class MainWindow : public QMainWindow,
                    public Central
 {
@@ -28,9 +25,6 @@ private:
    void setModified(bool enabled) override;
    void closeEvent(QCloseEvent* ce) override;
 
-private:
-   SelectModel* selectModel;
-   ComponentsModel* componentsModel;
 };
 
 #endif // NOT MainWindowH

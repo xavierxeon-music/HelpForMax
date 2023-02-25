@@ -23,7 +23,8 @@ public:
       Patch,
       Argument,
       Attribute,
-      Message,
+      MessageStandard,
+      MessageFree,
       Output
    };
    Q_ENUM(Marker)

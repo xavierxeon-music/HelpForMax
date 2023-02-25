@@ -20,7 +20,8 @@ Edit::Widget::Widget(MainWindow* mainWindow)
    addEditor<Page::Blank>(PatchParser::Marker::Undefined);
    addEditor<Page::Argument>(PatchParser::Marker::Argument);
    addEditor<Page::Attribute>(PatchParser::Marker::Attribute);
-   addEditor<Page::Message>(PatchParser::Marker::Message);
+   addEditor<Page::Message>(PatchParser::Marker::MessageStandard);
+   addEditor<Page::Message>(PatchParser::Marker::MessageFree);
    addEditor<Page::Output>(PatchParser::Marker::Output);
    addEditor<Page::Patch>(PatchParser::Marker::Patch);
 }

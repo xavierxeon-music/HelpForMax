@@ -17,6 +17,13 @@ void ComponentsModel::patchSelected(QString patchPath, QString key)
    Q_UNUSED(key)
 
    rebuild();
+   update();
+}
+
+void ComponentsModel::setModified(bool enabled)
+{
+   if (enabled)
+      update();
 }
 
 void ComponentsModel::rebuild()
@@ -81,13 +88,22 @@ void ComponentsModel::rebuild()
       invisibleRootItem()->appendRow(messageListItem);
       messageListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
 
+      for (const PatchStructure::Type& type : PatchStructure::typeList())
+      {
+         ModelItem* msgItem = new ModelItem(PatchStructure::typeName(type));
+         ModelItem* msgDigestItem = new ModelItem();
+
+         messageListItem->appendRow({msgItem, msgDigestItem});
+         addMarker(PatchParser::Marker::MessageStandard, QVariant::fromValue(type), msgItem, msgDigestItem);
+      }
+
       for (PatchStructure::Message::FreeMap::ConstIterator it = structure.messageFreeMap.constBegin(); it != structure.messageFreeMap.constEnd(); it++)
       {
          ModelItem* msgItem = new ModelItem(it.key());
          ModelItem* msgDigestItem = new ModelItem(it.value().digest.text);
 
          messageListItem->appendRow({msgItem, msgDigestItem});
-         addMarker(PatchParser::Marker::Message, it.key(), msgItem, msgDigestItem);
+         addMarker(PatchParser::Marker::MessageFree, it.key(), msgItem, msgDigestItem);
       }
    }
 
@@ -107,4 +123,19 @@ void ComponentsModel::rebuild()
    }
 
    endResetModel();
+}
+
+void ComponentsModel::update()
+{
+}
+
+// filtered
+
+ComponentsModel::Filtered::Filtered(MainWindow* mainWindow)
+   : QSortFilterProxyModel(mainWindow)
+   , internal(nullptr)
+{
+   internal = new ComponentsModel(mainWindow);
+
+   setSourceModel(internal);
 }

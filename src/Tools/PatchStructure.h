@@ -52,8 +52,8 @@ public:
       Argument::List arguments;
       Digest digest;
 
-      using FreeMap = QMap<QString, Message>; // name vs message
       using StandardMap = QMap<Type, Message>;
+      using FreeMap = QMap<QString, Message>; // name vs message
    };
 
    // things in patcherargs with @
@@ -77,13 +77,17 @@ public:
    Output::Map outputMap;
    Argument::List argumentList;
    Attribute::Map attributeMap;
-   Message::FreeMap messageFreeMap;
    Message::StandardMap messageStandardMap;
+   Message::FreeMap messageFreeMap;
    SeeAlsoList seeAlsoList;
 
 public:
    static QString typeName(const Type& type);
    static Type toType(const QString& name);
+   static QList<Type> typeList();
+
+private:
+   static const QMap<Type, QString> typeNameMap;
 };
 
 #endif // NOT PatchStructureH

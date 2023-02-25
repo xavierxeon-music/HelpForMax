@@ -6,9 +6,11 @@
 
 #include <QStandardItemModel>
 
+#include "Central.h"
 #include "PatchStructure.h"
 
-class ArgumentView : public QTreeView
+class ArgumentView : public QTreeView,
+                     private FunctionHub
 {
    Q_OBJECT
 

@@ -22,12 +22,10 @@
 MainWindow::MainWindow()
    : QMainWindow(nullptr)
    , Central()
-   , selectModel(nullptr)
-   , componentsModel(nullptr)
 {
    setWindowTitle("Help For Max");
-   selectModel = new SelectModel(this);
-   componentsModel = new ComponentsModel(this);
+   SelectModel* selectModel = new SelectModel(this);
+   ComponentsModel* componentsModel = new ComponentsModel(this);
 
    SelectView* selectView = new SelectView(this, selectModel);
    ComponentsView* componentsView = new ComponentsView(this, componentsModel);
@@ -90,6 +88,7 @@ void MainWindow::slotReload()
 void MainWindow::slotSave()
 {
    savePatchStructures();
+   callOnAllHubInstances(&Central::setModified, false);
 }
 
 void MainWindow::slotAbout()

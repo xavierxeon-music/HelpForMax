@@ -1,42 +1,30 @@
 #include "PatchStructure.h"
 
+const QMap<PatchStructure::Type, QString> PatchStructure::typeNameMap = {{Type::Unkown, "???"}, // must be max names!
+                                                                         {Type::Symbol, "symbol"},
+                                                                         {Type::Float, "float"},
+                                                                         {Type::Integer, "int"},
+                                                                         {Type::Bang, "bang"},
+                                                                         {Type::List, "list"},
+                                                                         {Type::Signal, "signal"}};
+
 QString PatchStructure::typeName(const Type& type)
 {
-   switch (type)
-   {
-      case Type::Symbol:
-         return "symbol";
-      case Type::Float:
-         return "float";
-      case Type::Integer:
-         return "int";
-      case Type::Bang:
-         return "bang";
-      case Type::List:
-         return "list";
-      case Type::Signal:
-         return "signal";
-      default:
-         break;
-   }
-
-   return QString("???");
+   return typeNameMap.value(type, "???");
 }
 
 PatchStructure::Type PatchStructure::toType(const QString& name)
 {
-   if ("symbol" == name)
-      return Type::Symbol;
-   else if ("float" == name)
-      return Type::Float;
-   else if ("int" == name)
-      return Type::Integer;
-   else if ("bang" == name)
-      return Type::Bang;
-   else if ("list" == name)
-      return Type::List;
-   else if ("signal" == name)
-      return Type::Signal;
+   for (QMap<Type, QString>::ConstIterator it = typeNameMap.constBegin(); it != typeNameMap.constEnd(); it++)
+   {
+      if (name == it.value())
+         return it.key();
+   }
 
    return Type::Unkown;
+}
+
+QList<PatchStructure::Type> PatchStructure::typeList()
+{
+   return typeNameMap.keys();
 }
