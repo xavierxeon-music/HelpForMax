@@ -571,6 +571,10 @@ void PatchParser::addJSON()
 
             if (!messageFreeMap.contains(messageText))
                messageFreeMap[messageText] = Message{};
+
+            Message& message = messageFreeMap[messageText];
+            if (message.arguments.empty())
+               message.arguments.append(Argument{});
          }
       }
    }

@@ -99,7 +99,7 @@ void Page::Attribute::update(const QVariant& data)
    getItem->setCheckState(attribute.get ? Qt::Checked : Qt::Unchecked);
 
    QStandardItem* setItem = attributeModel->invisibleRootItem()->child(0, 1);
-   getItem->setCheckState(attribute.set ? Qt::Checked : Qt::Unchecked);
+   setItem->setCheckState(attribute.set ? Qt::Checked : Qt::Unchecked);
 
    QStandardItem* sizeItem = attributeModel->invisibleRootItem()->child(0, 2);
    sizeItem->setText(QString::number(attribute.size));

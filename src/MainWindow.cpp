@@ -45,34 +45,33 @@ MainWindow::MainWindow()
    toolBar->setObjectName("main_toolbar");
    toolBar->setMovable(false);
 
-   toolBar->addAction(QIcon(":/New.svg"), "New", this, &MainWindow::slotNew);
-   toolBar->addAction(QIcon(":/Open.svg"), "Open", this, &MainWindow::slotOpen);
+   toolBar->addAction(QIcon(":/New.svg"), "New Package", this, &MainWindow::slotNewPackage);
+   toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
 
-   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload", this, &MainWindow::slotReload);
+   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", this, &MainWindow::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
 
-   QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save", this, &MainWindow::slotSave);
+   QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save All Patches", this, &MainWindow::slotSavePatches);
    saveAction->setShortcut(QKeySequence::Save);
 
-   QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "External", componentsView, &ComponentsView::slotOpenInExternalEditor);
+   QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
 
+   // load package
    const QString packagePath = Central::getPackagePath();
    if (!packagePath.isEmpty())
-   {
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
-   }
 }
 
-void MainWindow::slotNew()
+void MainWindow::slotNewPackage()
 {
 }
 
-void MainWindow::slotOpen()
+void MainWindow::slotOpenPackage()
 {
    const QString fileName = QFileDialog::getOpenFileName(this, "package", QString(), "package-info.json");
    if (fileName.isEmpty())
@@ -87,11 +86,11 @@ void MainWindow::slotOpen()
    }
 }
 
-void MainWindow::slotReload()
+void MainWindow::slotReloadPatch()
 {
 }
 
-void MainWindow::slotSave()
+void MainWindow::slotSavePatches()
 {
    savePatchStructures();
    callOnAllHubInstances(&Central::setModified, false);

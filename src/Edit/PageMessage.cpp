@@ -11,6 +11,7 @@ Page::Message::Message(MainWindow* mainWindow, const PatchParser::Marker& marker
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("MESSAGE");
+   argumentView->allowNameEdit(false);
 }
 
 void Page::Message::update(const QVariant& data)

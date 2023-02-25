@@ -14,10 +14,10 @@ public:
    MainWindow();
 
 private slots:
-   void slotNew();
-   void slotOpen();
-   void slotReload();
-   void slotSave();
+   void slotNewPackage();
+   void slotOpenPackage();
+   void slotReloadPatch();
+   void slotSavePatches();
 
 private:
    void setPackagePath(QString packageDir) override;
