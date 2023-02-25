@@ -20,7 +20,7 @@ Abstract::FunctionHub<WhatEver>::~FunctionHub()
 
 template <typename WhatEver>
 template <typename ClassType, typename... ArgumentsType>
-void Abstract::FunctionHub<WhatEver>::callOnAllHubInstances(void (ClassType::*functionPointer)(ArgumentsType...), ArgumentsType... arguments)
+void Abstract::FunctionHub<WhatEver>::callOnOtherHubInstances(void (ClassType::*functionPointer)(ArgumentsType...), ArgumentsType... arguments)
 {
    static_assert(std::is_base_of<FunctionHub, ClassType>::value, "ClassType must derive from FunctionHub");
 
@@ -29,6 +29,19 @@ void Abstract::FunctionHub<WhatEver>::callOnAllHubInstances(void (ClassType::*fu
       if (this == instance)
          continue;
 
+      ClassType* classInstance = static_cast<ClassType*>(instance);
+      (classInstance->*functionPointer)(arguments...);
+   }
+}
+
+template <typename WhatEver>
+template <typename ClassType, typename... ArgumentsType>
+void Abstract::FunctionHub<WhatEver>::callOnAllHubInstances(void (ClassType::*functionPointer)(ArgumentsType...), ArgumentsType... arguments)
+{
+   static_assert(std::is_base_of<FunctionHub, ClassType>::value, "ClassType must derive from FunctionHub");
+
+   for (FunctionHub<WhatEver>* instance : instanceList)
+   {
       ClassType* classInstance = static_cast<ClassType*>(instance);
       (classInstance->*functionPointer)(arguments...);
    }

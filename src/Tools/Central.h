@@ -15,8 +15,6 @@ struct FunctionHub : public Abstract::FunctionHub<Central>
    virtual void setModified(bool enabled);
    virtual void patchSelected(QString patchPath, QString key);
    virtual void componentSelected(PatchParser::Marker marker, QVariant data);
-   virtual void laod();
-   virtual void save();
 };
 
 class Central : public FunctionHub

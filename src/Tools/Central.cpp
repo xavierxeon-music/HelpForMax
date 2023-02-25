@@ -30,16 +30,6 @@ void FunctionHub::componentSelected(PatchParser::Marker marker, QVariant data)
    Q_UNUSED(data)
 }
 
-void FunctionHub::laod()
-{
-   // do nothing
-}
-
-void FunctionHub::save()
-{
-   // do nothing
-}
-
 // central
 
 Central::Central()
@@ -95,5 +85,5 @@ void Central::savePatchStructures()
    for (PatchParser& parser : parserMap)
       parser.writeXML();
 
-   callOnAllHubInstances(&FunctionHub::setModified, false);
+   callOnOtherHubInstances(&FunctionHub::setModified, false);
 }

@@ -1,8 +1,11 @@
 #include "MainWindow.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QCloseEvent>
+#include <QFileDialog>
 #include <QSplitter>
+#include <QToolBar>
 
 #include <Settings.h>
 
@@ -10,21 +13,77 @@
 #include <MacTheme.h>
 #endif // Q_OS_MACX
 
+#include "ComponentsModel.h"
+#include "ComponentsView.h"
+#include "EditWidget.h"
+#include "SelectModel.h"
+#include "SelectView.h"
+
 MainWindow::MainWindow()
    : QMainWindow(nullptr)
    , Central()
+   , selectModel(nullptr)
+   , componentsModel(nullptr)
 {
    setWindowTitle("Help For Max");
+   selectModel = new SelectModel(this);
+   componentsModel = new ComponentsModel(this);
 
-   QSplitter* splitter = new QSplitter(this);
-   splitter->setObjectName("central_splitter");
-   setCentralWidget(splitter);
+   SelectView* selectView = new SelectView(this, selectModel);
+   ComponentsView* componentsView = new ComponentsView(this, componentsModel);
+   Edit::Widget* editWidget = new Edit::Widget(this);
+
+   {
+      QSplitter* splitter = new QSplitter(this);
+      splitter->setObjectName("central_splitter");
+      setCentralWidget(splitter);
+
+      splitter->addWidget(selectView);
+      splitter->addWidget(componentsView);
+      splitter->addWidget(editWidget);
+   }
+
+   QToolBar* toolBar = addToolBar("Main");
+   toolBar->setMovable(false);
+
+   toolBar->addAction(QIcon(":/Open.svg"), "Open", this, &MainWindow::slotOpenPackage);
+   toolBar->addAction(QIcon(":/Reload.svg"), "Reload", this, &MainWindow::slotReload);
+   QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save", this, &MainWindow::slotSave);
+   saveAction->setShortcut(QKeySequence::Save);
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
 
-   callOnAllHubInstances(&FunctionHub::laod);
+   const QString packagePath = Central::getPackagePath();
+   if (!packagePath.isEmpty())
+   {
+      callOnAllHubInstances(&Central::setPackagePath, packagePath);
+   }
+}
+
+void MainWindow::slotOpenPackage()
+{
+   const QString fileName = QFileDialog::getOpenFileName(this, "package", QString(), "package-info.json");
+   if (fileName.isEmpty())
+      return;
+
+   const QString packagePath = QFileInfo(fileName).absolutePath();
+
+   {
+      Settings settings;
+      settings.write("LastPackage", packagePath);
+      callOnAllHubInstances(&Central::setPackagePath, packagePath);
+   }
+}
+
+void MainWindow::slotReload()
+{
+}
+
+void MainWindow::slotSave()
+{
+   savePatchStructures();
 }
 
 void MainWindow::setPackagePath(QString packageDir)
@@ -45,8 +104,6 @@ void MainWindow::closeEvent(QCloseEvent* ce)
    Settings widgetSettings("MainWidget");
    widgetSettings.write("Geometry", saveGeometry());
    widgetSettings.write("State", saveState());
-
-   callOnAllHubInstances(&FunctionHub::save);
 
    ce->accept();
 }

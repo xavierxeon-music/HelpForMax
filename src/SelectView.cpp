@@ -28,7 +28,7 @@ void SelectView::clicked(ModelItem* item)
    mainWindow->buildPatchStructure(patchPath, key);
    QApplication::restoreOverrideCursor();
 
-   callOnAllHubInstances(&SelectView::patchSelected, patchPath, key);
+   callOnOtherHubInstances(&SelectView::patchSelected, patchPath, key);
 }
 
 void SelectView::doubleClicked(ModelItem* item)

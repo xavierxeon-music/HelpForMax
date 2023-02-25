@@ -19,5 +19,5 @@ void ComponentsView::clicked(ModelItem* item)
    const PatchParser::Marker marker = markerVariant.value<PatchParser::Marker>();
    const QVariant data = item->data(PatchParser::RoleData);
 
-   callOnAllHubInstances(&ComponentsView::componentSelected, marker, data);
+   callOnOtherHubInstances(&ComponentsView::componentSelected, marker, data);
 }

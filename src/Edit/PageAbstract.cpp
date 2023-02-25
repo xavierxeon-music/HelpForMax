@@ -28,7 +28,7 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
          return;
 
       *variable = newText;
-      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -48,7 +48,7 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
          return;
 
       *variable = newText.split(";");
-      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -68,7 +68,7 @@ void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
          return;
 
       *variable = newText;
-      FunctionHub::callOnAllHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
    };
 
    if (connectionMap.contains(textEdit))
