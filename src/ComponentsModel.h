@@ -15,8 +15,10 @@ public:
 public:
    ComponentsModel(MainWindow* mainWindow);
 
-private:
+public:
    void patchSelected(QString patchPath, QString key) override;
+
+private:
    void setModified(bool enabled) override;
    void rebuild();
    void update();

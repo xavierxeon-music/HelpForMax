@@ -8,6 +8,11 @@ const QMap<PatchStructure::Type, QString> PatchStructure::typeNameMap = {{Type::
                                                                          {Type::List, "list"},
                                                                          {Type::Signal, "signal"}};
 
+void PatchStructure::clear()
+{
+   *this = PatchStructure();
+}
+
 QString PatchStructure::typeName(const Type& type)
 {
    return typeNameMap.value(type, "???");

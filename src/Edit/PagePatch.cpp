@@ -30,8 +30,13 @@ void Page::Patch::slotAddStandardMethond(int typeId)
    if (mainWindow->parser().messageStandardMap.contains(type))
       return;
 
-   mainWindow->parserRef().messageStandardMap[type] = PatchStructure::Message{};
-   qDebug() << typeId << PatchStructure::typeName(type);
+   PatchStructure::Argument argument;
+   argument.type = type;
+
+   PatchStructure::Message message;
+   message.arguments.append(argument);
+
+   mainWindow->parserRef().messageStandardMap[type] = message;
    callOnOtherHubInstances(&Central::setModified, true);
 }
 

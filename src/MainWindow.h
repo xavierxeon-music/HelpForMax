@@ -16,7 +16,6 @@ public:
 private slots:
    void slotNewPackage();
    void slotOpenPackage();
-   void slotReloadPatch();
    void slotSavePatches();
 
 private:

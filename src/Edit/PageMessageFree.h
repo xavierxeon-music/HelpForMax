@@ -1,19 +1,19 @@
-#ifndef PageMessageH
-#define PageMessageH
+#ifndef PageMessageFreeH
+#define PageMessageFreeH
 
 #include "PageAbstract.h"
-#include "ui_PageMessage.h"
+#include "ui_PageMessageFree.h"
 
 #include "DescriptionHighlighter.h"
 
 namespace Page
 {
-   class Message : public Abstract, private Ui::Message
+   class MessageFree : public Abstract, private Ui::MessageFree
    {
       Q_OBJECT
 
    public:
-      Message(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      MessageFree(MainWindow* mainWindow, const PatchParser::Marker& marker);
 
    private:
       void update(const QVariant& data) override;
@@ -24,4 +24,4 @@ namespace Page
    };
 } // namespace Page
 
-#endif // NOT PageMessageH
+#endif // NOT PageMessageFreeH

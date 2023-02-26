@@ -36,6 +36,7 @@ public:
    PatchParser(const QString& patchPath);
 
 public:
+   void load();
    void writeXML();
 
 private:

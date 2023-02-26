@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Page::Message</class>
- <widget class="QWidget" name="Page::Message">
+ <class>Page::MessageStandard</class>
+ <widget class="QWidget" name="Page::MessageStandard">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,40 +22,6 @@
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="valueGroup">
-     <property name="title">
-      <string>Values</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="ArgumentView" name="argumentView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
    <item>
@@ -85,13 +51,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ArgumentView</class>
-   <extends>QTreeView</extends>
-   <header>Edit/ArgumentView.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

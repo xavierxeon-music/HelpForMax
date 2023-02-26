@@ -32,7 +32,7 @@ void ComponentsModel::rebuild()
 
    clear();
 
-   const PatchStructure structure = mainWindow->parser();
+   const PatchStructure& structure = mainWindow->parser();
 
    auto addMarker = [](const PatchParser::Marker& marker, const QVariant& data, ModelItem* item1, ModelItem* item2)
    {

@@ -1,8 +1,8 @@
-#include "PageMessage.h"
+#include "PageMessageFree.h"
 
 #include "MainWindow.h"
 
-Page::Message::Message(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::MessageFree::MessageFree(MainWindow* mainWindow, const PatchParser::Marker& marker)
    : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , messageName()
@@ -14,7 +14,7 @@ Page::Message::Message(MainWindow* mainWindow, const PatchParser::Marker& marker
    argumentView->allowNameEdit(false);
 }
 
-void Page::Message::update(const QVariant& data)
+void Page::MessageFree::update(const QVariant& data)
 {
    messageName = data.toString();
    PatchStructure::Message& message = mainWindow->parserRef().messageFreeMap[messageName];

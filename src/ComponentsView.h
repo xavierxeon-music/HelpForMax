@@ -5,6 +5,7 @@
 
 #include <Central.h>
 
+class MainWindow;
 class ComponentsModel;
 
 class ComponentsView : public Abstract::ItemTreeView,
@@ -13,9 +14,10 @@ class ComponentsView : public Abstract::ItemTreeView,
    Q_OBJECT
 
 public:
-   ComponentsView(QWidget* parent, ComponentsModel* model);
+   ComponentsView(MainWindow* mainWindow, ComponentsModel* model);
 
 public slots:
+   void slotReloadPatch();
    void slotOpenInExternalEditor();
 
 private:
@@ -23,6 +25,7 @@ private:
    void clicked(ModelItem* item) override;
 
 private:
+   MainWindow* mainWindow;
    QString helpPath;
 };
 

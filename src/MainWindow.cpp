@@ -48,7 +48,7 @@ MainWindow::MainWindow()
    toolBar->addAction(QIcon(":/New.svg"), "New Package", this, &MainWindow::slotNewPackage);
    toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
 
-   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", this, &MainWindow::slotReloadPatch);
+   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
 
    QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save All Patches", this, &MainWindow::slotSavePatches);
@@ -56,6 +56,16 @@ MainWindow::MainWindow()
 
    QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
+
+   for (QAction* action : this->findChildren<QAction*>())
+   {
+      const QString& shortcutName = action->shortcut().toString();
+      if (shortcutName.isEmpty())
+         continue;
+
+      const QString text = action->text();
+      action->setText(text + " (" + shortcutName + ")");
+   }
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
@@ -84,10 +94,6 @@ void MainWindow::slotOpenPackage()
       settings.write("LastPackage", packagePath);
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
    }
-}
-
-void MainWindow::slotReloadPatch()
-{
 }
 
 void MainWindow::slotSavePatches()

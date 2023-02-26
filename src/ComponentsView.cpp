@@ -5,14 +5,25 @@
 #include <QUrl>
 
 #include "ComponentsModel.h"
+#include "MainWindow.h"
 #include "PatchParser.h"
 
-ComponentsView::ComponentsView(QWidget* parent, ComponentsModel* model)
-   : Abstract::ItemTreeView(parent, model, true)
+ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
+   : Abstract::ItemTreeView(mainWindow, model, true)
    , FunctionHub()
+   , mainWindow(mainWindow)
    , helpPath()
 {
    setHeaderHidden(true);
+}
+
+void ComponentsView::slotReloadPatch()
+{
+   mainWindow->parserRef().clear();
+   mainWindow->parserRef().load();
+
+   getModel<ComponentsModel>()->patchSelected(QString(), QString());
+   callOnOtherHubInstances(&Central::setModified, false);
 }
 
 void ComponentsView::slotOpenInExternalEditor()

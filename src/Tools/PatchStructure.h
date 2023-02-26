@@ -82,6 +82,7 @@ public:
    SeeAlsoList seeAlsoList;
 
 public:
+   void clear();
    static QString typeName(const Type& type);
    static Type toType(const QString& name);
    static QList<Type> typeList();

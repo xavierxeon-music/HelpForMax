@@ -7,7 +7,8 @@
 #include "Edit/PageArgument.h"
 #include "Edit/PageAttribute.h"
 #include "Edit/PageBlank.h"
-#include "Edit/PageMessage.h"
+#include "Edit/PageMessageFree.h"
+#include "Edit/PageMessageStandard.h"
 #include "Edit/PageOutput.h"
 #include "Edit/PagePatch.h"
 
@@ -20,8 +21,8 @@ Edit::Widget::Widget(MainWindow* mainWindow)
    addEditor<Page::Blank>(PatchParser::Marker::Undefined);
    addEditor<Page::Argument>(PatchParser::Marker::Argument);
    addEditor<Page::Attribute>(PatchParser::Marker::Attribute);
-   addEditor<Page::Message>(PatchParser::Marker::MessageStandard);
-   addEditor<Page::Message>(PatchParser::Marker::MessageFree);
+   addEditor<Page::MessageStandard>(PatchParser::Marker::MessageStandard);
+   addEditor<Page::MessageFree>(PatchParser::Marker::MessageFree);
    addEditor<Page::Output>(PatchParser::Marker::Output);
    addEditor<Page::Patch>(PatchParser::Marker::Patch);
 }

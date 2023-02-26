@@ -28,7 +28,7 @@ public:
    static QString getPackageName();
 
    const QString& getCurrentKey() const;
-   PatchParser parser() const;
+   const PatchParser& parser();
    PatchParser& parserRef();
    void savePatchStructures();
    void buildPatchStructure(QString patchPath, const QString& key);

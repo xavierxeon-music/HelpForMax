@@ -62,7 +62,7 @@ const QString& Central::getCurrentKey() const
    return currentKey;
 }
 
-PatchParser Central::parser() const
+const PatchParser& Central::parser() // must not be constant, else map iterator is not not a reference
 {
    return parserMap[currentKey];
 }
