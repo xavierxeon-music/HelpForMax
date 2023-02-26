@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>754</height>
+    <width>412</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,6 +25,31 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="digestGroup">
+     <property name="title">
+      <string>Digest / Description</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="digestEdit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="descrptionEdit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="meetaTagGroup">
      <property name="title">
       <string>Meta Tags</string>
@@ -35,6 +60,28 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QLineEdit" name="metaTagEdit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="seeAlsoGroup">
+     <property name="title">
+      <string>See Also</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLineEdit" name="seeAlsoEdit">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -87,53 +134,6 @@
        <widget class="QPushButton" name="messageSignalButton">
         <property name="text">
          <string>signal</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="digestGroup">
-     <property name="title">
-      <string>Digest / Description</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLineEdit" name="digestEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPlainTextEdit" name="descrptionEdit"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="seeAlsoGroup">
-     <property name="title">
-      <string>See Also</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QLineEdit" name="seeAlsoEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
         </property>
        </widget>
       </item>

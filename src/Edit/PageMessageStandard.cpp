@@ -19,6 +19,5 @@ void Page::MessageStandard::update(const QVariant& data)
    PatchStructure::Message& message = mainWindow->parserRef().messageStandardMap[messageType];
    keyInfo->setText("messsage " + PatchStructure::typeName(messageType) + " @ " + mainWindow->getCurrentKey());
 
-   monitor(digestEdit, &message.digest.text);
    monitor(descrptionEdit, &message.digest.description);
 }

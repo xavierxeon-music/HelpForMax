@@ -27,22 +27,12 @@
    <item>
     <widget class="QGroupBox" name="digestGroup">
      <property name="title">
-      <string>Diget / Description</string>
+      <string>Description</string>
      </property>
      <property name="flat">
       <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLineEdit" name="digestEdit">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPlainTextEdit" name="descrptionEdit"/>
       </item>

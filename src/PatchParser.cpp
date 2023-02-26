@@ -478,9 +478,24 @@ void PatchParser::addJSON()
       }
       else if ("newobj" == className)
       {
-         const QString text = boxObject["text"].toString();
+         QString text = boxObject["text"].toString();
          if (!text.startsWith("patcherargs"))
             continue;
+
+         // remove whitespace in quotes
+         bool inQuote = false;
+         for (int index = 0; index < text.size(); index++)
+         {
+            if ("\"" == text.mid(index, 1))
+            {
+               inQuote ^= true;
+               continue;
+            }
+            else if (inQuote && " " == text.mid(index, 1))
+            {
+               text.replace(index, 1, "_");
+            }
+         }
 
          const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
          enum class State
