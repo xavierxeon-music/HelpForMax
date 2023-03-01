@@ -59,8 +59,8 @@ public:
    // things in patcherargs with @
    struct Attribute
    {
-      bool get = false;
-      bool set = false;
+      bool get = true;
+      bool set = true;
       Type type = Type::Symbol;
       int size = 1;
       Digest digest;

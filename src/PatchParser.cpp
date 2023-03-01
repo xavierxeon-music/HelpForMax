@@ -122,7 +122,7 @@ void PatchParser::writeXML()
          messageElement.setAttribute("name", name);
          messageElement.setAttribute("standard", isStandard);
 
-         if (!message.arguments.empty())
+         if (!message.arguments.empty() && !isStandard)
          {
             QDomElement argListElement = createSubElement(messageElement, "arglist");
             for (const Argument& argument : message.arguments)
