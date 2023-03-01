@@ -598,13 +598,25 @@ void PatchParser::addJSON()
          for (int i = 1; i < contentList.size(); i++)
          {
             const QString& messageText = contentList.at(i);
+            const Type type = toType(messageText);
+            if (Type::Unkown == type)
+            {
+               if (!messageFreeMap.contains(messageText))
+                  messageFreeMap[messageText] = Message();
 
-            if (!messageFreeMap.contains(messageText))
-               messageFreeMap[messageText] = Message();
+               Message& message = messageFreeMap[messageText];
+               if (message.arguments.empty())
+                  message.arguments.append(Argument());
+            }
+            else
+            {
+               if (!messageStandardMap.contains(type))
+                  messageStandardMap[type] = Message();
 
-            Message& message = messageFreeMap[messageText];
-            if (message.arguments.empty())
-               message.arguments.append(Argument());
+               Message& message = messageStandardMap[type];
+               if (message.arguments.empty())
+                  message.arguments.append(Argument());
+            }
          }
       }
    }
