@@ -13,6 +13,8 @@
 #include <MacTheme.h>
 #endif // Q_OS_MACX
 
+#include <JSONModel.h>
+
 #include "ComponentsModel.h"
 #include "ComponentsView.h"
 #include "EditWidget.h"
@@ -45,7 +47,9 @@ MainWindow::MainWindow()
    toolBar->setObjectName("main_toolbar");
    toolBar->setMovable(false);
 
-   toolBar->addAction(QIcon(":/New.svg"), "New Package", this, &MainWindow::slotNewPackage);
+   QAction* noAction = toolBar->addAction(QIcon(":/New.svg"), "-> no functionality <-");
+   noAction->setEnabled(false);
+
    toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
 
    QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
@@ -77,10 +81,6 @@ MainWindow::MainWindow()
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
 }
 
-void MainWindow::slotNewPackage()
-{
-}
-
 void MainWindow::slotOpenPackage()
 {
    const QString fileName = QFileDialog::getOpenFileName(this, "package", QString(), "package-info.json");
@@ -102,13 +102,27 @@ void MainWindow::slotSavePatches()
    callOnAllHubInstances(&Central::setModified, false);
 }
 
-
 void MainWindow::setPackagePath(QString packageDir)
 {
    if (packageDir.isEmpty())
       setWindowTitle("Help For Max");
    else
       setWindowTitle("Help For Max - [*]" + packageDir);
+
+   const QString fileName = packageDir + "/package-info.json";
+
+   QJsonObject object = JSON::fromFile(fileName);
+   if (object.empty())
+   {
+      packageAuthor = "";
+      packageName = "";
+      return;
+   }
+
+   packageAuthor = object["author"].toString();
+   packageName = object["name"].toString();
+
+   qDebug() << packageAuthor << packageName;
 }
 
 void MainWindow::setModified(bool enabled)

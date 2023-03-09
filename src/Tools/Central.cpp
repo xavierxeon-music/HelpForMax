@@ -32,6 +32,9 @@ void FunctionHub::componentSelected(PatchParser::Marker marker, QVariant data)
 
 // central
 
+QString Central::packageAuthor = QString();
+QString Central::packageName = QString();
+
 Central::Central()
    : FunctionHub()
    , currentKey()
@@ -49,12 +52,12 @@ QString Central::getPackagePath()
 
 QString Central::getAuthor()
 {
-   return "Ralf Waspe";
+   return packageAuthor;
 }
 
 QString Central::getPackageName()
 {
-   return "WaMaxPackage";
+   return packageName;
 }
 
 const QString& Central::getCurrentKey() const

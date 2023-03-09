@@ -12,7 +12,6 @@
 
 const QList<QByteArray> PatchParser::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
 
-
 PatchParser::PatchParser()
    : PatchStructure()
    , patchName()
