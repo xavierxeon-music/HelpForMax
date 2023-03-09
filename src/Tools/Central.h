@@ -33,6 +33,10 @@ public:
    void savePatchStructures();
    void buildPatchStructure(QString patchPath, const QString& key);
 
+protected:
+   static QString packageAuthor;
+   static QString packageName;
+
 private:
    using ParserMap = QMap<QString, PatchParser>;
 
@@ -40,6 +44,5 @@ private:
    QString currentKey;
    ParserMap parserMap;
 };
-
 
 #endif // NOT CentralH
