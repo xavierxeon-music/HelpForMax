@@ -12,12 +12,12 @@
 
 const QList<QByteArray> PatchParser::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
 
-
 PatchParser::PatchParser()
    : PatchStructure()
    , patchName()
    , patchPath()
    , helpPath()
+   , isUndocumented(false)
 {
 }
 
@@ -173,6 +173,11 @@ void PatchParser::writeXML()
 
    file.write(content);
    file.close();
+}
+
+const bool& PatchParser::foundUndocumented() const
+{
+   return isUndocumented;
 }
 
 QDomElement PatchParser::createSubElement(QDomElement parent, const QString& name, const QString& text, const TagMap& tagMap)
@@ -474,7 +479,10 @@ void PatchParser::addJSON()
 
          const QString comment = boxObject["comment"].toString();
          if (output.name.isEmpty())
+         {
+            isUndocumented = true;
             output.name = comment;
+         }
       }
       else if ("newobj" == className)
       {
@@ -524,14 +532,20 @@ void PatchParser::addJSON()
                argument.optional = true;
 
                if (i > argumentList.count())
+               {
+                  isUndocumented = true;
                   argumentList.append(argument);
+               }
             }
             else if (State::AttributeName == state)
             {
                Attribute attribute;
                const QString& name = arg.mid(1);
                if (!attributeMap.contains(name))
+               {
+                  isUndocumented = true;
                   attributeMap[name] = attribute;
+               }
             }
             else if (State::AttributeArg == state)
             {
@@ -602,20 +616,32 @@ void PatchParser::addJSON()
             if (Type::Unkown == type)
             {
                if (!messageFreeMap.contains(messageText))
+               {
+                  isUndocumented = true;
                   messageFreeMap[messageText] = Message();
+               }
 
                Message& message = messageFreeMap[messageText];
                if (message.arguments.empty())
+               {
+                  isUndocumented = true;
                   message.arguments.append(Argument());
+               }
             }
             else
             {
                if (!messageStandardMap.contains(type))
+               {
+                  isUndocumented = true;
                   messageStandardMap[type] = Message();
+               }
 
                Message& message = messageStandardMap[type];
                if (message.arguments.empty())
+               {
+                  isUndocumented = true;
                   message.arguments.append(Argument());
+               }
             }
          }
       }

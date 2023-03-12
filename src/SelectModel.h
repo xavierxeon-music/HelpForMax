@@ -20,7 +20,7 @@ public:
    };
 
 public:
-   SelectModel(QObject* parent);
+   SelectModel(MainWindow* mainWindow);
 
 private:
    using InfoMap = QMap<QString, QFileInfo>;
@@ -28,6 +28,9 @@ private:
 private:
    void setPackagePath(QString packageDir) override;
    void recursiveSearch(const QString& path, InfoMap& infoMap);
+
+private:
+   MainWindow* mainWindow;
 };
 
 #endif // NOT SelectModelH

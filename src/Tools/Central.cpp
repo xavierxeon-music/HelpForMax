@@ -72,12 +72,16 @@ PatchParser& Central::parserRef()
    return parserMap[currentKey];
 }
 
-void Central::buildPatchStructure(QString patchPath, const QString& key)
+bool Central::buildPatchStructure(QString patchPath, const QString& key)
 {
    currentKey = key;
 
    if (!parserMap.contains(key))
+   {
       parserMap[key] = PatchParser(patchPath);
+   }
+
+   return parserMap[key].foundUndocumented();
 }
 
 void Central::savePatchStructures()

@@ -39,6 +39,8 @@ public:
    void load();
    void writeXML();
 
+   const bool& foundUndocumented() const;
+
 private:
    using TagMap = QMap<QString, QString>;
 
@@ -61,6 +63,7 @@ private:
    QString patchName;
    QString patchPath;
    QString helpPath;
+   bool isUndocumented;
 };
 
 #endif // NOT PatchParserH

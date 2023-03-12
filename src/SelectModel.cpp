@@ -1,12 +1,16 @@
 #include "SelectModel.h"
 
+#include <QApplication>
 #include <QDir>
 
 #include <ModelItem.h>
 
-SelectModel::SelectModel(QObject* parent)
-   : QStandardItemModel(parent)
+#include "MainWindow.h"
+
+SelectModel::SelectModel(MainWindow* mainWindow)
+   : QStandardItemModel(mainWindow)
    , FunctionHub()
+   , mainWindow(mainWindow)
 {
 }
 
@@ -26,15 +30,19 @@ void SelectModel::setPackagePath(QString packageDir)
    QMap<QString, QStandardItem*> parentMap;
    parentMap[packageDir + "/patchers"] = invisibleRootItem();
 
+   QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
    for (InfoMap::ConstIterator it = infoMap.constBegin(); it != infoMap.constEnd(); it++)
    {
-      const QString patchName = it.key();
-
-      ModelItem* patchItem = new ModelItem(patchName);
-
+      const QString key = it.key();
       const QString patchPath = it.value().absoluteFilePath();
+
+      QString itemName = key;
+      if (mainWindow->buildPatchStructure(patchPath, key))
+         itemName = "* " + itemName;
+
+      ModelItem* patchItem = new ModelItem(itemName);
       patchItem->setData(patchPath, RolePatchPath);
-      patchItem->setData(patchName, RoleKey);
+      patchItem->setData(key, RoleKey);
 
       const QString patchDir = it.value().absolutePath();
       if (!parentMap.contains(patchDir))
@@ -49,6 +57,7 @@ void SelectModel::setPackagePath(QString packageDir)
 
       parentMap[patchDir]->appendRow(patchItem);
    }
+   QApplication::restoreOverrideCursor();
 
    endResetModel();
 }

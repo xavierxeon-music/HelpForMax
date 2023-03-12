@@ -31,7 +31,7 @@ public:
    const PatchParser& parser();
    PatchParser& parserRef();
    void savePatchStructures();
-   void buildPatchStructure(QString patchPath, const QString& key);
+   bool buildPatchStructure(QString patchPath, const QString& key);
 
 private:
    using ParserMap = QMap<QString, PatchParser>;
