@@ -26,6 +26,7 @@ PatchParser::PatchParser(const QString& patchPath)
    , patchName()
    , patchPath(patchPath)
    , helpPath()
+   , isUndocumented(false)
 {
    const QFileInfo patchInfo(patchPath);
    patchName = patchInfo.fileName().replace(".maxpat", "");
@@ -480,7 +481,7 @@ void PatchParser::addJSON()
          const QString comment = boxObject["comment"].toString();
          if (output.name.isEmpty())
          {
-            isUndocumented = true;
+            markUndocumented(QString("outlet name @ %1 = %2").arg(index).arg(comment));
             output.name = comment;
          }
       }
@@ -533,7 +534,7 @@ void PatchParser::addJSON()
 
                if (i > argumentList.count())
                {
-                  isUndocumented = true;
+                  markUndocumented(QString("exrta argument @ %1 ").arg(i));
                   argumentList.append(argument);
                }
             }
@@ -543,7 +544,7 @@ void PatchParser::addJSON()
                const QString& name = arg.mid(1);
                if (!attributeMap.contains(name))
                {
-                  isUndocumented = true;
+                  markUndocumented(QString("extra attribute @ %1").arg(name));
                   attributeMap[name] = attribute;
                }
             }
@@ -617,14 +618,14 @@ void PatchParser::addJSON()
             {
                if (!messageFreeMap.contains(messageText))
                {
-                  isUndocumented = true;
+                  markUndocumented(QString("free message %1").arg(messageText));
                   messageFreeMap[messageText] = Message();
                }
 
                Message& message = messageFreeMap[messageText];
                if (message.arguments.empty())
                {
-                  isUndocumented = true;
+                  markUndocumented(QString("free message %1 arguments").arg(messageText));
                   message.arguments.append(Argument());
                }
             }
@@ -632,14 +633,13 @@ void PatchParser::addJSON()
             {
                if (!messageStandardMap.contains(type))
                {
-                  isUndocumented = true;
+                  markUndocumented(QString("standard message %1").arg(typeName(type)));
                   messageStandardMap[type] = Message();
                }
 
                Message& message = messageStandardMap[type];
                if (message.arguments.empty())
                {
-                  isUndocumented = true;
                   message.arguments.append(Argument());
                }
             }
@@ -651,7 +651,10 @@ void PatchParser::addJSON()
 PatchStructure::Output& PatchParser::findOrCreateOutput(const int id)
 {
    if (!outputMap.contains(id))
+   {
+      markUndocumented(QString("missing output %1").arg(id));
       outputMap[id] = Output{};
+   }
 
    return outputMap[id];
 }
@@ -675,4 +678,10 @@ QByteArray PatchParser::maxFileToDom(QByteArray maxXML) const
    maxXML.replace("<br/>", "\n");
 
    return maxXML;
+}
+
+void PatchParser::markUndocumented(const QString& where)
+{
+   qDebug() << "UNDOCUMENTED" << patchName << qPrintable(where);
+   isUndocumented = true;
 }

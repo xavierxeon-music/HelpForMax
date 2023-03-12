@@ -75,7 +75,7 @@ PatchParser& Central::parserRef()
    return parserMap[currentKey];
 }
 
-bool Central::buildPatchStructure(QString patchPath, const QString& key)
+bool Central::selectPatchStructure(QString patchPath, const QString& key)
 {
    currentKey = key;
 

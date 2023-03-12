@@ -59,6 +59,8 @@ private:
    void addJSON();
    Output& findOrCreateOutput(const int id);
 
+   void markUndocumented(const QString& where);
+
 private:
    QString patchName;
    QString patchPath;

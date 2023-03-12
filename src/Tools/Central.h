@@ -31,7 +31,7 @@ public:
    const PatchParser& parser();
    PatchParser& parserRef();
    void savePatchStructures();
-   bool buildPatchStructure(QString patchPath, const QString& key);
+   bool selectPatchStructure(QString patchPath, const QString& key);
 
 protected:
    static QString packageAuthor;

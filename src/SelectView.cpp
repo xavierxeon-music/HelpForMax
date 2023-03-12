@@ -23,6 +23,8 @@ void SelectView::clicked(ModelItem* item)
    const QString patchPath = data.toString();
    const QString key = item->data(SelectModel::RoleKey).toString();
 
+   mainWindow->selectPatchStructure(patchPath, key);
+
    callOnOtherHubInstances(&SelectView::patchSelected, patchPath, key);
 }
 

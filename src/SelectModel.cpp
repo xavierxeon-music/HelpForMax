@@ -37,7 +37,7 @@ void SelectModel::setPackagePath(QString packageDir)
       const QString patchPath = it.value().absoluteFilePath();
 
       QString itemName = key;
-      if (mainWindow->buildPatchStructure(patchPath, key))
+      if (mainWindow->selectPatchStructure(patchPath, key))
          itemName = "* " + itemName;
 
       ModelItem* patchItem = new ModelItem(itemName);
