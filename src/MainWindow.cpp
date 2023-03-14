@@ -46,26 +46,21 @@ MainWindow::MainWindow()
       splitter->addWidget(editWidget);
    }
 
-   {
-      Message::Widget* messageWidget = new Message::Widget(this);
+   Message::Widget* messageWidget = new Message::Widget(this);
 
-      QDockWidget* messageDock = new QDockWidget(this);
-      messageDock->setObjectName("MessageDock");
-      messageDock->setWidget(messageWidget);
-      messageDock->setTitleBarWidget(new QWidget());
-      messageDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
+   QDockWidget* messageDock = new QDockWidget(this);
+   messageDock->setObjectName("MessageDock");
+   messageDock->setWidget(messageWidget);
+   messageDock->setTitleBarWidget(new QWidget());
+   messageDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
 
-      addDockWidget(Qt::BottomDockWidgetArea, messageDock);
-   }
+   addDockWidget(Qt::BottomDockWidgetArea, messageDock);
 
    QToolBar* toolBar = addToolBar("Main");
    toolBar->setObjectName("main_toolbar");
    toolBar->setMovable(false);
 
-   QAction* noAction = toolBar->addAction(QIcon(":/New.svg"), "-> no functionality <-");
-   noAction->setEnabled(false);
-
-   toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
+   QAction* allAction = toolBar->addAction(QIcon(":/All.svg"), "Reload Package");
 
    QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
@@ -75,6 +70,15 @@ MainWindow::MainWindow()
 
    QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
+
+   QWidget* stretchWidget = new QWidget(this);
+   stretchWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+   toolBar->addWidget(stretchWidget);
+
+   toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
+
+   QAction* visibleAction = toolBar->addAction(QIcon(":/List.svg"), "Toggle Messages", messageDock, &QWidget::setVisible);
+   visibleAction->setCheckable(true);
 
    for (QAction* action : this->findChildren<QAction*>())
    {
@@ -89,6 +93,7 @@ MainWindow::MainWindow()
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
+   messageDock->hide();
 
    // load package
    const QString packagePath = Central::getPackagePath();

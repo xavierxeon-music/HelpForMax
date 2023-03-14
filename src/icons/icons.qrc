@@ -1,10 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>H4M.svg</file>
-        <file>New.svg</file>
         <file>Open.svg</file>
         <file>Reload.svg</file>
         <file>Save.svg</file>
         <file>External.svg</file>
+        <file>All.svg</file>
+        <file>List.svg</file>
     </qresource>
 </RCC>
