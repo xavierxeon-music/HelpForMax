@@ -230,6 +230,8 @@ void PatchParser::readXML()
 
    const QDomElement rootElement = doc.documentElement();
    readDigest(rootElement, patchDigest);
+   if (patchDigest.description.isEmpty())
+      markUndocumented("patch description");
 
    {
       const QDomElement metaDataElement = rootElement.firstChildElement("metadatalist");
@@ -261,6 +263,8 @@ void PatchParser::readXML()
             output.name = outletElement.attribute("name");
 
             readDigest(outletElement, output.digest);
+            if (patchDigest.description.isEmpty())
+               markUndocumented(QString("output %1 description").arg(output.name));
 
             outputMap[id] = output;
          }
@@ -331,6 +335,8 @@ void PatchParser::readXML()
             }
 
             readDigest(messageElement, message.digest);
+            if (patchDigest.description.isEmpty())
+               markUndocumented(QString("message %1 description").arg(name));
 
             const bool isStandard = ("1" == messageElement.attribute("standard"));
             if (isStandard)
@@ -682,6 +688,6 @@ QByteArray PatchParser::maxFileToDom(QByteArray maxXML) const
 
 void PatchParser::markUndocumented(const QString& where)
 {
-   qDebug() << "UNDOCUMENTED" << patchName << qPrintable(where);
+   ::Message::undocumented(patchName, where);
    isUndocumented = true;
 }

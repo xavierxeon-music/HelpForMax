@@ -13,7 +13,6 @@ HEADERS += \
    $$PWD/AbstractItemTreeView.hpp \
    $$PWD/Central.h \
    $$PWD/JSONModel.h \
-   $$PWD/Message.h \
    $$PWD/ModelItem.h \
    $$PWD/PatchStructure.h \
    $$PWD/Settings.h \
@@ -24,7 +23,6 @@ SOURCES += \
    $$PWD/AbstractItemTreeView.cpp \
    $$PWD/Central.cpp \
    $$PWD/JSONModel.cpp \
-   $$PWD/Message.cpp \
    $$PWD/ModelItem.cpp \
    $$PWD/PatchStructure.cpp \
    $$PWD/Settings.cpp \

@@ -23,6 +23,7 @@ HEADERS += \
    ComponentsView.h \
    EditWidget.h \
    MainWindow.h \
+   Message.h \
    PatchParser.h \
    SelectModel.h \
    SelectView.h
@@ -32,6 +33,7 @@ SOURCES += \
    ComponentsView.cpp \
    EditWidget.cpp \
    MainWindow.cpp \
+   Message.cpp \
    PatchParser.cpp \
    SelectModel.cpp \
    SelectView.cpp

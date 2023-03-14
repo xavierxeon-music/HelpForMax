@@ -53,7 +53,7 @@ void ComponentsModel::rebuild()
 
    {
       ModelItem* argumentListItem = new ModelItem("ARGUMENTS");
-      invisibleRootItem()->appendRow(argumentListItem);
+      invisibleRootItem()->appendRow({argumentListItem, new ModelItem()});
       argumentListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
 
       for (int index = 0; index < structure.argumentList.count(); index++)
@@ -68,7 +68,7 @@ void ComponentsModel::rebuild()
 
    {
       ModelItem* attributeListItem = new ModelItem("ATTRIBUTES");
-      invisibleRootItem()->appendRow(attributeListItem);
+      invisibleRootItem()->appendRow({attributeListItem, new ModelItem()});
       attributeListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
 
       for (PatchStructure::Attribute::Map::ConstIterator it = structure.attributeMap.constBegin(); it != structure.attributeMap.constEnd(); it++)
@@ -83,7 +83,7 @@ void ComponentsModel::rebuild()
 
    {
       ModelItem* messageListItem = new ModelItem("MESSAGES");
-      invisibleRootItem()->appendRow(messageListItem);
+      invisibleRootItem()->appendRow({messageListItem, new ModelItem()});
       messageListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
 
       for (const PatchStructure::Type& type : PatchStructure::typeList())
@@ -116,7 +116,7 @@ void ComponentsModel::rebuild()
 
    {
       ModelItem* outputListItem = new ModelItem("OUTPUTS");
-      invisibleRootItem()->appendRow(outputListItem);
+      invisibleRootItem()->appendRow({outputListItem, new ModelItem()});
       outputListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
 
       for (PatchStructure::Output::Map::ConstIterator it = structure.outputMap.constBegin(); it != structure.outputMap.constEnd(); it++)
