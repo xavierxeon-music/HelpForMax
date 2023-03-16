@@ -51,6 +51,28 @@ void SelectModel::setPackagePath(QString packageDir)
    endResetModel();
 }
 
+void SelectModel::setModified(bool enabled, QString key)
+{
+   if (enabled)
+      return;
+
+   for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
+   {
+      QStandardItem* undocumntedItem = invisibleRootItem()->child(row, 0);
+      QStandardItem* patchItem = invisibleRootItem()->child(row, 1);
+
+      const QString& rowKey = patchItem->text();
+
+      if (key.isEmpty() || rowKey == key)
+      {
+         if (mainWindow->isPatchStructureUndocumented(rowKey))
+            undocumntedItem->setText(" *");
+         else
+            undocumntedItem->setText("");
+      }
+   }
+}
+
 void SelectModel::recursiveSearch(const QString& path, InfoMap& infoMap)
 {
    const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files | QDir::Dirs;

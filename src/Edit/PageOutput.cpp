@@ -19,5 +19,5 @@ void Page::Output::update(const QVariant& data)
    PatchStructure::Output& output = mainWindow->parserRef().outputMap[outputIndex];
    keyInfo->setText("output " + QString::number(outputIndex) + " @ " + mainWindow->getCurrentKey());
 
-   monitor(descrptionEdit, &output.digest.description);
+   monitor(descrptionEdit, &output.digest.description, mainWindow->getCurrentKey());
 }

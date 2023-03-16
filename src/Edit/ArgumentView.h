@@ -20,7 +20,7 @@ public:
 
 public:
    void allowNameEdit(bool allow);
-   void clearMonitors();
+   void clearMonitors(const QString& patchKey);
    void monitor(PatchStructure::Argument* argument);
 
 private slots:
@@ -30,6 +30,7 @@ private:
    PatchStructure::Type getType(const int index) override;
 
 private:
+   QString key;
    QList<PatchStructure::Argument*> argumentList;
    QStandardItemModel* argumentModel;
    bool nameEditable;

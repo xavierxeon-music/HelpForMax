@@ -99,7 +99,6 @@ void MainWindow::slotOpenPackage()
 void MainWindow::slotSavePatches()
 {
    savePatchStructures();
-   callOnAllHubInstances(&Central::setModified, false);
 }
 
 void MainWindow::setPackagePath(QString packageDir)
@@ -125,8 +124,10 @@ void MainWindow::setPackagePath(QString packageDir)
    qDebug() << packageAuthor << packageName;
 }
 
-void MainWindow::setModified(bool enabled)
+void MainWindow::setModified(bool enabled, QString key)
 {
+   Q_UNUSED(key)
+
    setWindowModified(enabled);
 }
 

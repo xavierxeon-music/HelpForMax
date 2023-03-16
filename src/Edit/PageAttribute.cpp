@@ -45,12 +45,12 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    if (0 == item->column())
    {
       attribute.get = (item->checkState() == Qt::Checked);
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
    }
    else if (1 == item->column())
    {
       attribute.set = (item->checkState() == Qt::Checked);
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
    }
    else if (2 == item->column())
    {
@@ -63,7 +63,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
          if (number != attribute.size)
          {
             attribute.size = number;
-            FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+            FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
          }
       }
       else
@@ -77,7 +77,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
       if (type != attribute.type)
       {
          attribute.type = type;
-         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
       }
    }
 
@@ -92,8 +92,8 @@ void Page::Attribute::update(const QVariant& data)
    PatchStructure::Attribute& attribute = mainWindow->parserRef().attributeMap[attributeName];
    keyInfo->setText("attribute " + attributeName + " @ " + mainWindow->getCurrentKey());
 
-   monitor(digestEdit, &attribute.digest.text);
-   monitor(descrptionEdit, &attribute.digest.description);
+   monitor(digestEdit, &attribute.digest.text, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &attribute.digest.description, mainWindow->getCurrentKey());
 
    QStandardItem* getItem = attributeModel->invisibleRootItem()->child(0, 0);
    getItem->setCheckState(attribute.get ? Qt::Checked : Qt::Unchecked);

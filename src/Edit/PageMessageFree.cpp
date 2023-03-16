@@ -20,10 +20,10 @@ void Page::MessageFree::update(const QVariant& data)
    PatchStructure::Message& message = mainWindow->parserRef().messageFreeMap[messageName];
    keyInfo->setText("messsage " + messageName + " @ " + mainWindow->getCurrentKey());
 
-   monitor(digestEdit, &message.digest.text);
-   monitor(descrptionEdit, &message.digest.description);
+   monitor(digestEdit, &message.digest.text, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &message.digest.description, mainWindow->getCurrentKey());
 
-   argumentView->clearMonitors();
+   argumentView->clearMonitors(mainWindow->getCurrentKey());
    for (PatchStructure::Argument& argument : message.arguments)
       argumentView->monitor(&argument);
 }

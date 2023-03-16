@@ -27,6 +27,7 @@ private:
 
 private:
    void setPackagePath(QString packageDir) override;
+   void setModified(bool enabled, QString key) override;
    void recursiveSearch(const QString& path, InfoMap& infoMap);
 
 private:

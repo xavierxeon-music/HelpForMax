@@ -24,9 +24,9 @@ namespace Page
 
    protected:
       virtual void update(const QVariant& data) = 0;
-      void monitor(QLineEdit* lineEdit, QString* variable);
-      void monitor(QLineEdit* lineEdit, QStringList* variable);
-      void monitor(QPlainTextEdit* textEdit, QString* variable);
+      void monitor(QLineEdit* lineEdit, QString* variable, const QString& patchKey);
+      void monitor(QLineEdit* lineEdit, QStringList* variable, const QString& patchKey);
+      void monitor(QPlainTextEdit* textEdit, QString* variable, const QString& patchKey);
 
    protected:
       MainWindow* mainWindow;

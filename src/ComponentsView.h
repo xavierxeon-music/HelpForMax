@@ -23,6 +23,7 @@ public slots:
 private:
    void patchSelected(QString patchPath, QString key) override;
    void clicked(ModelItem* item) override;
+   void setModified(bool modified, QString key) override;
 
 private:
    MainWindow* mainWindow;

@@ -18,9 +18,9 @@ Page::Abstract::~Abstract()
 {
 }
 
-void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
+void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable, const QString& patchKey)
 {
-   auto update = [&, lineEdit, variable]()
+   auto update = [&, lineEdit, variable, patchKey]()
    {
       const QString& newText = lineEdit->text();
       const QString oldText = *variable;
@@ -28,7 +28,7 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
          return;
 
       *variable = newText;
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -38,9 +38,9 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable)
    connectionMap[lineEdit] = connect(lineEdit, &QLineEdit::textChanged, update);
 }
 
-void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
+void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable, const QString& patchKey)
 {
-   auto update = [&, lineEdit, variable]()
+   auto update = [&, lineEdit, variable, patchKey]()
    {
       const QString& newText = lineEdit->text();
       const QString oldText = variable->join(";");
@@ -48,7 +48,7 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
          return;
 
       *variable = newText.split(";");
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
    };
 
    if (connectionMap.contains(lineEdit))
@@ -58,9 +58,9 @@ void Page::Abstract::monitor(QLineEdit* lineEdit, QStringList* variable)
    connectionMap[lineEdit] = connect(lineEdit, &QLineEdit::textChanged, update);
 }
 
-void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
+void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable, const QString& patchKey)
 {
-   auto update = [&, textEdit, variable]()
+   auto update = [&, textEdit, variable, patchKey]()
    {
       const QString& newText = textEdit->toPlainText();
       const QString oldText = *variable;
@@ -68,7 +68,7 @@ void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable)
          return;
 
       *variable = newText;
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
    };
 
    if (connectionMap.contains(textEdit))

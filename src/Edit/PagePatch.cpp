@@ -37,7 +37,7 @@ void Page::Patch::slotAddStandardMethond(int typeId)
    message.arguments.append(argument);
 
    mainWindow->parserRef().messageStandardMap[type] = message;
-   callOnOtherHubInstances(&Central::setModified, true);
+   callOnOtherHubInstances(&Central::setModified, true, mainWindow->getCurrentKey());
 }
 
 void Page::Patch::update(const QVariant& data)
@@ -45,8 +45,8 @@ void Page::Patch::update(const QVariant& data)
    Q_UNUSED(data)
 
    keyInfo->setText("patch @ " + mainWindow->getCurrentKey());
-   monitor(metaTagEdit, &mainWindow->parserRef().metaTagList);
-   monitor(digestEdit, &mainWindow->parserRef().patchDigest.text);
-   monitor(descrptionEdit, &mainWindow->parserRef().patchDigest.description);
-   monitor(seeAlsoEdit, &mainWindow->parserRef().seeAlsoList);
+   monitor(metaTagEdit, &mainWindow->parserRef().metaTagList, mainWindow->getCurrentKey());
+   monitor(digestEdit, &mainWindow->parserRef().patchDigest.text, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &mainWindow->parserRef().patchDigest.description, mainWindow->getCurrentKey());
+   monitor(seeAlsoEdit, &mainWindow->parserRef().seeAlsoList, mainWindow->getCurrentKey());
 }

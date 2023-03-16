@@ -19,7 +19,7 @@ public:
    void patchSelected(QString patchPath, QString key) override;
 
 private:
-   void setModified(bool enabled) override;
+   void setModified(bool enabled, QString key) override;
    void rebuild();
    void update();
 

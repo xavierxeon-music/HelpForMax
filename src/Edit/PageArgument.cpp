@@ -20,9 +20,9 @@ void Page::Argument::update(const QVariant& data)
    PatchStructure::Argument& argument = mainWindow->parserRef().argumentList[argumentIndex];
    keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + mainWindow->getCurrentKey());
 
-   monitor(digestEdit, &argument.digest.text);
-   monitor(descrptionEdit, &argument.digest.description);
+   monitor(digestEdit, &argument.digest.text, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &argument.digest.description, mainWindow->getCurrentKey());
 
-   argumentView->clearMonitors();
+   argumentView->clearMonitors(mainWindow->getCurrentKey());
    argumentView->monitor(&argument);
 }

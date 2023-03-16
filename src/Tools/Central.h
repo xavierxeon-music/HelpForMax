@@ -12,7 +12,7 @@ class Central;
 struct FunctionHub : public Abstract::FunctionHub<Central>
 {
    virtual void setPackagePath(QString packageDir);
-   virtual void setModified(bool enabled);
+   virtual void setModified(bool enabled, QString key);
    virtual void patchSelected(QString patchPath, QString key);
    virtual void componentSelected(PatchParser::Marker marker, QVariant data);
 };

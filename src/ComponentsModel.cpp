@@ -20,7 +20,7 @@ void ComponentsModel::patchSelected(QString patchPath, QString key)
    update();
 }
 
-void ComponentsModel::setModified(bool enabled)
+void ComponentsModel::setModified(bool enabled, QString key)
 {
    if (enabled)
       update();

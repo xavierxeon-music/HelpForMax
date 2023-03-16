@@ -24,7 +24,7 @@ void ComponentsView::slotReloadPatch()
    mainWindow->parserRef().load();
 
    getModel<ComponentsModel>()->patchSelected(QString(), QString());
-   callOnOtherHubInstances(&Central::setModified, false);
+   callOnOtherHubInstances(&Central::setModified, false, mainWindow->getCurrentKey());
 }
 
 void ComponentsView::slotOpenInExternalEditor()
@@ -62,4 +62,13 @@ void ComponentsView::clicked(ModelItem* item)
    const QVariant data = item->data(PatchParser::RoleData);
 
    callOnOtherHubInstances(&ComponentsView::componentSelected, marker, data);
+}
+
+void ComponentsView::setModified(bool modified, QString key)
+{
+   if (modified)
+      return;
+
+   if (key.isEmpty() || mainWindow->getCurrentKey() == key)
+      getModel<ComponentsModel>()->patchSelected(QString(), QString());
 }

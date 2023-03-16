@@ -10,10 +10,11 @@ void FunctionHub::setPackagePath(QString packageDir)
    Q_UNUSED(packageDir);
 }
 
-void FunctionHub::setModified(bool enabled)
+void FunctionHub::setModified(bool enabled, QString key)
 {
    // do nothing
-   Q_UNUSED(enabled);
+   Q_UNUSED(enabled)
+   Q_UNUSED(key)
 }
 
 void FunctionHub::patchSelected(QString patchPath, QString key)
@@ -96,7 +97,11 @@ bool Central::isPatchStructureUndocumented(const QString& key)
 void Central::savePatchStructures()
 {
    for (PatchParser& parser : parserMap)
+   {
       parser.writeXML();
+      parser.clear();
+      parser.load();
+   }
 
-   callOnOtherHubInstances(&FunctionHub::setModified, false);
+   callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }

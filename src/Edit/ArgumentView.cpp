@@ -4,6 +4,7 @@ ArgumentView::ArgumentView(QWidget* parent)
    : QTreeView(parent)
    , TypeDelegate::Proxy()
    , FunctionHub()
+   , key()
    , argumentList()
    , argumentModel(nullptr)
    , nameEditable(false)
@@ -22,8 +23,10 @@ void ArgumentView::allowNameEdit(bool allow)
    nameEditable = allow;
 }
 
-void ArgumentView::clearMonitors()
+void ArgumentView::clearMonitors(const QString& patchKey)
 {
+   key = patchKey;
+
    argumentList.clear();
    argumentModel->clear();
    argumentModel->setHorizontalHeaderLabels({"O", "Name", "Type"});
@@ -55,7 +58,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
    if (0 == item->column())
    {
       argument->optional = (item->checkState() == Qt::Checked);
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, key);
    }
    else if (1 == item->column())
    {
@@ -63,7 +66,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
       if (name != argument->name)
       {
          argument->name = name;
-         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, key);
       }
    }
    else if (2 == item->column())
@@ -72,7 +75,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
       if (type != argument->type)
       {
          argument->type = type;
-         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true);
+         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, key);
       }
    }
 }
