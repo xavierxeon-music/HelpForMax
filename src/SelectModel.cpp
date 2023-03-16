@@ -19,7 +19,7 @@ void SelectModel::setPackagePath(QString packageDir)
    beginResetModel();
 
    clear();
-   setHorizontalHeaderLabels({"Patch"});
+   setHorizontalHeaderLabels({"U", "Patch"});
 
    QDir().mkpath(packageDir + "/patchers");
    QDir().mkpath(packageDir + "/docs");
@@ -27,35 +27,24 @@ void SelectModel::setPackagePath(QString packageDir)
    InfoMap infoMap;
    recursiveSearch(packageDir + "/patchers", infoMap);
 
-   QMap<QString, QStandardItem*> parentMap;
-   parentMap[packageDir + "/patchers"] = invisibleRootItem();
-
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
    for (InfoMap::ConstIterator it = infoMap.constBegin(); it != infoMap.constEnd(); it++)
    {
       const QString key = it.key();
       const QString patchPath = it.value().absoluteFilePath();
 
-      QString itemName = key;
-      if (mainWindow->selectPatchStructure(patchPath, key))
-         itemName = "* " + itemName;
+      ModelItem* undocumntedItem = new ModelItem();
 
-      ModelItem* patchItem = new ModelItem(itemName);
+      ModelItem* patchItem = new ModelItem(key);
       patchItem->setData(patchPath, RolePatchPath);
       patchItem->setData(key, RoleKey);
 
-      const QString patchDir = it.value().absolutePath();
-      if (!parentMap.contains(patchDir))
-      {
-         const QString folderName = QString(patchDir).replace(packageDir + "/patchers/", "");
+      invisibleRootItem()->appendRow({undocumntedItem, patchItem});
 
-         ModelItem* item = new ModelItem(folderName);
-         invisibleRootItem()->appendRow(item);
+      mainWindow->loadPatchStructure(patchPath, key);
 
-         parentMap[patchDir] = item;
-      }
-
-      parentMap[patchDir]->appendRow(patchItem);
+      if (mainWindow->isPatchStructureUndocumented(key))
+         undocumntedItem->setText(" *");
    }
    QApplication::restoreOverrideCursor();
 

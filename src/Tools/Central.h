@@ -30,8 +30,11 @@ public:
    const QString& getCurrentKey() const;
    const PatchParser& parser();
    PatchParser& parserRef();
+
    void savePatchStructures();
-   bool selectPatchStructure(QString patchPath, const QString& key);
+   void loadPatchStructure(QString patchPath, const QString& key);
+   void selectPatchStructure(const QString& key);
+   bool isPatchStructureUndocumented(const QString& key);
 
 protected:
    static QString packageAuthor;

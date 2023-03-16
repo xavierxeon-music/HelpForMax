@@ -60,25 +60,17 @@ MainWindow::MainWindow()
    toolBar->setObjectName("main_toolbar");
    toolBar->setMovable(false);
 
-   QAction* allAction = toolBar->addAction(QIcon(":/All.svg"), "Reload Package");
+   toolBar->addAction(QIcon(":/OpenPackage.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
 
-   QAction* reloadAction = toolBar->addAction(QIcon(":/Reload.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
+   QAction* reloadAction = toolBar->addAction(QIcon(":/ReloadPatch.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
 
-   QAction* saveAction = toolBar->addAction(QIcon(":/Save.svg"), "Save All Patches", this, &MainWindow::slotSavePatches);
+   QAction* saveAction = toolBar->addAction(QIcon(":/SaveAllPatches.svg"), "Save All Patches", this, &MainWindow::slotSavePatches);
    saveAction->setShortcut(QKeySequence::Save);
 
-   QAction* editorAction = toolBar->addAction(QIcon(":/External.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
+   QAction* editorAction = toolBar->addAction(QIcon(":/Editor.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
 
-   QWidget* stretchWidget = new QWidget(this);
-   stretchWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-   toolBar->addWidget(stretchWidget);
-
-   toolBar->addAction(QIcon(":/Open.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
-
-   QAction* visibleAction = toolBar->addAction(QIcon(":/List.svg"), "Toggle Messages", messageDock, &QWidget::setVisible);
-   visibleAction->setCheckable(true);
 
    for (QAction* action : this->findChildren<QAction*>())
    {

@@ -12,6 +12,7 @@ SelectView::SelectView(MainWindow* mainWindow, SelectModel* model)
    , mainWindow(mainWindow)
 {
    setHeaderHidden(true);
+   setRootIsDecorated(false);
 }
 
 void SelectView::clicked(ModelItem* item)
@@ -23,7 +24,7 @@ void SelectView::clicked(ModelItem* item)
    const QString patchPath = data.toString();
    const QString key = item->data(SelectModel::RoleKey).toString();
 
-   mainWindow->selectPatchStructure(patchPath, key);
+   mainWindow->selectPatchStructure(key);
 
    callOnOtherHubInstances(&SelectView::patchSelected, patchPath, key);
 }

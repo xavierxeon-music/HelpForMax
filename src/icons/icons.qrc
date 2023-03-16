@@ -1,11 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>H4M.svg</file>
-        <file>Open.svg</file>
-        <file>Reload.svg</file>
-        <file>Save.svg</file>
-        <file>External.svg</file>
-        <file>All.svg</file>
-        <file>List.svg</file>
+        <file>Editor.svg</file>
+        <file>HelpForMax.svg</file>
+        <file>OpenPackage.svg</file>
+        <file>PatchArgument.svg</file>
+        <file>PatchAttribute.svg</file>
+        <file>PatchGeneral.svg</file>
+        <file>PatchMessage.svg</file>
+        <file>PatchOutput.svg</file>
+        <file>ReloadPatch.svg</file>
+        <file>SaveAllPatches.svg</file>
     </qresource>
 </RCC>

@@ -75,14 +75,20 @@ PatchParser& Central::parserRef()
    return parserMap[currentKey];
 }
 
-bool Central::selectPatchStructure(QString patchPath, const QString& key)
+void Central::loadPatchStructure(QString patchPath, const QString& key)
+{
+   parserMap[key] = PatchParser(patchPath);
+}
+
+void Central::selectPatchStructure(const QString& key)
 {
    currentKey = key;
+}
 
+bool Central::isPatchStructureUndocumented(const QString& key)
+{
    if (!parserMap.contains(key))
-   {
-      parserMap[key] = PatchParser(patchPath);
-   }
+      return false;
 
    return parserMap[key].foundUndocumented();
 }

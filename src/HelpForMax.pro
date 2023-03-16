@@ -7,12 +7,12 @@ CONFIG += c++20
 DESTDIR = ../bin
 
 macx {
-    ICON = $$PWD/icons/H4M.icns
+    ICON = $$PWD/icons/HelpForMax.icns
     CONFIG(release, debug|release): DESTDIR = ~/Applications
 }
 
 windows {
-    RC_ICONS = $$PWD/icons/H4M.ico
+    RC_ICONS = $$PWD/icons/HelpForMax.ico
 }
 
 include(Edit/Edit.pri)

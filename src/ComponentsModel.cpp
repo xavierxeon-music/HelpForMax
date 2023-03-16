@@ -49,43 +49,37 @@ void ComponentsModel::rebuild()
 
       invisibleRootItem()->appendRow({patchItem, patchDigestItem});
       addMarker(PatchParser::Marker::Patch, true, patchItem, patchDigestItem);
+
+      patchItem->setIcon(QIcon(":/PatchGeneral.svg"));
    }
 
    {
-      ModelItem* argumentListItem = new ModelItem("ARGUMENTS");
-      invisibleRootItem()->appendRow({argumentListItem, new ModelItem()});
-      argumentListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
-
       for (int index = 0; index < structure.argumentList.count(); index++)
       {
          ModelItem* argItem = new ModelItem();
          ModelItem* argDigestItem = new ModelItem();
 
-         argumentListItem->appendRow({argItem, argDigestItem});
+         invisibleRootItem()->appendRow({argItem, argDigestItem});
          addMarker(PatchParser::Marker::Argument, index, argItem, argDigestItem);
+
+         argItem->setIcon(QIcon(":/PatchArgument.svg"));
       }
    }
 
    {
-      ModelItem* attributeListItem = new ModelItem("ATTRIBUTES");
-      invisibleRootItem()->appendRow({attributeListItem, new ModelItem()});
-      attributeListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
-
       for (PatchStructure::Attribute::Map::ConstIterator it = structure.attributeMap.constBegin(); it != structure.attributeMap.constEnd(); it++)
       {
          ModelItem* attrItem = new ModelItem(it.key()); // read only
          ModelItem* attrrDigestItem = new ModelItem();
 
-         attributeListItem->appendRow({attrItem, attrrDigestItem});
+         invisibleRootItem()->appendRow({attrItem, attrrDigestItem});
          addMarker(PatchParser::Marker::Attribute, it.key(), attrItem, attrrDigestItem);
+
+         attrItem->setIcon(QIcon(":/PatchAttribute.svg"));
       }
    }
 
    {
-      ModelItem* messageListItem = new ModelItem("MESSAGES");
-      invisibleRootItem()->appendRow({messageListItem, new ModelItem()});
-      messageListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
-
       for (const PatchStructure::Type& type : PatchStructure::typeList())
       {
          ModelItem* msgItem = new ModelItem(PatchStructure::typeName(type)); // read only
@@ -100,8 +94,10 @@ void ComponentsModel::rebuild()
             msgItem->setVisible(false);
          }
 
-         messageListItem->appendRow({msgItem, msgDigestItem});
+         invisibleRootItem()->appendRow({msgItem, msgDigestItem});
          addMarker(PatchParser::Marker::MessageStandard, QVariant::fromValue(type), msgItem, msgDigestItem);
+
+         msgItem->setIcon(QIcon(":/PatchMessage.svg"));
       }
 
       for (PatchStructure::Message::FreeMap::ConstIterator it = structure.messageFreeMap.constBegin(); it != structure.messageFreeMap.constEnd(); it++)
@@ -109,23 +105,23 @@ void ComponentsModel::rebuild()
          ModelItem* msgItem = new ModelItem(it.key()); // read only
          ModelItem* msgDigestItem = new ModelItem();
 
-         messageListItem->appendRow({msgItem, msgDigestItem});
+         invisibleRootItem()->appendRow({msgItem, msgDigestItem});
          addMarker(PatchParser::Marker::MessageFree, it.key(), msgItem, msgDigestItem);
+
+         msgItem->setIcon(QIcon(":/PatchMessage.svg"));
       }
    }
 
    {
-      ModelItem* outputListItem = new ModelItem("OUTPUTS");
-      invisibleRootItem()->appendRow({outputListItem, new ModelItem()});
-      outputListItem->setData(QVariant::fromValue(PatchParser::Marker::Undefined), PatchParser::RoleMarker);
-
       for (PatchStructure::Output::Map::ConstIterator it = structure.outputMap.constBegin(); it != structure.outputMap.constEnd(); it++)
       {
          ModelItem* outputItem = new ModelItem();
          ModelItem* outputNumberItem = new ModelItem("output #" + QString::number(it.key())); // read only
 
-         outputListItem->appendRow({outputItem, outputNumberItem});
+         invisibleRootItem()->appendRow({outputItem, outputNumberItem});
          addMarker(PatchParser::Marker::Output, it.key(), outputItem, outputNumberItem);
+
+         outputItem->setIcon(QIcon(":/PatchOutput.svg"));
       }
    }
 
@@ -135,43 +131,40 @@ void ComponentsModel::rebuild()
 void ComponentsModel::update()
 {
    const PatchStructure structure = mainWindow->parser();
+   int row = 0;
 
-   QStandardItem* patchDigestItem = invisibleRootItem()->child(0, 1);
+   QStandardItem* patchDigestItem = invisibleRootItem()->child(row, 1);
    patchDigestItem->setText(structure.patchDigest.text);
+   row++;
 
    {
-      QStandardItem* argumentListItem = invisibleRootItem()->child(1, 0);
       for (int index = 0; index < structure.argumentList.count(); index++)
       {
          const PatchStructure::Argument& argument = structure.argumentList.at(index);
 
-         QStandardItem* argItem = argumentListItem->child(index, 0);
+         QStandardItem* argItem = invisibleRootItem()->child(row + index, 0);
          argItem->setText(argument.name);
 
-         QStandardItem* argDigestItem = argumentListItem->child(index, 1);
+         QStandardItem* argDigestItem = invisibleRootItem()->child(row + index, 1);
          argDigestItem->setText(argument.digest.text);
       }
+      row += structure.argumentList.count();
    }
 
    {
-      QStandardItem* attributeListItem = invisibleRootItem()->child(2, 0);
-      int index = 0;
       for (PatchStructure::Attribute::Map::ConstIterator it = structure.attributeMap.constBegin(); it != structure.attributeMap.constEnd(); it++)
       {
-         QStandardItem* attrrDigestItem = attributeListItem->child(index, 1);
+         QStandardItem* attrrDigestItem = invisibleRootItem()->child(row, 1);
          attrrDigestItem->setText(it.value().digest.text);
-         index++;
+         row++;
       }
    }
 
    {
-      QStandardItem* messageListItem = invisibleRootItem()->child(3, 0);
-      int index = 0;
-
       for (const PatchStructure::Type& type : PatchStructure::typeList())
       {
-         ModelItem* msgItem = static_cast<ModelItem*>(messageListItem->child(index, 0));
-         QStandardItem* msgDigestItem = messageListItem->child(index, 1);
+         ModelItem* msgItem = static_cast<ModelItem*>(invisibleRootItem()->child(row, 0));
+         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 1);
 
          if (structure.messageStandardMap.contains(type))
          {
@@ -183,28 +176,25 @@ void ComponentsModel::update()
             msgItem->setVisible(false);
          }
 
-         index++;
+         row++;
       }
 
       for (PatchStructure::Message::FreeMap::ConstIterator it = structure.messageFreeMap.constBegin(); it != structure.messageFreeMap.constEnd(); it++)
       {
-         QStandardItem* msgDigestItem = messageListItem->child(index, 1);
+         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 1);
          msgDigestItem->setText(it.value().digest.text);
 
-         index++;
+         row++;
       }
    }
 
    {
-      QStandardItem* outputListItem = invisibleRootItem()->child(4, 0);
-
-      int index = 0;
       for (PatchStructure::Output::Map::ConstIterator it = structure.outputMap.constBegin(); it != structure.outputMap.constEnd(); it++)
       {
-         QStandardItem* outputItem = outputListItem->child(index, 0);
+         QStandardItem* outputItem = invisibleRootItem()->child(row, 0);
          outputItem->setText(it.value().name);
 
-         index++;
+         row++;
       }
    }
 }
