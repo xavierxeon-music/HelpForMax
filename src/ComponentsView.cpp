@@ -15,6 +15,7 @@ ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
    , helpPath()
 {
    setHeaderHidden(true);
+   setRootIsDecorated(false);
 }
 
 void ComponentsView::slotReloadPatch()

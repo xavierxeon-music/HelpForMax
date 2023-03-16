@@ -19,7 +19,12 @@ public:
       Signal
    };
 
-   struct Digest
+   struct Base
+   {
+      bool undocumented = false;
+   };
+
+   struct Digest : Base
    {
       QString text;
       QString description;
@@ -27,7 +32,7 @@ public:
 
    using MetaTagList = QStringList;
 
-   struct Output
+   struct Output : Base
    {
       QString name;
       Digest digest;
@@ -37,7 +42,7 @@ public:
 
    // things in patcherargs without @
    // message argumetns
-   struct Argument
+   struct Argument : Base
    {
       QString name;
       bool optional = false;
@@ -47,7 +52,7 @@ public:
       using List = QList<Argument>;
    };
 
-   struct Message
+   struct Message : Base
    {
       Argument::List arguments;
       Digest digest;
@@ -57,7 +62,7 @@ public:
    };
 
    // things in patcherargs with @
-   struct Attribute
+   struct Attribute : Base
    {
       bool get = true;
       bool set = true;

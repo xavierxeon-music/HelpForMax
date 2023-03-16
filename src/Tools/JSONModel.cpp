@@ -8,8 +8,6 @@
 #include <QJsonParseError>
 #include <QJsonValue>
 
-#include <Message.h>
-
 QJsonObject JSON::fromFile(const QString& fileName)
 {
    if (fileName.isEmpty())
@@ -18,7 +16,7 @@ QJsonObject JSON::fromFile(const QString& fileName)
    QFile file(fileName);
    if (!file.open(QIODevice::ReadOnly))
    {
-      Message::error(QString("unalbe to read JSON file %1").arg(fileName));
+      qWarning() << "unable to read JSON file" << fileName;
       return QJsonObject();
    }
 
@@ -29,7 +27,7 @@ QJsonObject JSON::fromFile(const QString& fileName)
    QJsonDocument doc = QJsonDocument::fromJson(content, &parserStatus);
    if (parserStatus.error != QJsonParseError::NoError)
    {
-      Message::error(parserStatus.errorString());
+      qWarning() << parserStatus.errorString();
       return QJsonObject();
    }
 

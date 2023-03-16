@@ -19,7 +19,6 @@
 #include "ComponentsModel.h"
 #include "ComponentsView.h"
 #include "EditWidget.h"
-#include "Message.h"
 #include "SelectModel.h"
 #include "SelectView.h"
 
@@ -45,16 +44,6 @@ MainWindow::MainWindow()
       splitter->addWidget(componentsView);
       splitter->addWidget(editWidget);
    }
-
-   Message::Widget* messageWidget = new Message::Widget(this);
-
-   QDockWidget* messageDock = new QDockWidget(this);
-   messageDock->setObjectName("MessageDock");
-   messageDock->setWidget(messageWidget);
-   messageDock->setTitleBarWidget(new QWidget());
-   messageDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-
-   addDockWidget(Qt::BottomDockWidgetArea, messageDock);
 
    QToolBar* toolBar = addToolBar("Main");
    toolBar->setObjectName("main_toolbar");
@@ -85,7 +74,6 @@ MainWindow::MainWindow()
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
-   messageDock->hide();
 
    // load package
    const QString packagePath = Central::getPackagePath();
