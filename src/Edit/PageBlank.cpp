@@ -5,7 +5,7 @@ Page::Blank::Blank(MainWindow* mainWindow, const PatchParser::Marker& marker)
 {
    setupUi(this);
 
-   const QIcon icon(":/H4M.svg");
+   const QIcon icon(":/HelpForMax.svg");
    label->setPixmap(icon.pixmap(150, 150));
 }
 

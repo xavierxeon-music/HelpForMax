@@ -22,6 +22,9 @@ public:
 public:
    SelectModel(MainWindow* mainWindow);
 
+signals:
+   void signalUnmatchedHelpFiles(QStringList helpFileList);
+
 private:
    using InfoMap = QMap<QString, QFileInfo>;
 

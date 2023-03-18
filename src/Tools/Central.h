@@ -34,7 +34,8 @@ public:
    void savePatchStructures();
    void loadPatchStructure(QString patchPath, const QString& key);
    void selectPatchStructure(const QString& key);
-   bool isPatchStructureUndocumented(const QString& key);
+   bool isPatchStructureUndocumented(const QString& key) const;
+   QString getHelpPath(const QString& key) const;
 
 protected:
    static QString packageAuthor;

@@ -180,6 +180,11 @@ const bool& PatchParser::foundUndocumented() const
    return isUndocumented;
 }
 
+const QString& PatchParser::getHelpPath() const
+{
+   return helpPath;
+}
+
 QDomElement PatchParser::createSubElement(QDomElement parent, const QString& name, const QString& text, const TagMap& tagMap)
 {
    QDomElement element = parent.ownerDocument().createElement(name);

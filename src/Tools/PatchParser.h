@@ -40,6 +40,7 @@ public:
    void writeXML();
 
    const bool& foundUndocumented() const;
+   const QString& getHelpPath() const;
 
 private:
    using TagMap = QMap<QString, QString>;

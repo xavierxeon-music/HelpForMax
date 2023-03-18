@@ -21,10 +21,19 @@ void SelectModel::setPackagePath(QString packageDir)
    clear();
    setHorizontalHeaderLabels({"U", "Patch"});
 
-   QDir().mkpath(packageDir + "/patchers");
+   QStringList unmatchedHelpFileList;
    QDir().mkpath(packageDir + "/docs");
+   const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files;
+   for (QFileInfo fileInfo : QDir(packageDir + "/docs").entryInfoList(filters))
+   {
+      if (!fileInfo.fileName().endsWith(".maxref.xml"))
+         continue;
+
+      unmatchedHelpFileList.append(fileInfo.absoluteFilePath());
+   }
 
    InfoMap infoMap;
+   QDir().mkpath(packageDir + "/patchers");
    recursiveSearch(packageDir + "/patchers", infoMap);
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
@@ -45,7 +54,15 @@ void SelectModel::setPackagePath(QString packageDir)
 
       if (mainWindow->isPatchStructureUndocumented(key))
          undocumntedItem->setText(" *");
+
+      const QString helpPath = mainWindow->getHelpPath(key);
+      if (unmatchedHelpFileList.contains(helpPath))
+         unmatchedHelpFileList.removeAll(helpPath);
    }
+
+   if (!unmatchedHelpFileList.isEmpty())
+      emit signalUnmatchedHelpFiles(unmatchedHelpFileList);
+
    QApplication::restoreOverrideCursor();
 
    endResetModel();

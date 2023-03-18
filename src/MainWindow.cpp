@@ -6,13 +6,14 @@
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QSplitter>
+#include <QTimer>
 #include <QToolBar>
-
 
 #ifdef Q_OS_MACX
 #include "Tools/MacTheme.h"
 #endif // Q_OS_MACX
 
+#include "Clean/CleanDialog.h"
 #include "Components/ComponentsModel.h"
 #include "Components/ComponentsView.h"
 #include "Edit/EditWidget.h"
@@ -28,6 +29,8 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max");
 
    SelectModel* selectModel = new SelectModel(this);
+   connect(selectModel, &SelectModel::signalUnmatchedHelpFiles, this, &MainWindow::slotUnmatchedHelpFiles);
+
    ComponentsModel* componentsModel = new ComponentsModel(this);
 
    SelectView* selectView = new SelectView(this, selectModel);
@@ -98,6 +101,17 @@ void MainWindow::slotOpenPackage()
 void MainWindow::slotSavePatches()
 {
    savePatchStructures();
+}
+
+void MainWindow::slotUnmatchedHelpFiles(QStringList helpFileList)
+{
+   auto delayStart = [this, helpFileList]()
+   {
+      Clean::Dialog dialog(this, helpFileList);
+      dialog.exec();
+   };
+
+   QTimer::singleShot(100, delayStart);
 }
 
 void MainWindow::setPackagePath(QString packageDir)

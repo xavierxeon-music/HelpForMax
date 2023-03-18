@@ -86,12 +86,22 @@ void Central::selectPatchStructure(const QString& key)
    currentKey = key;
 }
 
-bool Central::isPatchStructureUndocumented(const QString& key)
+bool Central::isPatchStructureUndocumented(const QString& key) const
 {
    if (!parserMap.contains(key))
       return false;
 
    return parserMap[key].foundUndocumented();
+}
+
+QString Central::getHelpPath(const QString& key) const
+{
+   static const QString dummy;
+   if (!parserMap.contains(key))
+      return dummy;
+
+   const QString helpPath = parserMap[key].getHelpPath();
+   return helpPath;
 }
 
 void Central::savePatchStructures()
