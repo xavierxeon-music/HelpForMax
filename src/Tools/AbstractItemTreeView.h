@@ -6,7 +6,7 @@
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 
-#include <ModelItem.h>
+#include "Tools/ModelItem.h"
 
 namespace Abstract
 {

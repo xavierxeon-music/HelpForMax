@@ -15,26 +15,17 @@ windows {
     RC_ICONS = $$PWD/icons/HelpForMax.ico
 }
 
+include(Clean/Clean.pri)
+include(Components/Components.pri)
 include(Edit/Edit.pri)
+include(Select/Select.pri)
 include(Tools/Tools.pri)
 
 HEADERS += \
-   ComponentsModel.h \
-   ComponentsView.h \
-   EditWidget.h \
-   MainWindow.h \
-   PatchParser.h \
-   SelectModel.h \
-   SelectView.h
+   MainWindow.h
 
 SOURCES += \
-   ComponentsModel.cpp \
-   ComponentsView.cpp \
-   EditWidget.cpp \
-   MainWindow.cpp \
-   PatchParser.cpp \
-   SelectModel.cpp \
-   SelectView.cpp
+   MainWindow.cpp
 
 RESOURCES += \
    icons/icons.qrc

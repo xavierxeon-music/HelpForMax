@@ -1,7 +1,7 @@
 #ifndef ComponentsModelH
 #define ComponentsModelH
 
-#include <Central.h>
+#include "Tools/Central.h"
 
 #include <QStandardItemModel>
 

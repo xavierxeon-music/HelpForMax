@@ -1,6 +1,6 @@
 #include "ComponentsModel.h"
 
-#include <ModelItem.h>
+#include "Tools/ModelItem.h"
 
 #include "MainWindow.h"
 

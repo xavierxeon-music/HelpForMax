@@ -8,19 +8,18 @@
 #include <QSplitter>
 #include <QToolBar>
 
-#include <Settings.h>
 
 #ifdef Q_OS_MACX
-#include <MacTheme.h>
+#include "Tools/MacTheme.h"
 #endif // Q_OS_MACX
 
-#include <JSONModel.h>
-
-#include "ComponentsModel.h"
-#include "ComponentsView.h"
-#include "EditWidget.h"
-#include "SelectModel.h"
-#include "SelectView.h"
+#include "Components/ComponentsModel.h"
+#include "Components/ComponentsView.h"
+#include "Edit/EditWidget.h"
+#include "Select/SelectModel.h"
+#include "Select/SelectView.h"
+#include "Tools/JSONModel.h"
+#include "Tools/Settings.h"
 
 MainWindow::MainWindow()
    : QMainWindow(nullptr)

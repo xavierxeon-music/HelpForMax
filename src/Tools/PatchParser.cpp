@@ -1,4 +1,4 @@
-#include "PatchParser.h"
+#include "Tools/PatchParser.h"
 
 #include <QDomDocument>
 #include <QFile>
@@ -6,8 +6,8 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
-#include <Central.h>
-#include <JSONModel.h>
+#include "Tools/Central.h"
+#include "Tools/JSONModel.h"
 
 const QList<QByteArray> PatchParser::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
 

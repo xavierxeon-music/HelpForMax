@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include <Central.h>
+#include "Tools/Central.h"
 
 class MainWindow : public QMainWindow,
                    public Central

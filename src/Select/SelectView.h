@@ -1,8 +1,8 @@
 #ifndef SelectViewH
 #define SelectViewH
 
-#include <Central.h>
-#include <AbstractItemTreeView.h>
+#include "Tools/Central.h"
+#include "Tools/AbstractItemTreeView.h"
 
 class SelectModel;
 class Persona;

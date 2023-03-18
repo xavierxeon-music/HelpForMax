@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDir>
 
-#include <ModelItem.h>
+#include "Tools/ModelItem.h"
 
 #include "MainWindow.h"
 

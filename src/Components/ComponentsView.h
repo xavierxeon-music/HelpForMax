@@ -1,9 +1,9 @@
 #ifndef ComponentsViewH
 #define ComponentsViewH
 
-#include <AbstractItemTreeView.h>
+#include "Tools/AbstractItemTreeView.h"
 
-#include <Central.h>
+#include "Tools/Central.h"
 
 class MainWindow;
 class ComponentsModel;

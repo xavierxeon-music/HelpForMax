@@ -6,7 +6,7 @@
 
 #include <QStandardItemModel>
 
-#include <TypeDelegate.h>
+#include "Tools/TypeDelegate.h"
 
 #include "DescriptionHighlighter.h"
 

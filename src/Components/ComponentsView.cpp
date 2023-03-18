@@ -6,7 +6,7 @@
 
 #include "ComponentsModel.h"
 #include "MainWindow.h"
-#include "PatchParser.h"
+#include "Tools/PatchParser.h"
 
 ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
    : Abstract::ItemTreeView(mainWindow, model, true)

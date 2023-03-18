@@ -1,6 +1,6 @@
 #include "EditWidget.h"
 
-#include <Central.h>
+#include "Tools/Central.h"
 
 #include "MainWindow.h"
 

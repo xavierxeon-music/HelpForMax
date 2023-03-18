@@ -1,10 +1,10 @@
 #ifndef SelectModelH
 #define SelectModelH
 
-#include <Central.h>
+#include "Tools/Central.h"
 #include <QStandardItemModel>
 
-#include <Central.h>
+#include "Tools/Central.h"
 #include <QFileInfo>
 
 class SelectModel : public QStandardItemModel,

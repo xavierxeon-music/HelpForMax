@@ -1,7 +1,7 @@
 #ifndef PatchParserH
 #define PatchParserH
 
-#include <PatchStructure.h>
+#include "PatchStructure.h"
 
 #include <QDomElement>
 #include <QMap>

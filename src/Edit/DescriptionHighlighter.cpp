@@ -1,6 +1,6 @@
 #include "DescriptionHighlighter.h"
 
-#include "PatchParser.h"
+#include "Tools/PatchParser.h"
 
 DescriptionHighlighter::DescriptionHighlighter(QTextDocument* document)
    : QSyntaxHighlighter(document)

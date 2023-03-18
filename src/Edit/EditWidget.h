@@ -4,7 +4,7 @@
 #include <QStackedWidget>
 
 #include "Edit/PageAbstract.h"
-#include "PatchParser.h"
+#include "Tools/PatchParser.h"
 
 namespace Edit
 {

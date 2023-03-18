@@ -5,7 +5,7 @@
 
 #include <QJsonObject>
 
-#include <ModelItem.h>
+#include "Tools/ModelItem.h"
 
 namespace JSON
 {

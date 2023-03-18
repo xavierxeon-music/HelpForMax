@@ -5,9 +5,9 @@
 
 #include <QStandardItemModel>
 
-#include <Central.h>
-#include <PatchStructure.h>
-#include <TypeDelegate.h>
+#include "Tools/Central.h"
+#include "Tools/PatchStructure.h"
+#include "Tools/TypeDelegate.h"
 
 class ArgumentView : public QTreeView,
                      public TypeDelegate::Proxy,

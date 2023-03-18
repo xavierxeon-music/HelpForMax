@@ -1,6 +1,6 @@
 #include "PageAbstract.h"
 
-#include <Central.h>
+#include "Tools/Central.h"
 
 #include <MainWindow.h>
 

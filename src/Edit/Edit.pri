@@ -1,6 +1,7 @@
 HEADERS += \
    $$PWD/ArgumentView.h \
    $$PWD/DescriptionHighlighter.h \
+   $$PWD/EditWidget.h \
    $$PWD/PageAbstract.h \
    $$PWD/PageArgument.h \
    $$PWD/PageAttribute.h \
@@ -13,6 +14,7 @@ HEADERS += \
 SOURCES += \
    $$PWD/ArgumentView.cpp \
    $$PWD/DescriptionHighlighter.cpp \
+   $$PWD/EditWidget.cpp \
    $$PWD/PageAbstract.cpp \
    $$PWD/PageArgument.cpp \
    $$PWD/PageAttribute.cpp \

@@ -6,10 +6,8 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 
-#include <Central.h>
-
-#include "PatchParser.h"
-#include <Central.h>
+#include "Tools/Central.h"
+#include "Tools/PatchParser.h"
 
 namespace Page
 {

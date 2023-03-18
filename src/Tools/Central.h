@@ -3,7 +3,7 @@
 
 #include "AbstractFunctionHub.h"
 
-#include "PatchParser.h"
+#include "Tools/PatchParser.h"
 
 class MainWindow;
 
