@@ -22,6 +22,8 @@ void ComponentsModel::patchSelected(QString patchPath, QString key)
 
 void ComponentsModel::setModified(bool enabled, QString key)
 {
+   Q_UNUSED(key)
+
    if (enabled)
       update();
 }

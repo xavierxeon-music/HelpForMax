@@ -15,7 +15,7 @@ PatchParser::PatchParser()
    : PatchStructure()
    , patchName()
    , patchPath()
-   , helpPath()
+   , refPath()
    , isUndocumented(false)
 {
 }
@@ -24,14 +24,14 @@ PatchParser::PatchParser(const QString& patchPath)
    : PatchStructure()
    , patchName()
    , patchPath(patchPath)
-   , helpPath()
+   , refPath()
    , isUndocumented(false)
 {
    const QFileInfo patchInfo(patchPath);
    patchName = patchInfo.fileName().replace(".maxpat", "");
    const QString packagePath = Central::getPackagePath();
 
-   helpPath = packagePath + "/docs/" + patchName + ".maxref.xml";
+   refPath = packagePath + "/docs/" + patchName + ".maxref.xml";
 
    load();
 }
@@ -44,8 +44,11 @@ void PatchParser::load()
    if (patchDigest.text.isEmpty())
       patchDigest.text = "Hello World";
 
-   if (!QFile::exists(helpPath))
+   if (!QFile::exists(refPath))
+   {
       writeXML();
+      writeHelpFile();
+   }
 }
 
 void PatchParser::writeXML()
@@ -55,13 +58,14 @@ void PatchParser::writeXML()
    QDomElement rootElement = doc.createElement("c74object");
    doc.appendChild(rootElement);
    rootElement.setAttribute("name", patchName);
+   rootElement.setAttribute("as_bpatcher", extras.openAsBPatcher);
    addDigest(rootElement, patchDigest);
 
    {
       QDomElement metaDataElement = createSubElement(rootElement, "metadatalist");
       createSubElement(metaDataElement, "metadata", Central::getAuthor(), {{"name", "author"}});
       createSubElement(metaDataElement, "metadata", Central::getPackageName(), {{"name", "tag"}});
-      for (const QString& tag : metaTagList)
+      for (const QString& tag : extras.metaTagList)
          createSubElement(metaDataElement, "metadata", tag, {{"name", "tag"}});
    }
 
@@ -154,13 +158,13 @@ void PatchParser::writeXML()
 
    {
       QDomElement seeAlsoListElement = createSubElement(rootElement, "seealsolist");
-      for (const QString& seeAlso : seeAlsoList)
+      for (const QString& seeAlso : extras.seeAlsoList)
       {
          createSubElement(seeAlsoListElement, "seealso", QString(), {{"name", seeAlso}});
       }
    }
 
-   QFile file(helpPath);
+   QFile file(refPath);
    if (!file.open(QIODevice::WriteOnly))
       return;
 
@@ -175,14 +179,77 @@ void PatchParser::writeXML()
    file.close();
 }
 
+void PatchParser::writeHelpFile()
+{
+   const QString packagePath = Central::getPackagePath();
+   const QString helpPath = packagePath + "/help/" + patchName + ".maxhelp";
+
+   if (QFile::exists(helpPath))
+      return;
+
+   QJsonObject patcher;
+   patcher["classnamespace"] = "box";
+   patcher["description"] = "";
+   patcher["digest"] = "";
+   patcher["tags"] = "";
+   patcher["style"] = "";
+   patcher["boxes"] = QJsonArray();
+   patcher["lines"] = QJsonArray();
+   patcher["assistshowspatchername"] = 0;
+   patcher["dependency_cache"] = QJsonArray();
+   patcher["autosave"] = 0;
+
+   QJsonObject helpData;
+   helpData["patcher"] = patcher;
+
+   JSON::toFile(helpPath, helpData);
+}
+
+void PatchParser::writeInitFile()
+{
+   const QString packagePath = Central::getPackagePath();
+   const QString initPath = packagePath + "/init/" + patchName + ".txt";
+
+   auto writeFile = [&]()
+   {
+      if (extras.openAsBPatcher)
+         return true;
+
+      return false;
+   };
+
+   QFile file(initPath);
+
+   if (!writeFile()) // delete file
+   {
+      if (!file.exists()) // nothing to delete
+         return;
+
+      file.remove();
+   }
+   else
+   {
+      if (!file.open(QIODevice::WriteOnly))
+         return;
+
+      {
+         QTextStream stream(&file);
+
+         stream << "max objectfile " << patchName << " " << patchName << ";\n";
+         stream << "max definesubstitution " << patchName << " bpatcher @name " << patchName << ".maxpat;\n";
+      }
+      file.close();
+   }
+}
+
 const bool& PatchParser::foundUndocumented() const
 {
    return isUndocumented;
 }
 
-const QString& PatchParser::getHelpPath() const
+const QString& PatchParser::getRefPath() const
 {
-   return helpPath;
+   return refPath;
 }
 
 QDomElement PatchParser::createSubElement(QDomElement parent, const QString& name, const QString& text, const TagMap& tagMap)
@@ -217,7 +284,7 @@ void PatchParser::addDigest(const QDomElement& parentElement, const Digest& dige
 
 void PatchParser::readXML()
 {
-   QFile file(helpPath);
+   QFile file(refPath);
    if (!file.open(QIODevice::ReadOnly))
       return;
 
@@ -237,6 +304,8 @@ void PatchParser::readXML()
    if (patchDigest.description.isEmpty())
       markUndocumented(patchDigest);
 
+   extras.openAsBPatcher = (1 == rootElement.attribute("as_bpatcher", "0").toInt());
+
    {
       const QDomElement metaDataElement = rootElement.firstChildElement("metadatalist");
       if (!metaDataElement.isNull())
@@ -250,7 +319,7 @@ void PatchParser::readXML()
 
             const QString text = readText(element);
             if (packageName != text)
-               metaTagList.append(text);
+               extras.metaTagList.append(text);
          }
       }
    }
@@ -367,7 +436,7 @@ void PatchParser::readXML()
          for (QDomElement element = seeAlsoListElement.firstChildElement("seealso"); !element.isNull(); element = element.nextSiblingElement("seealso"))
          {
             const QString& name = element.attribute("name");
-            seeAlsoList.append(name);
+            extras.seeAlsoList.append(name);
          }
       }
    }

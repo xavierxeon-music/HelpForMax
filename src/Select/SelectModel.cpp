@@ -21,7 +21,7 @@ void SelectModel::setPackagePath(QString packageDir)
    clear();
    setHorizontalHeaderLabels({"U", "Patch"});
 
-   QStringList unmatchedHelpFileList;
+   QStringList unmatchedRefFileList;
    QDir().mkpath(packageDir + "/docs");
    const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files;
    for (QFileInfo fileInfo : QDir(packageDir + "/docs").entryInfoList(filters))
@@ -29,7 +29,7 @@ void SelectModel::setPackagePath(QString packageDir)
       if (!fileInfo.fileName().endsWith(".maxref.xml"))
          continue;
 
-      unmatchedHelpFileList.append(fileInfo.absoluteFilePath());
+      unmatchedRefFileList.append(fileInfo.absoluteFilePath());
    }
 
    InfoMap infoMap;
@@ -55,13 +55,13 @@ void SelectModel::setPackagePath(QString packageDir)
       if (mainWindow->isPatchStructureUndocumented(key))
          undocumntedItem->setText(" *");
 
-      const QString helpPath = mainWindow->getHelpPath(key);
-      if (unmatchedHelpFileList.contains(helpPath))
-         unmatchedHelpFileList.removeAll(helpPath);
+      const QString refPath = mainWindow->getRefPath(key);
+      if (unmatchedRefFileList.contains(refPath))
+         unmatchedRefFileList.removeAll(refPath);
    }
 
-   if (!unmatchedHelpFileList.isEmpty())
-      emit signalUnmatchedHelpFiles(unmatchedHelpFileList);
+   if (!unmatchedRefFileList.isEmpty())
+      emit signalUnmatchedFiles(unmatchedRefFileList, QStringList());
 
    QApplication::restoreOverrideCursor();
 

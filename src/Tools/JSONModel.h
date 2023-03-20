@@ -10,6 +10,7 @@
 namespace JSON
 {
    QJsonObject fromFile(const QString& fileName);
+   void toFile(const QString& fileName, const QJsonObject& object);
 
    class Model : public QStandardItemModel
    {

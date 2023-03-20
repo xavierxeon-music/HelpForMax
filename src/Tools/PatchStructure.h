@@ -19,6 +19,13 @@ public:
       Signal
    };
 
+   struct Extras
+   {
+      bool openAsBPatcher = false;
+      QStringList metaTagList;
+      QStringList seeAlsoList;
+   };
+
    struct Base
    {
       bool undocumented = false;
@@ -29,8 +36,6 @@ public:
       QString text;
       QString description;
    };
-
-   using MetaTagList = QStringList;
 
    struct Output : Base
    {
@@ -77,14 +82,13 @@ public:
 
 public:
    Digest patchDigest;
-   MetaTagList metaTagList;
+   Extras extras;
    int inletCount = 0;
    Output::Map outputMap;
    Argument::List argumentList;
    Attribute::Map attributeMap;
    Message::StandardMap messageStandardMap;
    Message::FreeMap messageFreeMap;
-   SeeAlsoList seeAlsoList;
 
 public:
    void clear();

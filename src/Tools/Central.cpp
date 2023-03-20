@@ -94,14 +94,14 @@ bool Central::isPatchStructureUndocumented(const QString& key) const
    return parserMap[key].foundUndocumented();
 }
 
-QString Central::getHelpPath(const QString& key) const
+QString Central::getRefPath(const QString& key) const
 {
    static const QString dummy;
    if (!parserMap.contains(key))
       return dummy;
 
-   const QString helpPath = parserMap[key].getHelpPath();
-   return helpPath;
+   const QString refPath = parserMap[key].getRefPath();
+   return refPath;
 }
 
 void Central::savePatchStructures()
@@ -111,6 +111,9 @@ void Central::savePatchStructures()
       parser.writeXML();
       parser.clear();
       parser.load();
+
+      parser.writeHelpFile();
+      parser.writeInitFile();
    }
 
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());

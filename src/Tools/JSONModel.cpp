@@ -35,6 +35,20 @@ QJsonObject JSON::fromFile(const QString& fileName)
    return object;
 }
 
+void JSON::toFile(const QString& fileName, const QJsonObject& object)
+{
+   QJsonDocument doc(object);
+
+   QFile file(fileName);
+   if (!file.open(QIODevice::WriteOnly))
+      return;
+
+   const QByteArray content = doc.toJson(QJsonDocument::Indented);
+   file.write(content);
+
+   file.close();
+}
+
 JSON::Model::Model(QObject* parent)
    : QStandardItemModel(parent)
 {

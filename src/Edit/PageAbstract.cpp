@@ -18,6 +18,22 @@ Page::Abstract::~Abstract()
 {
 }
 
+void Page::Abstract::monitor(QCheckBox* checkBox, bool* variable, const QString& patchKey)
+{
+   auto update = [&, checkBox, variable, patchKey](bool checked)
+   {
+      *variable = checkBox->isChecked();
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
+   };
+
+   if (connectionMap.contains(checkBox))
+      disconnect(connectionMap.value(checkBox));
+
+   checkBox->setCheckable(true);
+   checkBox->setChecked(*variable);
+   connectionMap[checkBox] = connect(checkBox, &QCheckBox::clicked, update);
+}
+
 void Page::Abstract::monitor(QLineEdit* lineEdit, QString* variable, const QString& patchKey)
 {
    auto update = [&, lineEdit, variable, patchKey]()

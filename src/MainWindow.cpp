@@ -29,7 +29,7 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max");
 
    SelectModel* selectModel = new SelectModel(this);
-   connect(selectModel, &SelectModel::signalUnmatchedHelpFiles, this, &MainWindow::slotUnmatchedHelpFiles);
+   connect(selectModel, &SelectModel::signalUnmatchedFiles, this, &MainWindow::slotUnmatchedFiles);
 
    ComponentsModel* componentsModel = new ComponentsModel(this);
 
@@ -103,11 +103,13 @@ void MainWindow::slotSavePatches()
    savePatchStructures();
 }
 
-void MainWindow::slotUnmatchedHelpFiles(QStringList helpFileList)
+void MainWindow::slotUnmatchedFiles(const QStringList& refFileList, const QStringList& helpFileList)
 {
-   auto delayStart = [this, helpFileList]()
+   Q_UNUSED(helpFileList)
+
+   auto delayStart = [this, refFileList]()
    {
-      Clean::Dialog dialog(this, helpFileList);
+      Clean::Dialog dialog(this, refFileList);
       dialog.exec();
    };
 

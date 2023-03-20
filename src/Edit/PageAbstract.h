@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include <QCheckBox>
 #include <QLineEdit>
 #include <QPlainTextEdit>
 
@@ -22,6 +23,7 @@ namespace Page
 
    protected:
       virtual void update(const QVariant& data) = 0;
+      void monitor(QCheckBox* checkBox, bool* variable, const QString& patchKey);
       void monitor(QLineEdit* lineEdit, QString* variable, const QString& patchKey);
       void monitor(QLineEdit* lineEdit, QStringList* variable, const QString& patchKey);
       void monitor(QPlainTextEdit* textEdit, QString* variable, const QString& patchKey);
