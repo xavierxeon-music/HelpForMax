@@ -187,20 +187,25 @@ void PatchParser::writeHelpFile()
    if (QFile::exists(helpPath))
       return;
 
-   QJsonObject patcher;
-   patcher["classnamespace"] = "box";
-   patcher["description"] = "";
-   patcher["digest"] = "";
-   patcher["tags"] = "";
-   patcher["style"] = "";
-   patcher["boxes"] = QJsonArray();
-   patcher["lines"] = QJsonArray();
-   patcher["assistshowspatchername"] = 0;
-   patcher["dependency_cache"] = QJsonArray();
-   patcher["autosave"] = 0;
+   static const QJsonObject helpData = []()
+   {
+      QJsonObject patcher;
+      patcher["classnamespace"] = "box";
+      patcher["description"] = "";
+      patcher["digest"] = "";
+      patcher["tags"] = "";
+      patcher["style"] = "";
+      patcher["boxes"] = QJsonArray();
+      patcher["lines"] = QJsonArray();
+      patcher["assistshowspatchername"] = 0;
+      patcher["dependency_cache"] = QJsonArray();
+      patcher["autosave"] = 0;
 
-   QJsonObject helpData;
-   helpData["patcher"] = patcher;
+      QJsonObject helpData;
+      helpData["patcher"] = patcher;
+
+      return helpData;
+   }();
 
    JSON::toFile(helpPath, helpData);
 }
