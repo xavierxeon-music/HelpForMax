@@ -6,14 +6,14 @@
 
 #include "CleanModel.h"
 
-Clean::Dialog::Dialog(QWidget* parent, const QStringList& helpFileList)
+Clean::Dialog::Dialog(QWidget* parent, const QStringList& refFileList, const QStringList& helpFileList)
    : QDialog(parent)
    , model(nullptr)
 {
    setWindowTitle("Cleanup Help Files");
    setMinimumWidth(600);
 
-   model = new Model(this, helpFileList);
+   model = new Model(this, refFileList, helpFileList);
 
    QTreeView* cleanView = new QTreeView(this);
    cleanView->setModel(model);

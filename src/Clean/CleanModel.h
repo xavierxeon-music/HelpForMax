@@ -10,7 +10,7 @@ namespace Clean
       Q_OBJECT
 
    public:
-      Model(QObject* parent, const QStringList& helpFileList);
+      Model(QObject* parent, const QStringList& refFileList, const QStringList& helpFileList);
 
    public:
       void apply();

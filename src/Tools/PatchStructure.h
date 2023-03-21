@@ -91,7 +91,7 @@ public:
    Message::FreeMap messageFreeMap;
 
 public:
-   void clear();
+   virtual void clear();
    static QString typeName(const Type& type);
    static Type toType(const QString& name);
    static QList<Type> typeList();

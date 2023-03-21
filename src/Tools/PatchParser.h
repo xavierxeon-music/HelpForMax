@@ -45,6 +45,8 @@ public:
    const bool& foundUndocumented() const;
    const QString& getRefPath() const;
 
+   void clear() override;
+
 private:
    using TagMap = QMap<QString, QString>;
 

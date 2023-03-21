@@ -107,9 +107,9 @@ void MainWindow::slotUnmatchedFiles(const QStringList& refFileList, const QStrin
 {
    Q_UNUSED(helpFileList)
 
-   auto delayStart = [this, refFileList]()
+   auto delayStart = [this, refFileList, helpFileList]()
    {
-      Clean::Dialog dialog(this, refFileList);
+      Clean::Dialog dialog(this, refFileList, helpFileList);
       dialog.exec();
    };
 

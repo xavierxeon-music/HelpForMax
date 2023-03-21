@@ -257,6 +257,12 @@ const QString& PatchParser::getRefPath() const
    return refPath;
 }
 
+void PatchParser::clear()
+{
+   PatchStructure::clear();
+   isUndocumented = false;
+}
+
 QDomElement PatchParser::createSubElement(QDomElement parent, const QString& name, const QString& text, const TagMap& tagMap)
 {
    QDomElement element = parent.ownerDocument().createElement(name);

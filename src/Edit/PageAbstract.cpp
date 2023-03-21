@@ -20,9 +20,9 @@ Page::Abstract::~Abstract()
 
 void Page::Abstract::monitor(QCheckBox* checkBox, bool* variable, const QString& patchKey)
 {
-   auto update = [&, checkBox, variable, patchKey](bool checked)
+   auto update = [&, variable, patchKey](bool checked)
    {
-      *variable = checkBox->isChecked();
+      *variable = checked;
       FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
    };
 

@@ -3,18 +3,18 @@
 #include <QFile>
 #include <QFileInfo>
 
-Clean::Model::Model(QObject* parent, const QStringList& helpFileList)
+Clean::Model::Model(QObject* parent, const QStringList& refFileList, const QStringList& helpFileList)
    : QStandardItemModel(parent)
 {
    setHorizontalHeaderLabels({"Delete", "Old Name", "New Name"});
-   for (const QString& helpPath : helpFileList)
+   for (const QString& refPath : refFileList)
    {
-      const QString key = QFileInfo(helpPath).fileName().replace(".maxref.xml", "");
+      const QString key = QFileInfo(refPath).fileName().replace(".maxref.xml", "");
 
       QStandardItem* delItem = new QStandardItem();
       delItem->setEditable(false);
       delItem->setCheckable(true);
-      delItem->setData(helpPath, PathRole);
+      delItem->setData(refPath, PathRole);
       delItem->setData(key, KeyRole);
 
       QStandardItem* keyItem = new QStandardItem(key);
