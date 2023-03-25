@@ -79,6 +79,8 @@ MainWindow::MainWindow()
 
    // load package
    const QString packagePath = Central::getPackagePath();
+   compileBlockMap(packagePath);
+
    if (!packagePath.isEmpty())
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
 }
@@ -94,6 +96,8 @@ void MainWindow::slotOpenPackage()
    {
       Settings settings;
       settings.write("LastPackage", packagePath);
+
+      compileBlockMap(packagePath);
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
    }
 }

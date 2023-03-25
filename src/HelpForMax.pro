@@ -15,6 +15,7 @@ windows {
     RC_ICONS = $$PWD/icons/HelpForMax.ico
 }
 
+include(Block/Block.pri)
 include(Clean/Clean.pri)
 include(Components/Components.pri)
 include(Edit/Edit.pri)

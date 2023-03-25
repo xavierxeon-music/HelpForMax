@@ -39,6 +39,7 @@ QString Central::packageName = QString();
 Central::Central()
    : FunctionHub()
    , currentKey()
+   , blockMap()
    , parserMap()
 {
 }
@@ -64,6 +65,11 @@ QString Central::getPackageName()
 const QString& Central::getCurrentKey() const
 {
    return currentKey;
+}
+
+void Central::compileBlockMap(const QString& packagePath)
+{
+   blockMap = Block::Item::compileMap(packagePath);
 }
 
 const PatchParser& Central::parser() // must not be constant, else map iterator is not not a reference

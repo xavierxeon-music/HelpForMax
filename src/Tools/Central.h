@@ -2,7 +2,7 @@
 #define CentralH
 
 #include "AbstractFunctionHub.h"
-
+#include "Block/BlockItem.h"
 #include "Tools/PatchParser.h"
 
 class MainWindow;
@@ -28,6 +28,8 @@ public:
    static QString getPackageName();
 
    const QString& getCurrentKey() const;
+   void compileBlockMap(const QString& packagePath);
+
    const PatchParser& parser();
    PatchParser& parserRef();
 
@@ -46,6 +48,7 @@ private:
 
 private:
    QString currentKey;
+   Block::Item::Map blockMap;
    ParserMap parserMap;
 };
 
