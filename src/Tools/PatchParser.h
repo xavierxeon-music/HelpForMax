@@ -71,6 +71,7 @@ private:
    QString patchName;
    QString patchPath;
    QString refPath;
+   QString helpPath;
    bool isUndocumented;
 };
 

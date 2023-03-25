@@ -16,6 +16,7 @@ PatchParser::PatchParser()
    , patchName()
    , patchPath()
    , refPath()
+   , helpPath()
    , isUndocumented(false)
 {
 }
@@ -25,6 +26,7 @@ PatchParser::PatchParser(const QString& patchPath)
    , patchName()
    , patchPath(patchPath)
    , refPath()
+   , helpPath()
    , isUndocumented(false)
 {
    const QFileInfo patchInfo(patchPath);
@@ -32,6 +34,7 @@ PatchParser::PatchParser(const QString& patchPath)
    const QString packagePath = Central::getPackagePath();
 
    refPath = packagePath + "/docs/" + patchName + ".maxref.xml";
+   helpPath = packagePath + "/help/" + patchName + ".maxhelp";
 
    load();
 }
@@ -181,9 +184,6 @@ void PatchParser::writeXML()
 
 void PatchParser::writeHelpFile()
 {
-   const QString packagePath = Central::getPackagePath();
-   const QString helpPath = packagePath + "/help/" + patchName + ".maxhelp";
-
    if (QFile::exists(helpPath))
       return;
 
