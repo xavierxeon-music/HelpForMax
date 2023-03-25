@@ -6,13 +6,6 @@
 
 const QList<QByteArray> Block::Item::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
 
-/*
-Block::Item::Item()
-   : Item(QString(), QString())
-{
-}
-*/
-
 Block::Item::Item(const QString& key, const QString& patchPath)
    : Structure()
    , key(key)
@@ -24,27 +17,11 @@ Block::Item::Item(const QString& key, const QString& patchPath)
 {
 }
 
-/*
-Block::Item::Item(const Item& other)
-   : Item(QString(), QString())
-{
-   *this = other;
-}
-*/
 
 Block::Item::~Item()
 {
 }
 
-/*
-Block::Item& Block::Item::operator=(const Item& other)
-{
-   key = other.key;
-   isUndocumented = other.isUndocumented;
-
-   return *this;
-}
-*/
 
 Block::Item::Map Block::Item::compileMap(const QString& packagePath)
 {
