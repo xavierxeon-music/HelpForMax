@@ -1,21 +1,46 @@
 #include "ComponentsView.h"
 
+#include <QContextMenuEvent>
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <QMenu>
 #include <QUrl>
 
 #include "ComponentsModel.h"
 #include "MainWindow.h"
 #include "Tools/PatchParser.h"
 
+ComponentsView::Clip::Clip(const PatchParser::Marker& marker)
+   : marker(marker)
+   , digest{}
+   , type(PatchStructure::Type::Unkown)
+{
+}
+
+// main class
+
 ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
    : Abstract::ItemTreeView(mainWindow, model, true)
    , FunctionHub()
    , mainWindow(mainWindow)
    , helpPath()
+   , copyAction()
+   , pasteAction()
+   , clip()
 {
    setHeaderHidden(true);
    setRootIsDecorated(false);
+   setContextMenuPolicy(Qt::DefaultContextMenu);
+
+   copyAction = new QAction(QIcon(), "Copy", this);
+   copyAction->setShortcut(QKeySequence::Copy);
+   connect(copyAction, &QAction::triggered, this, &ComponentsView::slotCopy);
+   addAction(copyAction);
+
+   pasteAction = new QAction(QIcon(), "Paste", this);
+   pasteAction->setShortcut(QKeySequence::Paste);
+   connect(pasteAction, &QAction::triggered, this, &ComponentsView::slotPaste);
+   addAction(pasteAction);
 }
 
 void ComponentsView::slotReloadPatch()
@@ -33,6 +58,38 @@ void ComponentsView::slotOpenInExternalEditor()
       return;
 
    QDesktopServices::openUrl(QUrl::fromLocalFile(helpPath));
+}
+
+void ComponentsView::slotCopy()
+{
+   QStandardItem* uDocItem = actionItem();
+   if (!uDocItem)
+   {
+      clip = Clip();
+      return;
+   }
+
+   const QVariant markerVariant = uDocItem->data(PatchParser::RoleMarker);
+   const PatchParser::Marker marker = markerVariant.value<PatchParser::Marker>();
+   clip = Clip(marker);
+
+   qDebug() << __FUNCTION__;
+}
+
+void ComponentsView::slotPaste()
+{
+   QStandardItem* uDocItem = actionItem();
+   if (!uDocItem)
+      return;
+
+   switch (clip.marker)
+   {
+      case PatchParser::Marker::Undefined:
+      default:
+         break;
+   }
+
+   qDebug() << __FUNCTION__;
 }
 
 void ComponentsView::patchSelected(QString patchPath, QString key)
@@ -54,13 +111,13 @@ void ComponentsView::patchSelected(QString patchPath, QString key)
 
 void ComponentsView::clicked(ModelItem* item)
 {
-   const QVariant markerVariant = item->data(PatchParser::RoleMarker);
-   if (!markerVariant.isValid())
-      return;
+   int row = item->row();
+   QStandardItem* uDocItem = getModel<ComponentsModel>()->item(row); // first column item
 
+   const QVariant markerVariant = uDocItem->data(PatchParser::RoleMarker);
    const PatchParser::Marker marker = markerVariant.value<PatchParser::Marker>();
-   const QVariant data = item->data(PatchParser::RoleData);
 
+   const QVariant data = uDocItem->data(PatchParser::RoleData);
    callOnOtherHubInstances(&ComponentsView::componentSelected, marker, data);
 }
 
@@ -71,4 +128,30 @@ void ComponentsView::setModified(bool modified, QString key)
 
    if (key.isEmpty() || mainWindow->getCurrentKey() == key)
       getModel<ComponentsModel>()->patchSelected(QString(), QString());
+}
+
+void ComponentsView::contextMenuEvent(QContextMenuEvent* event)
+{
+   QModelIndex index = indexAt(event->pos());
+   if (!index.isValid())
+      return;
+
+   QMenu menu(this);
+   menu.addAction(copyAction);
+   menu.addAction(pasteAction);
+   menu.exec(event->globalPos());
+}
+
+QStandardItem* ComponentsView::actionItem()
+{
+   if (!hasFocus())
+      return nullptr;
+
+   if (selectedIndexes().empty())
+      return nullptr;
+
+   QModelIndex index = selectedIndexes().first();
+   QStandardItem* uDocItem = getModel<ComponentsModel>()->item(index.row());
+
+   return uDocItem;
 }

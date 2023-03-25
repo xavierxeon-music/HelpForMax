@@ -15,7 +15,6 @@ HEADERS += \
    $$PWD/PatchParser.h \
    $$PWD/PatchStructure.h \
    $$PWD/Settings.h \
-   $$PWD/SpacerToolBar.h \
    $$PWD/TypeDelegate.h
 
 SOURCES += \
@@ -26,5 +25,4 @@ SOURCES += \
    $$PWD/PatchParser.cpp \
    $$PWD/PatchStructure.cpp \
    $$PWD/Settings.cpp \
-   $$PWD/SpacerToolBar.cpp \
    $$PWD/TypeDelegate.cpp
