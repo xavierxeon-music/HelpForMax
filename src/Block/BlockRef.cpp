@@ -13,6 +13,11 @@ Block::Ref::Ref(Item* item)
    refPath = packagePath + "/docs/" + item->key + ".maxref.xml";
 }
 
+const QString& Block::Ref::getPath() const
+{
+   return refPath;
+}
+
 void Block::Ref::read()
 {
    QFile file(refPath);

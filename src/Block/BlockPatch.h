@@ -10,11 +10,11 @@ namespace Block
    class Patch
    {
    public:
-      Patch(Item* item);
+      Patch(Item* item, const QString& patchPath);
 
    public:
-      const QString& getPatchPath() const;
-      void read(const QString& patchPath);
+      const QString& getPath() const;
+      void read();
 
    private:
       Structure::Output& findOrCreateOutput(const int id);

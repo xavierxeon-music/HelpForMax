@@ -7,21 +7,19 @@
 #include "BlockItem.h"
 #include "Tools/JSONModel.h"
 
-Block::Patch::Patch(Item* item)
+Block::Patch::Patch(Item* item, const QString& patchPath)
    : item(item)
-   , patchPath()
+   , patchPath(patchPath)
 {
 }
 
-const QString& Block::Patch::getPatchPath() const
+const QString& Block::Patch::getPath() const
 {
    return patchPath;
 }
 
-void Block::Patch::read(const QString& patchPath)
+void Block::Patch::read()
 {
-   this->patchPath = patchPath;
-
    QJsonObject object = JSON::fromFile(patchPath);
    if (object.empty())
       return;

@@ -42,11 +42,16 @@ namespace Block
       static const QList<QByteArray> descriptionMaxTags;
 
    public:
-      Item(const QString& key = QString());
+      Item();
+      Item(const QString& key, const QString& patchPath);
       virtual ~Item();
 
    public:
       static Map compileMap(const QString& packageDir);
+
+      void load();
+      void save();
+
       void clear() override;
       bool foundUndocumented() const;
 
@@ -60,7 +65,6 @@ namespace Block
       friend class Settings;
 
    private:
-      void load(const QString& patchPath);
       void markUndocumented(Base& base);
 
    private:

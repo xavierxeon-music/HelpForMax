@@ -35,13 +35,8 @@ public:
 
    void selectBlock(const QString& key);
    bool isBlockUndocumented(const QString& key) const;
-   /*
-   void savePatchStructures();
-   void loadPatchStructure(QString patchPath, const QString& key);
-   void selectPatchStructure(const QString& key);
-   bool isPatchStructureUndocumented(const QString& key) const;
-   QString getRefPath(const QString& key) const;
-   */
+
+   void saveBlocks();
 
 protected:
    static QString packageAuthor;

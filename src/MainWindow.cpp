@@ -104,7 +104,7 @@ void MainWindow::slotOpenPackage()
 
 void MainWindow::slotSavePatches()
 {
-   //§ savePatchStructures();
+   saveBlocks();
 }
 
 void MainWindow::slotUnmatchedFiles(const QStringList& refFileList, const QStringList& helpFileList)

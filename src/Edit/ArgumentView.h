@@ -6,7 +6,6 @@
 #include <QStandardItemModel>
 
 #include "Tools/Central.h"
-#include "Tools/PatchStructure.h"
 #include "Tools/TypeDelegate.h"
 
 class ArgumentView : public QTreeView,

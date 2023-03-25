@@ -15,6 +15,7 @@ namespace Block
       Ref(Item* item);
 
    public:
+      const QString& getPath() const;
       void read();
       void write();
 

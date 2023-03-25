@@ -99,47 +99,12 @@ bool Central::isBlockUndocumented(const QString& key) const
    return blockMap[key].foundUndocumented();
 }
 
-/*
-void Central::loadPatchStructure(QString patchPath, const QString& key)
+void Central::saveBlocks()
 {
-   parserMap[key] = PatchParser(patchPath);
-}
-
-void Central::selectPatchStructure(const QString& key)
-{
-   currentKey = key;
-}
-
-bool Central::isPatchStructureUndocumented(const QString& key) const
-{
-   if (!parserMap.contains(key))
-      return false;
-
-   return parserMap[key].foundUndocumented();
-}
-
-QString Central::getRefPath(const QString& key) const
-{
-   static const QString dummy;
-   if (!parserMap.contains(key))
-      return dummy;
-
-   const QString refPath = parserMap[key].getRefPath();
-   return refPath;
-}
-
-void Central::savePatchStructures()
-{
-   for (PatchParser& parser : parserMap)
+   for (Block::Item& block : blockMap)
    {
-      parser.writeXML();
-      parser.clear();
-      parser.load();
-
-      parser.writeHelpFile();
-      parser.writeInitFile();
+      block.save();
    }
 
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }
-*/

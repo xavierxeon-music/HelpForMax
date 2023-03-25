@@ -8,7 +8,6 @@
 
 #include "ComponentsModel.h"
 #include "MainWindow.h"
-#include "Tools/PatchParser.h"
 
 ComponentsView::Clip::Clip(const Block::Item::Marker& marker)
    : marker(marker)
@@ -46,7 +45,7 @@ ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
 void ComponentsView::slotReloadPatch()
 {
    mainWindow->blockRef().clear();
-   //§ mainWindow->blockRef().load();
+   mainWindow->blockRef().load();
 
    getModel<ComponentsModel>()->patchSelected(QString(), QString());
    callOnOtherHubInstances(&Central::setModified, false, mainWindow->getCurrentKey());

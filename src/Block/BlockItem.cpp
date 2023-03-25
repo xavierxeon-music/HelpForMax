@@ -6,11 +6,16 @@
 
 const QList<QByteArray> Block::Item::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
 
-Block::Item::Item(const QString& key)
+Block::Item::Item()
+   : Item(QString(), QString())
+{
+}
+
+Block::Item::Item(const QString& key, const QString& patchPath)
    : Structure()
    , key(key)
    , isUndocumented(false)
-   , patch(this)
+   , patch(this, patchPath)
    , ref(this)
    , help(this)
    , settings(this)
@@ -64,8 +69,8 @@ Block::Item::Map Block::Item::compileMap(const QString& packageDir)
       const QString key = it.key();
       const QString patchPath = it.value().absoluteFilePath();
 
-      Item item(key);
-      item.load(patchPath);
+      Item item(key, patchPath);
+      item.load();
 
       map[key] = item;
    }
@@ -88,29 +93,37 @@ bool Block::Item::foundUndocumented() const
 
 const QString& Block::Item::getPatchPath() const
 {
-   return patch.getPatchPath();
+   return patch.getPath();
 }
 
 const QString& Block::Item::getRefPath() const
 {
-   return QString();
+   return ref.getPath();
 }
 
-void Block::Item::load(const QString& patchPath)
+void Block::Item::load()
 {
    ref.read();
-   patch.read(patchPath);
+   patch.read();
 
    if (patchDigest.text.isEmpty())
       patchDigest.text = "Hello World";
 
-   /*
-   if (!QFile::exists(refPath))
+   if (!QFile::exists(ref.getPath()))
    {
-      ref.writeXML();
-      //writeHelpFile();
+      ref.write();
+      help.write();
    }
-*/
+}
+
+void Block::Item::save()
+{
+   ref.write();
+   help.write();
+   settings.write();
+
+   clear();
+   load();
 }
 
 void Block::Item::markUndocumented(Base& base)

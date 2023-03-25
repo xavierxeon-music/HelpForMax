@@ -8,7 +8,6 @@
 #include <QPlainTextEdit>
 
 #include "Tools/Central.h"
-#include "Tools/PatchParser.h"
 
 namespace Page
 {
