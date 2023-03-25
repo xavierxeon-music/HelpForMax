@@ -12,13 +12,7 @@ namespace Clean
       Q_OBJECT
 
    public:
-      Dialog(QWidget* parent, const QStringList& refFileList, const QStringList& helpFileList);
-
-   private slots:
-      void accept() override;
-
-   private:
-      Model* model;
+      Dialog(QWidget* parent, Model* model);
    };
 } // namespace Clean
 

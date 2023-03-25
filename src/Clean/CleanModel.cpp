@@ -1,21 +1,49 @@
 #include "CleanModel.h"
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 
-Clean::Model::Model(QObject* parent, const QStringList& refFileList, const QStringList& helpFileList)
+#include "Tools/Central.h"
+
+Clean::Model::Model(QObject* parent, const QStringList& keyList)
    : QStandardItemModel(parent)
+   , targetMap()
 {
    setHorizontalHeaderLabels({"Delete", "Old Name", "New Name"});
-   for (const QString& refPath : refFileList)
+
+   const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files | QDir::Dirs;
+   auto addKeys = [&](const QString& path, const QString& extension, Target::MemPtr memPtr)
    {
-      const QString key = QFileInfo(refPath).fileName().replace(".maxref.xml", "");
+      const QFileInfoList infoList = QDir(path).entryInfoList(filters);
+      for (const QFileInfo& fileInfo : infoList)
+      {
+         if (fileInfo.isDir())
+            continue;
+
+         if (!fileInfo.fileName().endsWith(extension))
+            continue;
+
+         const QString key = fileInfo.fileName().replace(extension, "");
+         if (keyList.contains(key))
+            continue;
+
+         targetMap[key].*memPtr = fileInfo.absoluteFilePath();
+      }
+   };
+
+   const QString packagePath = Central::getPackagePath();
+   addKeys(packagePath + "/docs", ".maxref.xml", &Target::docPath);
+   addKeys(packagePath + "/help", ".maxhelp", &Target::helpPath);
+   addKeys(packagePath + "/init", ".txt", &Target::initPath);
+
+   for (Target::Map::ConstIterator it = targetMap.constBegin(); it != targetMap.constEnd(); it++)
+   {
+      const QString key = it.key();
 
       QStandardItem* delItem = new QStandardItem();
       delItem->setEditable(false);
       delItem->setCheckable(true);
-      delItem->setData(refPath, PathRole);
-      delItem->setData(key, KeyRole);
 
       QStandardItem* keyItem = new QStandardItem(key);
       keyItem->setEditable(false);
@@ -26,29 +54,55 @@ Clean::Model::Model(QObject* parent, const QStringList& refFileList, const QStri
    }
 }
 
+bool Clean::Model::needCleaning() const
+{
+   return (0 != invisibleRootItem()->rowCount());
+}
+
 void Clean::Model::apply()
 {
+   auto compilePathList = [&](const QString& key)
+   {
+      QStringList pathList;
+      if (!targetMap.contains(key))
+         return pathList;
+
+      const Target& target = targetMap[key];
+
+      if (!target.docPath.isEmpty())
+         pathList.append(target.docPath);
+      if (!target.helpPath.isEmpty())
+         pathList.append(target.helpPath);
+      if (!target.initPath.isEmpty())
+         pathList.append(target.initPath);
+
+      return pathList;
+   };
+
    for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
    {
       QStandardItem* delItem = invisibleRootItem()->child(row, 0);
-      const QString path = delItem->data(PathRole).toString();
-      const QString key = delItem->data(KeyRole).toString();
-
       const bool remove = (delItem->checkState() == Qt::Checked);
+
+      QStandardItem* keyItem = invisibleRootItem()->child(row, 1);
+      const QString key = keyItem->text();
 
       QStandardItem* nameItem = invisibleRootItem()->child(row, 2);
       const QString name = nameItem->text();
 
-      if (remove)
+      for (const QString& path : compilePathList(key))
       {
-         QFile::remove(path);
-         qInfo() << "remove" << path;
-      }
-      else if (name != key)
-      {
-         const QString newPath = QString(path).replace(key, name);
-         QFile::rename(path, newPath);
-         qInfo() << "rename" << path << newPath;
+         if (remove)
+         {
+            QFile::remove(path);
+            //qInfo() << "remove" << path;
+         }
+         else if (name != key)
+         {
+            const QString newPath = QString(path).replace(key, name);
+            QFile::rename(path, newPath);
+            //qInfo() << "rename" << path << newPath;
+         }
       }
    }
 }

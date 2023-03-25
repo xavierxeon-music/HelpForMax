@@ -14,6 +14,7 @@
 #endif // Q_OS_MACX
 
 #include "Clean/CleanDialog.h"
+#include "Clean/CleanModel.h"
 #include "Components/ComponentsModel.h"
 #include "Components/ComponentsView.h"
 #include "Edit/EditWidget.h"
@@ -29,8 +30,6 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max");
 
    SelectModel* selectModel = new SelectModel(this);
-   connect(selectModel, &SelectModel::signalUnmatchedFiles, this, &MainWindow::slotUnmatchedFiles);
-
    ComponentsModel* componentsModel = new ComponentsModel(this);
 
    SelectView* selectView = new SelectView(this, selectModel);
@@ -80,6 +79,7 @@ MainWindow::MainWindow()
    // load package
    const QString packagePath = Central::getPackagePath();
    compileBlockMap(packagePath);
+   QTimer::singleShot(1000, this, &MainWindow::slotCheckUmmatchedFiles);
 
    if (!packagePath.isEmpty())
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
@@ -107,17 +107,17 @@ void MainWindow::slotSavePatches()
    saveBlocks();
 }
 
-void MainWindow::slotUnmatchedFiles(const QStringList& refFileList, const QStringList& helpFileList)
+void MainWindow::slotCheckUmmatchedFiles()
 {
-   Q_UNUSED(helpFileList)
+   Clean::Model model(this, getBlockMap().keys());
+   if (!model.needCleaning())
+      return;
 
-   auto delayStart = [this, refFileList, helpFileList]()
-   {
-      Clean::Dialog dialog(this, refFileList, helpFileList);
-      dialog.exec();
-   };
+   Clean::Dialog dialog(this, &model);
+   if (QDialog::Accepted != dialog.exec())
+      return;
 
-   QTimer::singleShot(100, delayStart);
+   model.apply();
 }
 
 void MainWindow::setPackagePath(QString packageDir)

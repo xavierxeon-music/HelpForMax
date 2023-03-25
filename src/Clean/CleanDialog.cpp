@@ -6,14 +6,11 @@
 
 #include "CleanModel.h"
 
-Clean::Dialog::Dialog(QWidget* parent, const QStringList& refFileList, const QStringList& helpFileList)
+Clean::Dialog::Dialog(QWidget* parent, Model* model)
    : QDialog(parent)
-   , model(nullptr)
 {
    setWindowTitle("Cleanup Help Files");
    setMinimumWidth(600);
-
-   model = new Model(this, refFileList, helpFileList);
 
    QTreeView* cleanView = new QTreeView(this);
    cleanView->setModel(model);
@@ -27,10 +24,4 @@ Clean::Dialog::Dialog(QWidget* parent, const QStringList& refFileList, const QSt
    masterLayout->setContentsMargins(5, 0, 5, 0);
    masterLayout->addWidget(cleanView);
    masterLayout->addWidget(applyButton);
-}
-
-void Clean::Dialog::accept()
-{
-   model->apply();
-   QDialog::accept();
 }

@@ -16,7 +16,7 @@ public:
 private slots:
    void slotOpenPackage();
    void slotSavePatches();
-   void slotUnmatchedFiles(const QStringList& refFileList, const QStringList& helpFileList);
+   void slotCheckUmmatchedFiles();
 
 private:
    void setPackagePath(QString packageDir) override;

@@ -42,8 +42,6 @@ void SelectModel::setPackagePath(QString packageDir)
          undocumntedItem->setText(" *");
    }
 
-   //§ emit signalUnmatchedFiles(unmatchedRefFileList, QStringList());
-
    QApplication::restoreOverrideCursor();
 
    endResetModel();

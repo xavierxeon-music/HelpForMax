@@ -26,14 +26,12 @@ Block::Item::~Item()
 {
 }
 
-Block::Item::Map Block::Item::compileMap(const QString& packageDir)
+Block::Item::Map Block::Item::compileMap(const QString& packagePath)
 {
-   qDebug() << packageDir;
-
-   QDir().mkpath(packageDir + "/docs");
-   QDir().mkpath(packageDir + "/help");
-   QDir().mkpath(packageDir + "/init");
-   QDir().mkpath(packageDir + "/patchers");
+   QDir().mkpath(packagePath + "/docs");
+   QDir().mkpath(packagePath + "/help");
+   QDir().mkpath(packagePath + "/init");
+   QDir().mkpath(packagePath + "/patchers");
 
    using InfoMap = QMap<QString, QFileInfo>;
 
@@ -60,7 +58,7 @@ Block::Item::Map Block::Item::compileMap(const QString& packageDir)
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
-   recursiveSearch(packageDir + "/patchers");
+   recursiveSearch(packagePath + "/patchers");
 
    Map map;
 
