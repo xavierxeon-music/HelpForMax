@@ -78,12 +78,12 @@ const Block::Item::Map Central::getBlockMap() const
 
 const Block::Item& Central::block() // must not be constant, else map iterator is not not a reference
 {
-   return blockMap[currentKey];
+   return *blockMap[currentKey];
 }
 
 Block::Item& Central::blockRef()
 {
-   return blockMap[currentKey];
+   return *blockMap[currentKey];
 }
 
 void Central::selectBlock(const QString& key)
@@ -96,14 +96,14 @@ bool Central::isBlockUndocumented(const QString& key) const
    if (!blockMap.contains(key))
       return false;
 
-   return blockMap[key].foundUndocumented();
+   return blockMap[key]->foundUndocumented();
 }
 
 void Central::saveBlocks()
 {
-   for (Block::Item& block : blockMap)
+   for (Block::Item* block : qAsConst(blockMap))
    {
-      block.save();
+      block->save();
    }
 
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());

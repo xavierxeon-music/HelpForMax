@@ -72,7 +72,47 @@ void ComponentsView::slotCopy()
    const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
    clip = Clip(marker);
 
-   qDebug() << __FUNCTION__;
+   const QVariant data = uDocItem->data(Block::Item::RoleData);
+
+   switch (marker)
+   {
+      case Block::Item::Marker::Argument:
+      {
+         const int argumentIndex = data.toInt();
+         const Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
+
+         clip.digest = argument.digest;
+         clip.type = argument.type;
+         break;
+      }
+      case Block::Item::Marker::Attribute:
+      {
+         const QString attributeName = data.toString();
+         const Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
+
+         clip.digest = attribute.digest;
+         clip.type = attribute.type;
+         break;
+      }
+      case Block::Item::Marker::MessageStandard:
+      {
+         const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
+         const Block::Structure::Message& message = mainWindow->blockRef().messageStandardMap[messageType];
+
+         clip.digest = message.digest;
+         break;
+      }
+      case Block::Item::Marker::MessageFree:
+      {
+         const QString messageName = data.toString();
+         const Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
+
+         clip.digest = message.digest;
+         break;
+      }
+      default:
+         return;
+   }
 }
 
 void ComponentsView::slotPaste()
@@ -81,14 +121,59 @@ void ComponentsView::slotPaste()
    if (!uDocItem)
       return;
 
-   switch (clip.marker)
+   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
+   const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
+
+   const QVariant data = uDocItem->data(Block::Item::RoleData);
+
+   switch (targetMarker)
    {
-      case Block::Item::Marker::Undefined:
-      default:
+      case Block::Item::Marker::Argument:
+      {
+         const int argumentIndex = data.toInt();
+         Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
+
+         argument.digest = clip.digest;
+         if (Block::Structure::Type::Unkown != clip.type)
+            argument.type = clip.type;
+
          break;
+      }
+      case Block::Item::Marker::Attribute:
+      {
+         const QString attributeName = data.toString();
+         Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
+
+         attribute.digest = clip.digest;
+         if (Block::Structure::Type::Unkown != clip.type)
+            attribute.type = clip.type;
+
+         break;
+      }
+      case Block::Item::Marker::MessageStandard:
+      {
+         const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
+         Block::Structure::Message& message = mainWindow->blockRef().messageStandardMap[messageType];
+
+         message.digest = clip.digest;
+
+         break;
+      }
+      case Block::Item::Marker::MessageFree:
+      {
+         const QString messageName = data.toString();
+         Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
+
+         message.digest = clip.digest;
+
+         break;
+      }
+      default:
+         return;
    }
 
-   qDebug() << __FUNCTION__;
+   callOnOtherHubInstances(&ComponentsView::componentSelected, targetMarker, data);
+   callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
 }
 
 void ComponentsView::patchSelected(QString patchPath, QString key)
@@ -150,7 +235,10 @@ QStandardItem* ComponentsView::actionItem()
       return nullptr;
 
    QModelIndex index = selectedIndexes().first();
-   QStandardItem* uDocItem = getModel<ComponentsModel>()->item(index.row());
+   QStandardItem* uDocItem = getModel<ComponentsModel>()->getItem(index.row());
+
+   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
+   const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
 
    return uDocItem;
 }

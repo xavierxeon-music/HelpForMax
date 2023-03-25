@@ -1,6 +1,7 @@
 #include "PageAttribute.h"
 
 #include "MainWindow.h"
+#include "Tools/Lock.h"
 
 Page::Attribute::Attribute(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
@@ -8,6 +9,7 @@ Page::Attribute::Attribute(MainWindow* mainWindow, const Block::Item::Marker& ma
    , highlighter(nullptr)
    , attributeName()
    , attributeModel(nullptr)
+   , updating(false)
 {
    setupUi(this);
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
@@ -39,6 +41,9 @@ Page::Attribute::Attribute(MainWindow* mainWindow, const Block::Item::Marker& ma
 void Page::Attribute::slotItemChanged(QStandardItem* item)
 {
    if (0 != item->row())
+      return;
+
+   if (updating)
       return;
 
    Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
@@ -95,17 +100,21 @@ void Page::Attribute::update(const QVariant& data)
    monitor(digestEdit, &attribute.digest.text, mainWindow->getCurrentKey());
    monitor(descrptionEdit, &attribute.digest.description, mainWindow->getCurrentKey());
 
-   QStandardItem* getItem = attributeModel->invisibleRootItem()->child(0, 0);
-   getItem->setCheckState(attribute.get ? Qt::Checked : Qt::Unchecked);
+   {
+      Lock lock(updating);
 
-   QStandardItem* setItem = attributeModel->invisibleRootItem()->child(0, 1);
-   setItem->setCheckState(attribute.set ? Qt::Checked : Qt::Unchecked);
+      QStandardItem* getItem = attributeModel->invisibleRootItem()->child(0, 0);
+      getItem->setCheckState(attribute.get ? Qt::Checked : Qt::Unchecked);
 
-   QStandardItem* sizeItem = attributeModel->invisibleRootItem()->child(0, 2);
-   sizeItem->setText(QString::number(attribute.size));
+      QStandardItem* setItem = attributeModel->invisibleRootItem()->child(0, 1);
+      setItem->setCheckState(attribute.set ? Qt::Checked : Qt::Unchecked);
 
-   QStandardItem* typeItem = attributeModel->invisibleRootItem()->child(0, 3);
-   typeItem->setText(Block::Structure::typeName(attribute.type));
+      QStandardItem* sizeItem = attributeModel->invisibleRootItem()->child(0, 2);
+      sizeItem->setText(QString::number(attribute.size));
+
+      QStandardItem* typeItem = attributeModel->invisibleRootItem()->child(0, 3);
+      typeItem->setText(Block::Structure::typeName(attribute.type));
+   }
 
    attributeView->resizeColumnToContents(0);
    attributeView->resizeColumnToContents(1);

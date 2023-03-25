@@ -32,6 +32,7 @@ namespace Page
       DescriptionHighlighter* highlighter;
       QString attributeName;
       QStandardItemModel* attributeModel;
+      bool updating;
    };
 } // namespace Page
 

@@ -17,11 +17,12 @@ public:
 
 public:
    void patchSelected(QString patchPath, QString key) override;
+   void update();
+   QStandardItem* getItem(const int& row, const int& column = 0) const;
 
 private:
    void setModified(bool enabled, QString key) override;
    void rebuild();
-   void update();
 
 private:
    MainWindow* mainWindow;

@@ -19,7 +19,7 @@ namespace Block
       Q_GADGET
 
    public:
-      using Map = QMap<QString, Item>;
+      using Map = QMap<QString, Item*>;
 
       enum Role
       {
@@ -42,7 +42,6 @@ namespace Block
       static const QList<QByteArray> descriptionMaxTags;
 
    public:
-      Item();
       Item(const QString& key, const QString& patchPath);
       virtual ~Item();
 

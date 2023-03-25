@@ -6,9 +6,10 @@
         <file>PatchArgument.svg</file>
         <file>PatchAttribute.svg</file>
         <file>PatchGeneral.svg</file>
-        <file>PatchMessage.svg</file>
         <file>PatchOutput.svg</file>
         <file>ReloadPatch.svg</file>
         <file>SaveAllPatches.svg</file>
+        <file>PatchMessageFree.svg</file>
+        <file>PatchMessageStandard.svg</file>
     </qresource>
 </RCC>

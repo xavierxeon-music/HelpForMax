@@ -13,6 +13,7 @@ public:
 
 public:
    void setVisible(bool enabled);
+   bool isVisible();
 };
 
 class FilteredModel : public QSortFilterProxyModel

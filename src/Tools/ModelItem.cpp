@@ -26,6 +26,11 @@ void ModelItem::setVisible(bool enabled)
    setData(enabled, VisibleRole);
 }
 
+bool ModelItem::isVisible()
+{
+   return data(VisibleRole).toBool();
+}
+
 // FilteredModel
 
 FilteredModel::FilteredModel(QObject* parent)

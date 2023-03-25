@@ -33,7 +33,7 @@ void SelectModel::setPackagePath(QString packageDir)
       ModelItem* undocumntedItem = new ModelItem();
 
       ModelItem* patchItem = new ModelItem(key);
-      patchItem->setData(it.value().getPatchPath(), RolePatchPath);
+      patchItem->setData(it.value()->getPatchPath(), RolePatchPath);
       patchItem->setData(key, RoleKey);
 
       invisibleRootItem()->appendRow({undocumntedItem, patchItem});
