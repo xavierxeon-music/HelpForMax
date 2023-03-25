@@ -2,7 +2,7 @@
 
 #include "MainWindow.h"
 
-Page::Argument::Argument(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::Argument::Argument(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , argumentIndex()
@@ -17,7 +17,7 @@ Page::Argument::Argument(MainWindow* mainWindow, const PatchParser::Marker& mark
 void Page::Argument::update(const QVariant& data)
 {
    argumentIndex = data.toInt();
-   PatchStructure::Argument& argument = mainWindow->parserRef().argumentList[argumentIndex];
+   Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
    keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &argument.digest.text, mainWindow->getCurrentKey());

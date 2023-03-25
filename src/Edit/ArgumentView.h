@@ -21,17 +21,17 @@ public:
 public:
    void allowNameEdit(bool allow);
    void clearMonitors(const QString& patchKey);
-   void monitor(PatchStructure::Argument* argument);
+   void monitor(Block::Structure::Argument* argument);
 
 private slots:
    void slotItemChanged(QStandardItem* item);
 
 private:
-   PatchStructure::Type getType(const int index) override;
+   Block::Structure::Type getType(const int index) override;
 
 private:
    QString key;
-   QList<PatchStructure::Argument*> argumentList;
+   QList<Block::Structure::Argument*> argumentList;
    QStandardItemModel* argumentModel;
    bool nameEditable;
 };

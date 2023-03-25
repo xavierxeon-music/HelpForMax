@@ -13,14 +13,14 @@ namespace Page
       Q_OBJECT
 
    public:
-      MessageStandard(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      MessageStandard(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;
 
    private:
       DescriptionHighlighter* highlighter;
-      PatchStructure::Type messageType;
+      Block::Structure::Type messageType;
    };
 } // namespace Page
 

@@ -13,7 +13,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Patch(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      Patch(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private slots:
       void slotAddStandardMethond(int typeId);

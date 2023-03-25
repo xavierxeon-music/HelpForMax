@@ -13,6 +13,7 @@ namespace Block
       Patch(Item* item);
 
    public:
+      const QString& getPatchPath() const;
       void addJSON(const QString& patchPath);
 
    private:
@@ -20,6 +21,7 @@ namespace Block
 
    private:
       Item* item;
+      QString patchPath;
    };
 } // namespace Block
 

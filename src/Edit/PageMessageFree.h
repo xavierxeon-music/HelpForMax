@@ -13,7 +13,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      MessageFree(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      MessageFree(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

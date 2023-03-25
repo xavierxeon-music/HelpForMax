@@ -2,7 +2,7 @@
 
 #include "MainWindow.h"
 
-Page::MessageFree::MessageFree(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::MessageFree::MessageFree(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , messageName()
@@ -17,13 +17,13 @@ Page::MessageFree::MessageFree(MainWindow* mainWindow, const PatchParser::Marker
 void Page::MessageFree::update(const QVariant& data)
 {
    messageName = data.toString();
-   PatchStructure::Message& message = mainWindow->parserRef().messageFreeMap[messageName];
+   Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
    keyInfo->setText("messsage " + messageName + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &message.digest.text, mainWindow->getCurrentKey());
    monitor(descrptionEdit, &message.digest.description, mainWindow->getCurrentKey());
 
    argumentView->clearMonitors(mainWindow->getCurrentKey());
-   for (PatchStructure::Argument& argument : message.arguments)
+   for (Block::Structure::Argument& argument : message.arguments)
       argumentView->monitor(&argument);
 }

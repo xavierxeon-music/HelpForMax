@@ -19,14 +19,14 @@ namespace Page
       Q_OBJECT
 
    public:
-      Attribute(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      Attribute(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private slots:
       void slotItemChanged(QStandardItem* item);
 
    private:
       void update(const QVariant& data) override;
-      PatchStructure::Type getType(const int index) override;
+      Block::Structure::Type getType(const int index) override;
 
    private:
       DescriptionHighlighter* highlighter;

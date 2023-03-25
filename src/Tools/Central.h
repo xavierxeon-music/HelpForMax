@@ -3,7 +3,6 @@
 
 #include "AbstractFunctionHub.h"
 #include "Block/BlockItem.h"
-#include "Tools/PatchParser.h"
 
 class MainWindow;
 
@@ -14,7 +13,7 @@ struct FunctionHub : public Abstract::FunctionHub<Central>
    virtual void setPackagePath(QString packageDir);
    virtual void setModified(bool enabled, QString key);
    virtual void patchSelected(QString patchPath, QString key);
-   virtual void componentSelected(PatchParser::Marker marker, QVariant data);
+   virtual void componentSelected(Block::Item::Marker marker, QVariant data);
 };
 
 class Central : public FunctionHub
@@ -27,29 +26,30 @@ public:
    static QString getAuthor();
    static QString getPackageName();
 
-   const QString& getCurrentKey() const;
    void compileBlockMap(const QString& packagePath);
+   const Block::Item::Map getBlockMap() const;
 
-   const PatchParser& parser();
-   PatchParser& parserRef();
+   const QString& getCurrentKey() const;
+   const Block::Item& block();
+   Block::Item& blockRef();
 
+   void selectBlock(const QString& key);
+   bool isBlockUndocumented(const QString& key) const;
+   /*
    void savePatchStructures();
    void loadPatchStructure(QString patchPath, const QString& key);
    void selectPatchStructure(const QString& key);
    bool isPatchStructureUndocumented(const QString& key) const;
    QString getRefPath(const QString& key) const;
+   */
 
 protected:
    static QString packageAuthor;
    static QString packageName;
 
 private:
-   using ParserMap = QMap<QString, PatchParser>;
-
-private:
    QString currentKey;
    Block::Item::Map blockMap;
-   ParserMap parserMap;
 };
 
 #endif // NOT CentralH

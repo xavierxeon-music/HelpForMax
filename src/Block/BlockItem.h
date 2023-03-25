@@ -43,10 +43,15 @@ namespace Block
 
    public:
       Item(const QString& key = QString());
+      virtual ~Item();
 
    public:
       static Map compileMap(const QString& packageDir);
       void clear() override;
+      bool foundUndocumented() const;
+
+      const QString& getPatchPath() const;
+      const QString& getRefPath() const;
 
    private:
       friend class Patch;

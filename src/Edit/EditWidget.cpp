@@ -18,17 +18,17 @@ Edit::Widget::Widget(MainWindow* mainWindow)
    , mainWindow(mainWindow)
    , editorMap()
 {
-   addEditor<Page::Blank>(PatchParser::Marker::Undefined);
-   addEditor<Page::Argument>(PatchParser::Marker::Argument);
-   addEditor<Page::Attribute>(PatchParser::Marker::Attribute);
-   addEditor<Page::MessageStandard>(PatchParser::Marker::MessageStandard);
-   addEditor<Page::MessageFree>(PatchParser::Marker::MessageFree);
-   addEditor<Page::Output>(PatchParser::Marker::Output);
-   addEditor<Page::Patch>(PatchParser::Marker::Patch);
+   addEditor<Page::Blank>(Block::Item::Marker::Undefined);
+   addEditor<Page::Argument>(Block::Item::Marker::Argument);
+   addEditor<Page::Attribute>(Block::Item::Marker::Attribute);
+   addEditor<Page::MessageStandard>(Block::Item::Marker::MessageStandard);
+   addEditor<Page::MessageFree>(Block::Item::Marker::MessageFree);
+   addEditor<Page::Output>(Block::Item::Marker::Output);
+   addEditor<Page::Patch>(Block::Item::Marker::Patch);
 }
 
 template <typename EditorType>
-void Edit::Widget::addEditor(const PatchParser::Marker& marker)
+void Edit::Widget::addEditor(const Block::Item::Marker& marker)
 {
    Page::Abstract* abstract = new EditorType(mainWindow, marker);
    addWidget(abstract);
@@ -41,10 +41,10 @@ void Edit::Widget::patchSelected(QString patchPath, QString key)
    Q_UNUSED(patchPath)
    Q_UNUSED(key)
 
-   setCurrentWidget(editorMap.value(PatchParser::Marker::Undefined));
+   setCurrentWidget(editorMap.value(Block::Item::Marker::Undefined));
 }
 
-void Edit::Widget::componentSelected(PatchParser::Marker marker, QVariant data)
+void Edit::Widget::componentSelected(Block::Item::Marker marker, QVariant data)
 {
    Q_UNUSED(data);
 

@@ -23,12 +23,12 @@ public slots:
 private:
    struct Clip
    {
-      PatchParser::Marker marker; // what are we copying?
+      Block::Item::Marker marker; // what are we copying?
 
-      PatchStructure::Digest digest;
-      PatchStructure::Type type;
+      Block::Structure::Digest digest;
+      Block::Structure::Type type;
 
-      Clip(const PatchParser::Marker& marker = PatchParser::Marker::Undefined);
+      Clip(const Block::Item::Marker& marker = Block::Item::Marker::Undefined);
    };
 
 private slots:

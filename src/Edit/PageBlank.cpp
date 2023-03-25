@@ -1,6 +1,6 @@
 #include "PageBlank.h"
 
-Page::Blank::Blank(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::Blank::Blank(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
 {
    setupUi(this);

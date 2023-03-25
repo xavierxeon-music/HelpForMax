@@ -13,7 +13,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Argument(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      Argument(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

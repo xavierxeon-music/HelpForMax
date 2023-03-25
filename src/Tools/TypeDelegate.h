@@ -3,7 +3,7 @@
 
 #include <QStyledItemDelegate>
 
-#include "PatchStructure.h"
+#include "Block/BlockStructure.h"
 
 class TypeDelegate : public QStyledItemDelegate
 {
@@ -12,7 +12,7 @@ class TypeDelegate : public QStyledItemDelegate
 public:
    struct Proxy
    {
-      virtual PatchStructure::Type getType(const int index) = 0;
+      virtual Block::Structure::Type getType(const int index) = 0;
    };
 
 public:

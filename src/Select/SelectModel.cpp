@@ -16,52 +16,33 @@ SelectModel::SelectModel(MainWindow* mainWindow)
 
 void SelectModel::setPackagePath(QString packageDir)
 {
+   Q_UNUSED(packageDir)
+
    beginResetModel();
 
    clear();
    setHorizontalHeaderLabels({"U", "Patch"});
 
-   QStringList unmatchedRefFileList;
-   QDir().mkpath(packageDir + "/docs");
-   const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files;
-   for (QFileInfo fileInfo : QDir(packageDir + "/docs").entryInfoList(filters))
-   {
-      if (!fileInfo.fileName().endsWith(".maxref.xml"))
-         continue;
-
-      unmatchedRefFileList.append(fileInfo.absoluteFilePath());
-   }
-
-   InfoMap infoMap;
-   QDir().mkpath(packageDir + "/patchers");
-   recursiveSearch(packageDir + "/patchers", infoMap);
-
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
-   for (InfoMap::ConstIterator it = infoMap.constBegin(); it != infoMap.constEnd(); it++)
+
+   const Block::Item::Map map = mainWindow->getBlockMap();
+   for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString key = it.key();
-      const QString patchPath = it.value().absoluteFilePath();
 
       ModelItem* undocumntedItem = new ModelItem();
 
       ModelItem* patchItem = new ModelItem(key);
-      patchItem->setData(patchPath, RolePatchPath);
+      patchItem->setData(it.value().getPatchPath(), RolePatchPath);
       patchItem->setData(key, RoleKey);
 
       invisibleRootItem()->appendRow({undocumntedItem, patchItem});
 
-      mainWindow->loadPatchStructure(patchPath, key);
-
-      if (mainWindow->isPatchStructureUndocumented(key))
+      if (mainWindow->isBlockUndocumented(key))
          undocumntedItem->setText(" *");
-
-      const QString refPath = mainWindow->getRefPath(key);
-      if (unmatchedRefFileList.contains(refPath))
-         unmatchedRefFileList.removeAll(refPath);
    }
 
-   if (!unmatchedRefFileList.isEmpty())
-      emit signalUnmatchedFiles(unmatchedRefFileList, QStringList());
+   //§ emit signalUnmatchedFiles(unmatchedRefFileList, QStringList());
 
    QApplication::restoreOverrideCursor();
 
@@ -82,7 +63,7 @@ void SelectModel::setModified(bool enabled, QString key)
 
       if (key.isEmpty() || rowKey == key)
       {
-         if (mainWindow->isPatchStructureUndocumented(rowKey))
+         if (mainWindow->isBlockUndocumented(rowKey))
             undocumntedItem->setText(" *");
          else
             undocumntedItem->setText("");

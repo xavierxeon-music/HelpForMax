@@ -18,7 +18,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Abstract(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      Abstract(MainWindow* mainWindow, const Block::Item::Marker& marker);
       virtual ~Abstract();
 
    protected:
@@ -30,13 +30,13 @@ namespace Page
 
    protected:
       MainWindow* mainWindow;
-      const PatchParser::Marker editMarker;
+      const Block::Item::Marker editMarker;
 
    private:
       using ConnectionMap = QMap<QWidget*, QMetaObject::Connection>;
 
    private:
-      void componentSelected(PatchParser::Marker marker, QVariant data) override final;
+      void componentSelected(Block::Item::Marker marker, QVariant data) override final;
 
    private:
       ConnectionMap connectionMap;

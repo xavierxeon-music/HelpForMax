@@ -11,7 +11,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Blank(MainWindow* mainWindow, const PatchParser::Marker& marker);
+      Blank(MainWindow* mainWindow, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

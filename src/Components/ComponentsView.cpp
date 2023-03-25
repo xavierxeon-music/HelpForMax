@@ -10,10 +10,10 @@
 #include "MainWindow.h"
 #include "Tools/PatchParser.h"
 
-ComponentsView::Clip::Clip(const PatchParser::Marker& marker)
+ComponentsView::Clip::Clip(const Block::Item::Marker& marker)
    : marker(marker)
    , digest{}
-   , type(PatchStructure::Type::Unkown)
+   , type(Block::Structure::Type::Unkown)
 {
 }
 
@@ -45,8 +45,8 @@ ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
 
 void ComponentsView::slotReloadPatch()
 {
-   mainWindow->parserRef().clear();
-   mainWindow->parserRef().load();
+   mainWindow->blockRef().clear();
+   //§ mainWindow->blockRef().load();
 
    getModel<ComponentsModel>()->patchSelected(QString(), QString());
    callOnOtherHubInstances(&Central::setModified, false, mainWindow->getCurrentKey());
@@ -69,8 +69,8 @@ void ComponentsView::slotCopy()
       return;
    }
 
-   const QVariant markerVariant = uDocItem->data(PatchParser::RoleMarker);
-   const PatchParser::Marker marker = markerVariant.value<PatchParser::Marker>();
+   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
+   const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
    clip = Clip(marker);
 
    qDebug() << __FUNCTION__;
@@ -84,7 +84,7 @@ void ComponentsView::slotPaste()
 
    switch (clip.marker)
    {
-      case PatchParser::Marker::Undefined:
+      case Block::Item::Marker::Undefined:
       default:
          break;
    }
@@ -114,10 +114,10 @@ void ComponentsView::clicked(ModelItem* item)
    int row = item->row();
    QStandardItem* uDocItem = getModel<ComponentsModel>()->item(row); // first column item
 
-   const QVariant markerVariant = uDocItem->data(PatchParser::RoleMarker);
-   const PatchParser::Marker marker = markerVariant.value<PatchParser::Marker>();
+   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
+   const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
 
-   const QVariant data = uDocItem->data(PatchParser::RoleData);
+   const QVariant data = uDocItem->data(Block::Item::RoleData);
    callOnOtherHubInstances(&ComponentsView::componentSelected, marker, data);
 }
 

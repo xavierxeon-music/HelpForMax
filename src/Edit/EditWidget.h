@@ -17,14 +17,14 @@ namespace Edit
       Widget(MainWindow* mainWindow);
 
    private:
-      using EditorMap = QMap<PatchParser::Marker, Page::Abstract*>;
+      using EditorMap = QMap<Block::Item::Marker, Page::Abstract*>;
 
    private:
       template <typename EditorType>
-      void addEditor(const PatchParser::Marker& marker);
+      void addEditor(const Block::Item::Marker& marker);
 
       void patchSelected(QString patchPath, QString key) override;
-      void componentSelected(PatchParser::Marker marker, QVariant data) override;
+      void componentSelected(Block::Item::Marker marker, QVariant data) override;
 
    private:
       MainWindow* mainWindow;

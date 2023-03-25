@@ -17,6 +17,10 @@ Block::Item::Item(const QString& key)
 {
 }
 
+Block::Item::~Item()
+{
+}
+
 Block::Item::Map Block::Item::compileMap(const QString& packageDir)
 {
    qDebug() << packageDir;
@@ -77,10 +81,23 @@ void Block::Item::clear()
    isUndocumented = false;
 }
 
+bool Block::Item::foundUndocumented() const
+{
+   return isUndocumented;
+}
+
+const QString& Block::Item::getPatchPath() const
+{
+   return patch.getPatchPath();
+}
+
+const QString& Block::Item::getRefPath() const
+{
+   return QString();
+}
+
 void Block::Item::load(const QString& patchPath)
 {
-   qDebug() << key << patchPath;
-
    ref.readXML();
    patch.addJSON(patchPath);
 

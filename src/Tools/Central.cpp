@@ -24,7 +24,7 @@ void FunctionHub::patchSelected(QString patchPath, QString key)
    Q_UNUSED(key)
 }
 
-void FunctionHub::componentSelected(PatchParser::Marker marker, QVariant data)
+void FunctionHub::componentSelected(Block::Item::Marker marker, QVariant data)
 {
    // do nothing
    Q_UNUSED(marker)
@@ -40,7 +40,6 @@ Central::Central()
    : FunctionHub()
    , currentKey()
    , blockMap()
-   , parserMap()
 {
 }
 
@@ -72,16 +71,35 @@ void Central::compileBlockMap(const QString& packagePath)
    blockMap = Block::Item::compileMap(packagePath);
 }
 
-const PatchParser& Central::parser() // must not be constant, else map iterator is not not a reference
+const Block::Item::Map Central::getBlockMap() const
 {
-   return parserMap[currentKey];
+   return blockMap;
 }
 
-PatchParser& Central::parserRef()
+const Block::Item& Central::block() // must not be constant, else map iterator is not not a reference
 {
-   return parserMap[currentKey];
+   return blockMap[currentKey];
 }
 
+Block::Item& Central::blockRef()
+{
+   return blockMap[currentKey];
+}
+
+void Central::selectBlock(const QString& key)
+{
+   currentKey = key;
+}
+
+bool Central::isBlockUndocumented(const QString& key) const
+{
+   if (!blockMap.contains(key))
+      return false;
+
+   return blockMap[key].foundUndocumented();
+}
+
+/*
 void Central::loadPatchStructure(QString patchPath, const QString& key)
 {
    parserMap[key] = PatchParser(patchPath);
@@ -124,3 +142,4 @@ void Central::savePatchStructures()
 
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }
+*/

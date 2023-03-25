@@ -2,7 +2,7 @@
 
 #include "MainWindow.h"
 
-Page::Attribute::Attribute(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::Attribute::Attribute(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
    , TypeDelegate::Proxy()
    , highlighter(nullptr)
@@ -41,7 +41,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    if (0 != item->row())
       return;
 
-   PatchStructure::Attribute& attribute = mainWindow->parserRef().attributeMap[attributeName];
+   Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
    if (0 == item->column())
    {
       attribute.get = (item->checkState() == Qt::Checked);
@@ -73,7 +73,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    }
    else if (3 == item->column())
    {
-      const PatchStructure::Type type = PatchStructure::toType(item->text());
+      const Block::Structure::Type type = Block::Structure::toType(item->text());
       if (type != attribute.type)
       {
          attribute.type = type;
@@ -89,7 +89,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
 void Page::Attribute::update(const QVariant& data)
 {
    attributeName = data.toString();
-   PatchStructure::Attribute& attribute = mainWindow->parserRef().attributeMap[attributeName];
+   Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
    keyInfo->setText("attribute " + attributeName + " @ " + mainWindow->getCurrentKey());
 
    monitor(digestEdit, &attribute.digest.text, mainWindow->getCurrentKey());
@@ -105,17 +105,17 @@ void Page::Attribute::update(const QVariant& data)
    sizeItem->setText(QString::number(attribute.size));
 
    QStandardItem* typeItem = attributeModel->invisibleRootItem()->child(0, 3);
-   typeItem->setText(PatchStructure::typeName(attribute.type));
+   typeItem->setText(Block::Structure::typeName(attribute.type));
 
    attributeView->resizeColumnToContents(0);
    attributeView->resizeColumnToContents(1);
    attributeView->resizeColumnToContents(2);
 }
 
-PatchStructure::Type Page::Attribute::getType(const int index)
+Block::Structure::Type Page::Attribute::getType(const int index)
 {
    Q_UNUSED(index);
 
-   const PatchStructure::Attribute& attribute = mainWindow->parser().attributeMap.value(attributeName);
+   const Block::Structure::Attribute& attribute = mainWindow->block().attributeMap.value(attributeName);
    return attribute.type;
 }

@@ -2,7 +2,7 @@
 
 #include "MainWindow.h"
 
-Page::Output::Output(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::Output::Output(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
    , highlighter(nullptr)
    , outputIndex()
@@ -16,7 +16,7 @@ Page::Output::Output(MainWindow* mainWindow, const PatchParser::Marker& marker)
 void Page::Output::update(const QVariant& data)
 {
    outputIndex = data.toInt();
-   PatchStructure::Output& output = mainWindow->parserRef().outputMap[outputIndex];
+   Block::Structure::Output& output = mainWindow->blockRef().outputMap[outputIndex];
    keyInfo->setText("output " + QString::number(outputIndex) + " @ " + mainWindow->getCurrentKey());
 
    monitor(descrptionEdit, &output.digest.description, mainWindow->getCurrentKey());

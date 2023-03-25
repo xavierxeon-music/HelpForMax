@@ -9,11 +9,19 @@
 
 Block::Patch::Patch(Item* item)
    : item(item)
+   , patchPath()
 {
+}
+
+const QString& Block::Patch::getPatchPath() const
+{
+   return patchPath;
 }
 
 void Block::Patch::addJSON(const QString& patchPath)
 {
+   this->patchPath = patchPath;
+
    QJsonObject object = JSON::fromFile(patchPath);
    if (object.empty())
       return;

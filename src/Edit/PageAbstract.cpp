@@ -4,7 +4,7 @@
 
 #include <MainWindow.h>
 
-Page::Abstract::Abstract(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::Abstract::Abstract(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : QWidget(mainWindow)
    , FunctionHub()
    , mainWindow(mainWindow)
@@ -94,7 +94,7 @@ void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable, const 
    connectionMap[textEdit] = connect(textEdit, &QPlainTextEdit::textChanged, update);
 }
 
-void Page::Abstract::componentSelected(PatchParser::Marker marker, QVariant data)
+void Page::Abstract::componentSelected(Block::Item::Marker marker, QVariant data)
 {
    if (editMarker != marker)
       return;

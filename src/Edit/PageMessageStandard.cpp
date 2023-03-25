@@ -2,10 +2,10 @@
 
 #include "MainWindow.h"
 
-Page::MessageStandard::MessageStandard(MainWindow* mainWindow, const PatchParser::Marker& marker)
+Page::MessageStandard::MessageStandard(MainWindow* mainWindow, const Block::Item::Marker& marker)
    : Abstract(mainWindow, marker)
    , highlighter(nullptr)
-   , messageType(PatchStructure::Type::Unkown)
+   , messageType(Block::Structure::Type::Unkown)
 {
    setupUi(this);
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
@@ -15,9 +15,9 @@ Page::MessageStandard::MessageStandard(MainWindow* mainWindow, const PatchParser
 
 void Page::MessageStandard::update(const QVariant& data)
 {
-   messageType = data.value<PatchStructure::Type>();
-   PatchStructure::Message& message = mainWindow->parserRef().messageStandardMap[messageType];
-   keyInfo->setText("messsage " + PatchStructure::typeName(messageType) + " @ " + mainWindow->getCurrentKey());
+   messageType = data.value<Block::Structure::Type>();
+   Block::Structure::Message& message = mainWindow->blockRef().messageStandardMap[messageType];
+   keyInfo->setText("messsage " + Block::Structure::typeName(messageType) + " @ " + mainWindow->getCurrentKey());
 
    monitor(descrptionEdit, &message.digest.description, mainWindow->getCurrentKey());
 }
