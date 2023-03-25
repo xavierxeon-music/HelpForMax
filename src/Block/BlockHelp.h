@@ -1,7 +1,7 @@
 #ifndef BlockHelpH
 #define BlockHelpH
 
-#include "BlockStructure.h"
+#include <QString>
 
 namespace Block
 {

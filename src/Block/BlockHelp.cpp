@@ -16,6 +16,8 @@ Block::Help::Help(Item* item)
 
 void Block::Help::write()
 {
+   Q_UNUSED(item)
+
    if (QFile::exists(helpPath))
       return;
 
