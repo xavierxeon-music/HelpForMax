@@ -6,14 +6,14 @@
 #include "Tools/Central.h"
 
 Block::Ref::Ref(Item* item)
-   : refPath()
-   , item(item)
+   : item(item)
+   , refPath()
 {
    const QString packagePath = Central::getPackagePath();
    refPath = packagePath + "/docs/" + item->key + ".maxref.xml";
 }
 
-void Block::Ref::readXML()
+void Block::Ref::read()
 {
    QFile file(refPath);
    if (!file.open(QIODevice::ReadOnly))
@@ -173,7 +173,7 @@ void Block::Ref::readXML()
    }
 }
 
-void Block::Ref::writeXML()
+void Block::Ref::write()
 {
    QDomDocument doc;
 

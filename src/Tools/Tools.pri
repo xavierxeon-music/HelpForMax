@@ -12,8 +12,6 @@ HEADERS += \
    $$PWD/Central.h \
    $$PWD/JSONModel.h \
    $$PWD/ModelItem.h \
-   $$PWD/PatchParser.h \
-   $$PWD/PatchStructure.h \
    $$PWD/Settings.h \
    $$PWD/TypeDelegate.h
 
@@ -22,7 +20,5 @@ SOURCES += \
    $$PWD/Central.cpp \
    $$PWD/JSONModel.cpp \
    $$PWD/ModelItem.cpp \
-   $$PWD/PatchParser.cpp \
-   $$PWD/PatchStructure.cpp \
    $$PWD/Settings.cpp \
    $$PWD/TypeDelegate.cpp

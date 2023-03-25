@@ -15,8 +15,8 @@ namespace Block
       Ref(Item* item);
 
    public:
-      void readXML();
-      void writeXML();
+      void read();
+      void write();
 
    private:
       using TagMap = QMap<QString, QString>;
@@ -33,8 +33,8 @@ namespace Block
       QByteArray maxFileToDom(QByteArray maxXML) const;
 
    private:
-      QString refPath;
       Item* item;
+      QString refPath;
    };
 } // namespace Block
 

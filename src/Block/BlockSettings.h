@@ -1,6 +1,8 @@
 #ifndef BlockSettingsH
 #define BlockSettingsH
 
+#include "BlockStructure.h"
+
 namespace Block
 {
    class Item;
@@ -10,8 +12,12 @@ namespace Block
    public:
       Settings(Item* item);
 
+   public:
+      void write();
+
    private:
       Item* item;
+      QString initPath;
    };
 } // namespace Block
 

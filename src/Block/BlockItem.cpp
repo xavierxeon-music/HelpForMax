@@ -98,8 +98,8 @@ const QString& Block::Item::getRefPath() const
 
 void Block::Item::load(const QString& patchPath)
 {
-   ref.readXML();
-   patch.addJSON(patchPath);
+   ref.read();
+   patch.read(patchPath);
 
    if (patchDigest.text.isEmpty())
       patchDigest.text = "Hello World";

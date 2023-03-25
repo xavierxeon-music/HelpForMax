@@ -1,6 +1,8 @@
 #ifndef BlockHelpH
 #define BlockHelpH
 
+#include "BlockStructure.h"
+
 namespace Block
 {
    class Item;
@@ -10,8 +12,12 @@ namespace Block
    public:
       Help(Item* item);
 
+   public:
+      void write();
+
    private:
       Item* item;
+      QString helpPath;
    };
 } // namespace Block
 

@@ -14,7 +14,7 @@ namespace Block
 
    public:
       const QString& getPatchPath() const;
-      void addJSON(const QString& patchPath);
+      void read(const QString& patchPath);
 
    private:
       Structure::Output& findOrCreateOutput(const int id);

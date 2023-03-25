@@ -18,7 +18,7 @@ const QString& Block::Patch::getPatchPath() const
    return patchPath;
 }
 
-void Block::Patch::addJSON(const QString& patchPath)
+void Block::Patch::read(const QString& patchPath)
 {
    this->patchPath = patchPath;
 
