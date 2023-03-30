@@ -53,6 +53,7 @@ namespace Block
 
       void clear() override;
       bool foundUndocumented() const;
+      void markModified();
 
       const QString& getPatchPath() const;
       const QString& getRefPath() const;
@@ -69,6 +70,7 @@ namespace Block
    private:
       QString key;
       bool isUndocumented;
+      bool isModified;
 
       Patch patch;
       Ref ref;

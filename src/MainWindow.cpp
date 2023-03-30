@@ -61,7 +61,6 @@ MainWindow::MainWindow()
    QAction* editorAction = toolBar->addAction(QIcon(":/Editor.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
 
-
    for (QAction* action : this->findChildren<QAction*>())
    {
       const QString& shortcutName = action->shortcut().toString();
@@ -140,7 +139,7 @@ void MainWindow::setPackagePath(QString packageDir)
    packageAuthor = object["author"].toString();
    packageName = object["name"].toString();
 
-   qDebug() << packageAuthor << packageName;
+   // qDebug() << packageAuthor << packageName;
 }
 
 void MainWindow::setModified(bool enabled, QString key)
@@ -148,6 +147,9 @@ void MainWindow::setModified(bool enabled, QString key)
    Q_UNUSED(key)
 
    setWindowModified(enabled);
+
+   if (enabled)
+      blockRef().markModified();
 }
 
 void MainWindow::closeEvent(QCloseEvent* ce)
