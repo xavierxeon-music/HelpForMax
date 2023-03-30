@@ -100,8 +100,11 @@ void Clean::Model::apply()
          else if (name != key)
          {
             const QString newPath = QString(path).replace(key, name);
+            if(QFile::exists(newPath))
+                QFile::remove(newPath);
+
             QFile::rename(path, newPath);
-            //qInfo() << "rename" << path << newPath;
+            // qInfo() << "rename" << path << newPath;
          }
       }
    }
