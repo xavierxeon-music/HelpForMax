@@ -10,6 +10,7 @@ Block::Item::Item(const QString& key, const QString& patchPath)
    : Structure()
    , key(key)
    , isUndocumented(false)
+   , isModified(false)
    , patch(this, patchPath)
    , ref(this)
    , help(this)
@@ -17,11 +18,9 @@ Block::Item::Item(const QString& key, const QString& patchPath)
 {
 }
 
-
 Block::Item::~Item()
 {
 }
-
 
 Block::Item::Map Block::Item::compileMap(const QString& packagePath)
 {
@@ -86,6 +85,11 @@ bool Block::Item::foundUndocumented() const
    return isUndocumented;
 }
 
+void Block::Item::markModified()
+{
+   isModified = true;
+}
+
 const QString& Block::Item::getPatchPath() const
 {
    return patch.getPath();
@@ -106,6 +110,7 @@ void Block::Item::load()
 
    if (!QFile::exists(ref.getPath()))
    {
+      isModified = true;
       ref.write();
       help.write();
    }
@@ -113,6 +118,11 @@ void Block::Item::load()
 
 void Block::Item::save()
 {
+   if (!isModified)
+      return;
+
+   isModified = false;
+
    ref.write();
    help.write();
    settings.write();
