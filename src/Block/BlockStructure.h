@@ -18,7 +18,8 @@ namespace Block
          Integer,
          Bang,
          List,
-         Signal
+         Signal,
+         MultiSignal
       };
 
       struct Extras
