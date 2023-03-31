@@ -17,7 +17,7 @@ void Block::Settings::write()
 {
    auto writeFile = [&]()
    {
-      if (item->extras.openAsBPatcher)
+      if (item->patch.openAsBPatcher)
          return true;
 
       return false;

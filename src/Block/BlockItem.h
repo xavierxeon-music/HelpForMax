@@ -8,7 +8,7 @@
 #include <QString>
 
 #include "BlockHelp.h"
-#include "BlockPatch.h"
+#include "BlockPatcher.h"
 #include "BlockRef.h"
 #include "BlockSettings.h"
 
@@ -59,7 +59,7 @@ namespace Block
       const QString& getRefPath() const;
 
    private:
-      friend class Patch;
+      friend class Patcher;
       friend class Ref;
       friend class Help;
       friend class Settings;
@@ -72,7 +72,7 @@ namespace Block
       bool isUndocumented;
       bool isModified;
 
-      Patch patch;
+      Patcher patcher;
       Ref ref;
       Help help;
       Settings settings;

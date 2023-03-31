@@ -35,10 +35,10 @@ void ComponentsModel::update()
 
    {
       QStandardItem* udocItem = invisibleRootItem()->child(row, 0);
-      setUdocStatus(udocItem, block.patchDigest);
+      setUdocStatus(udocItem, block.patch.digest);
 
       QStandardItem* patchDigestItem = invisibleRootItem()->child(row, 2);
-      patchDigestItem->setText(block.patchDigest.text);
+      patchDigestItem->setText(block.patch.digest.text);
       row++;
    }
 

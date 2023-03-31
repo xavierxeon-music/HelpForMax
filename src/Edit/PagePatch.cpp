@@ -46,9 +46,9 @@ void Page::Patch::update(const QVariant& data)
    Q_UNUSED(data)
 
    keyInfo->setText("patch @ " + mainWindow->getCurrentKey());
-   monitor(openAsBPatcherCheck, &mainWindow->blockRef().extras.openAsBPatcher, mainWindow->getCurrentKey());
-   monitor(metaTagEdit, &mainWindow->blockRef().extras.metaTagList, mainWindow->getCurrentKey());
-   monitor(digestEdit, &mainWindow->blockRef().patchDigest.text, mainWindow->getCurrentKey());
-   monitor(descrptionEdit, &mainWindow->blockRef().patchDigest.description, mainWindow->getCurrentKey());
-   monitor(seeAlsoEdit, &mainWindow->blockRef().extras.seeAlsoList, mainWindow->getCurrentKey());
+   monitor(openAsBPatcherCheck, &mainWindow->blockRef().patch.openAsBPatcher, mainWindow->getCurrentKey());
+   monitor(metaTagEdit, &mainWindow->blockRef().patch.metaTagList, mainWindow->getCurrentKey());
+   monitor(digestEdit, &mainWindow->blockRef().patch.digest.text, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &mainWindow->blockRef().patch.digest.description, mainWindow->getCurrentKey());
+   monitor(seeAlsoEdit, &mainWindow->blockRef().patch.seeAlsoList, mainWindow->getCurrentKey());
 }

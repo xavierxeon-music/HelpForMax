@@ -11,7 +11,7 @@ Block::Item::Item(const QString& key, const QString& patchPath)
    , key(key)
    , isUndocumented(false)
    , isModified(false)
-   , patch(this, patchPath)
+   , patcher(this, patchPath)
    , ref(this)
    , help(this)
    , settings(this)
@@ -92,7 +92,7 @@ void Block::Item::markModified()
 
 const QString& Block::Item::getPatchPath() const
 {
-   return patch.getPath();
+   return patcher.getPath();
 }
 
 const QString& Block::Item::getRefPath() const
@@ -103,10 +103,10 @@ const QString& Block::Item::getRefPath() const
 void Block::Item::load()
 {
    ref.read();
-   patch.read();
+   patcher.read();
 
-   if (patchDigest.text.isEmpty())
-      patchDigest.text = "Hello World";
+   if (patch.digest.text.isEmpty())
+      patch.digest.text = "Hello World";
 
    if (!QFile::exists(ref.getPath()))
    {

@@ -22,13 +22,6 @@ namespace Block
          MultiSignal
       };
 
-      struct Extras
-      {
-         bool openAsBPatcher = false;
-         QStringList metaTagList;
-         QStringList seeAlsoList;
-      };
-
       struct Base
       {
          bool undocumented = false;
@@ -40,6 +33,16 @@ namespace Block
          QString description;
       };
 
+   public:
+      struct Patch
+      {
+         Digest digest;
+         bool openAsBPatcher = false;
+         int inletCount = 0;
+         QStringList metaTagList;
+         QStringList seeAlsoList;
+      };
+
       struct Output : Base
       {
          QString name;
@@ -49,7 +52,7 @@ namespace Block
       };
 
       // things in patcherargs without @
-      // message argumetns
+      // message arguments
       struct Argument : Base
       {
          QString name;
@@ -84,9 +87,7 @@ namespace Block
       using SeeAlsoList = QStringList;
 
    public:
-      Digest patchDigest;
-      Extras extras;
-      int inletCount = 0;
+      Patch patch;
       Output::Map outputMap;
       Argument::List argumentList;
       Attribute::Map attributeMap;

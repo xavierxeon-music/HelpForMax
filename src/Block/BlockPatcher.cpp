@@ -1,4 +1,4 @@
-#include "BlockPatch.h"
+#include "BlockPatcher.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -7,18 +7,18 @@
 #include "BlockItem.h"
 #include "Tools/JSONModel.h"
 
-Block::Patch::Patch(Item* item, const QString& patchPath)
+Block::Patcher::Patcher(Item* item, const QString& patchPath)
    : item(item)
    , patchPath(patchPath)
 {
 }
 
-const QString& Block::Patch::getPath() const
+const QString& Block::Patcher::getPath() const
 {
    return patchPath;
 }
 
-void Block::Patch::read()
+void Block::Patcher::read()
 {
    QJsonObject object = JSON::fromFile(patchPath);
    if (object.empty())
@@ -68,74 +68,16 @@ void Block::Patch::read()
       else if ("newobj" == className)
       {
          QString text = boxObject["text"].toString();
-         if (!text.startsWith("patcherargs"))
-            continue;
+         //
 
-         // remove whitespace in quotes
-         bool inQuote = false;
-         for (int index = 0; index < text.size(); index++)
-         {
-            if ("\"" == text.mid(index, 1))
-            {
-               inQuote ^= true;
-               continue;
-            }
-            else if (inQuote && " " == text.mid(index, 1))
-            {
-               text.replace(index, 1, "_");
-            }
-         }
-
-         const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
-         enum class State
-         {
-            Argument,
-            AttributeName,
-            AttributeArg
-         };
-
-         State state = State::Argument;
-
-         for (int i = 1; i < contentList.size(); i++)
-         {
-            const QString& arg = contentList.at(i);
-
-            // maybe advance state
-            if (arg.startsWith("@"))
-               state = State::AttributeName;
-            else if (State::AttributeName == state)
-               state = State::AttributeArg;
-
-            if (State::Argument == state)
-            {
-               Structure::Argument argument;
-               argument.name = QString::number(i);
-               argument.optional = true;
-
-               if (i > item->argumentList.count())
-               {
-                  item->markUndocumented(argument);
-                  item->argumentList.append(argument);
-               }
-            }
-            else if (State::AttributeName == state)
-            {
-               Structure::Attribute attribute;
-               const QString& name = arg.mid(1);
-               if (!item->attributeMap.contains(name))
-               {
-                  item->markUndocumented(attribute);
-                  item->attributeMap[name] = attribute;
-               }
-            }
-            else if (State::AttributeArg == state)
-            {
-            }
-         }
+         if (text.startsWith("patcherargs"))
+            readPatcherargs(text);
+         else if (text.startsWith("wa.setup.bpatcher"))
+            item->patch.openAsBPatcher = true;
       }
    }
 
-   item->inletCount = inletConnectionMap.count();
+   item->patch.inletCount = inletConnectionMap.count();
 
    // find objects connected to inlets
    for (int index = 0; index < lineArray.size(); index++)
@@ -227,7 +169,7 @@ void Block::Patch::read()
    }
 }
 
-Block::Structure::Output& Block::Patch::findOrCreateOutput(const int id)
+Block::Structure::Output& Block::Patcher::findOrCreateOutput(const int id)
 {
    if (!item->outputMap.contains(id))
    {
@@ -236,4 +178,69 @@ Block::Structure::Output& Block::Patch::findOrCreateOutput(const int id)
    }
 
    return item->outputMap[id];
+}
+
+void Block::Patcher::readPatcherargs(QString text)
+{
+   // remove whitespace in quotes
+   bool inQuote = false;
+   for (int index = 0; index < text.size(); index++)
+   {
+      if ("\"" == text.mid(index, 1))
+      {
+         inQuote ^= true;
+         continue;
+      }
+      else if (inQuote && " " == text.mid(index, 1))
+      {
+         text.replace(index, 1, "_");
+      }
+   }
+
+   const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
+   enum class State
+   {
+      Argument,
+      AttributeName,
+      AttributeArg
+   };
+
+   State state = State::Argument;
+
+   for (int i = 1; i < contentList.size(); i++)
+   {
+      const QString& arg = contentList.at(i);
+
+      // maybe advance state
+      if (arg.startsWith("@"))
+         state = State::AttributeName;
+      else if (State::AttributeName == state)
+         state = State::AttributeArg;
+
+      if (State::Argument == state)
+      {
+         Structure::Argument argument;
+         argument.name = QString::number(i);
+         argument.optional = true;
+
+         if (i > item->argumentList.count())
+         {
+            item->markUndocumented(argument);
+            item->argumentList.append(argument);
+         }
+      }
+      else if (State::AttributeName == state)
+      {
+         Structure::Attribute attribute;
+         const QString& name = arg.mid(1);
+         if (!item->attributeMap.contains(name))
+         {
+            item->markUndocumented(attribute);
+            item->attributeMap[name] = attribute;
+         }
+      }
+      else if (State::AttributeArg == state)
+      {
+      }
+   }
 }

@@ -36,11 +36,11 @@ void Block::Ref::read()
    }
 
    const QDomElement rootElement = doc.documentElement();
-   readDigest(rootElement, item->patchDigest);
-   if (item->patchDigest.description.isEmpty())
-      item->markUndocumented(item->patchDigest);
+   readDigest(rootElement, item->patch.digest);
+   if (item->patch.digest.description.isEmpty())
+      item->markUndocumented(item->patch.digest);
 
-   item->extras.openAsBPatcher = (1 == rootElement.attribute("as_bpatcher", "0").toInt());
+   item->patch.openAsBPatcher = (1 == rootElement.attribute("as_bpatcher", "0").toInt());
 
    {
       const QDomElement metaDataElement = rootElement.firstChildElement("metadatalist");
@@ -55,7 +55,7 @@ void Block::Ref::read()
 
             const QString text = readText(element);
             if (packageName != text)
-               item->extras.metaTagList.append(text);
+               item->patch.metaTagList.append(text);
          }
       }
    }
@@ -148,8 +148,8 @@ void Block::Ref::read()
             }
 
             readDigest(messageElement, message.digest);
-            if (item->patchDigest.description.isEmpty())
-               item->markUndocumented(item->patchDigest);
+            if (item->patch.digest.description.isEmpty())
+               item->markUndocumented(item->patch.digest);
 
             const bool isStandard = ("1" == messageElement.attribute("standard"));
             if (isStandard)
@@ -172,7 +172,7 @@ void Block::Ref::read()
          for (QDomElement element = seeAlsoListElement.firstChildElement("seealso"); !element.isNull(); element = element.nextSiblingElement("seealso"))
          {
             const QString& name = element.attribute("name");
-            item->extras.seeAlsoList.append(name);
+            item->patch.seeAlsoList.append(name);
          }
       }
    }
@@ -185,20 +185,20 @@ void Block::Ref::write()
    QDomElement rootElement = doc.createElement("c74object");
    doc.appendChild(rootElement);
    rootElement.setAttribute("name", item->key);
-   rootElement.setAttribute("as_bpatcher", item->extras.openAsBPatcher);
-   addDigest(rootElement, item->patchDigest);
+   rootElement.setAttribute("as_bpatcher", item->patch.openAsBPatcher);
+   addDigest(rootElement, item->patch.digest);
 
    {
       QDomElement metaDataElement = createSubElement(rootElement, "metadatalist");
       createSubElement(metaDataElement, "metadata", Central::getAuthor(), {{"name", "author"}});
       createSubElement(metaDataElement, "metadata", Central::getPackageName(), {{"name", "tag"}});
-      for (const QString& tag : item->extras.metaTagList)
+      for (const QString& tag : item->patch.metaTagList)
          createSubElement(metaDataElement, "metadata", tag, {{"name", "tag"}});
    }
 
    {
       QDomElement parserElement = createSubElement(rootElement, "parser");
-      parserElement.setAttribute("inlet_count", item->inletCount);
+      parserElement.setAttribute("inlet_count", item->patch.inletCount);
    }
 
    {
@@ -285,7 +285,7 @@ void Block::Ref::write()
 
    {
       QDomElement seeAlsoListElement = createSubElement(rootElement, "seealsolist");
-      for (const QString& seeAlso : item->extras.seeAlsoList)
+      for (const QString& seeAlso : item->patch.seeAlsoList)
       {
          createSubElement(seeAlsoListElement, "seealso", QString(), {{"name", seeAlso}});
       }

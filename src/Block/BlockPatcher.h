@@ -1,5 +1,5 @@
-#ifndef BlockPatchH
-#define BlockPatchH
+#ifndef BlockPatcherH
+#define BlockPatcherH
 
 #include "BlockStructure.h"
 
@@ -7,10 +7,10 @@ namespace Block
 {
    class Item;
 
-   class Patch
+   class Patcher
    {
    public:
-      Patch(Item* item, const QString& patchPath);
+      Patcher(Item* item, const QString& patchPath);
 
    public:
       const QString& getPath() const;
@@ -18,6 +18,7 @@ namespace Block
 
    private:
       Structure::Output& findOrCreateOutput(const int id);
+      void readPatcherargs(QString text);
 
    private:
       Item* item;
@@ -25,4 +26,4 @@ namespace Block
    };
 } // namespace Block
 
-#endif // NOT BlockPatchH
+#endif // NOT BlockPatcherH
