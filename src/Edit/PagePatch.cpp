@@ -21,6 +21,7 @@ Page::Patch::Patch(MainWindow* mainWindow, const Block::Item::Marker& marker)
    standardMethodGroup->addButton(messageListButton, static_cast<int>(Block::Structure::Type::List));
    standardMethodGroup->addButton(messageSignalButton, static_cast<int>(Block::Structure::Type::Signal));
    standardMethodGroup->addButton(messageMultiSignalButton, static_cast<int>(Block::Structure::Type::MultiSignal));
+   standardMethodGroup->addButton(messageAnythingButton, static_cast<int>(Block::Structure::Type::Anything));
 
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 }

@@ -237,8 +237,8 @@ QStandardItem* ComponentsView::actionItem()
    QModelIndex index = selectedIndexes().first();
    QStandardItem* uDocItem = getModel<ComponentsModel>()->getItem(index.row());
 
-   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
-   const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
+   //const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
+   //const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
 
    return uDocItem;
 }

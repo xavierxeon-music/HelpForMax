@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>489</width>
-    <height>499</height>
+    <height>644</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,46 +101,53 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="messageBangButton">
-        <property name="text">
-         <string>bang</string>
-        </property>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
        <widget class="QPushButton" name="messageIntButton">
         <property name="text">
          <string>int</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="messageBangButton">
+        <property name="text">
+         <string>bang</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QPushButton" name="messageFloatButton">
         <property name="text">
          <string>float</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
        <widget class="QPushButton" name="messageListButton">
         <property name="text">
          <string>list</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="3" column="3">
+       <widget class="QPushButton" name="messageMultiSignalButton">
+        <property name="text">
+         <string>mc.signal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
        <widget class="QPushButton" name="messageSignalButton">
         <property name="text">
          <string>signal</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="messageMultiSignalButton">
+      <item row="3" column="1">
+       <widget class="QPushButton" name="messageAnythingButton">
         <property name="text">
-         <string>mc.signal</string>
+         <string>anything</string>
         </property>
        </widget>
       </item>

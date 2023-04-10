@@ -19,7 +19,8 @@ namespace Block
          Bang,
          List,
          Signal,
-         MultiSignal
+         MultiSignal,
+         Anything
       };
 
       struct Base

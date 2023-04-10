@@ -51,6 +51,9 @@ MainWindow::MainWindow()
    toolBar->setMovable(false);
 
    toolBar->addAction(QIcon(":/OpenPackage.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
+   toolBar->addAction(QIcon(":/ReloadPackage.svg"), "Reload Package", this, &MainWindow::slotReloadPackage);
+
+   toolBar->addSeparator();
 
    QAction* reloadAction = toolBar->addAction(QIcon(":/ReloadPatch.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
@@ -99,6 +102,16 @@ void MainWindow::slotOpenPackage()
       compileBlockMap(packagePath);
       callOnAllHubInstances(&Central::setPackagePath, packagePath);
    }
+}
+
+void MainWindow::slotReloadPackage()
+{
+   const QString packagePath = Central::getPackagePath();
+   if (packagePath.isEmpty())
+      return;
+
+   compileBlockMap(packagePath);
+   callOnAllHubInstances(&Central::setPackagePath, packagePath);
 }
 
 void MainWindow::slotSavePatches()

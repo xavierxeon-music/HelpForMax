@@ -7,7 +7,8 @@ const QMap<Block::Structure::Type, QString> Block::Structure::typeNameMap = {{Ty
                                                                              {Type::Symbol, "symbol"},
                                                                              {Type::List, "list"},
                                                                              {Type::Signal, "signal"},
-                                                                             {Type::MultiSignal, "multichannelsignal"}};
+                                                                             {Type::MultiSignal, "multichannelsignal"},
+                                                                             {Type::Anything, "anything"}};
 
 void Block::Structure::clear()
 {

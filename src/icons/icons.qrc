@@ -11,5 +11,6 @@
         <file>SaveAllPatches.svg</file>
         <file>PatchMessageFree.svg</file>
         <file>PatchMessageStandard.svg</file>
+        <file>ReloadPackage.svg</file>
     </qresource>
 </RCC>
