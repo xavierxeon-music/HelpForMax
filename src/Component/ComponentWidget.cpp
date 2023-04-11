@@ -8,6 +8,7 @@
 
 Component::Widget::Widget(QWidget* parent, Central* central)
    : QWidget(parent)
+   , FunctionHub()
    , central(central)
 {
    Model* componentModel = new Model(this, central);
@@ -46,4 +47,5 @@ Component::Widget::Widget(QWidget* parent, Central* central)
 void Component::Widget::slotSavePatches()
 {
    central->saveBlocks();
+   callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }

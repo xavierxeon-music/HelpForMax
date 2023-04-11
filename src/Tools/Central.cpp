@@ -1,5 +1,6 @@
 #include "Central.h"
 
+#include "Tools/JSONModel.h"
 #include "Tools/Settings.h"
 
 // function hub
@@ -37,8 +38,7 @@ QString Central::packageAuthor = QString();
 QString Central::packageName = QString();
 
 Central::Central()
-   : FunctionHub()
-   , currentKey()
+   : currentKey()
    , blockMap()
 {
 }
@@ -105,6 +105,22 @@ void Central::saveBlocks()
    {
       block->save();
    }
+}
 
-   callOnAllHubInstances(&FunctionHub::setModified, false, QString());
+void Central::readPackageInfo(QString packagePath)
+{
+   const QString fileName = packagePath + "/package-info.json";
+
+   QJsonObject object = JSON::fromFile(fileName);
+   if (object.empty())
+   {
+      packageAuthor = "";
+      packageName = "";
+      return;
+   }
+
+   packageAuthor = object["author"].toString();
+   packageName = object["name"].toString();
+
+   // qDebug() << packageAuthor << packageName;
 }

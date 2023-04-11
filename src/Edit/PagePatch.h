@@ -8,12 +8,13 @@
 
 namespace Page
 {
-   class Patch : public Abstract, private Ui::Patch
+   class Patch : public Abstract,
+                 private Ui::Patch
    {
       Q_OBJECT
 
    public:
-      Patch(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Patch(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private slots:
       void slotAddStandardMethond(int typeId);

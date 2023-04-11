@@ -10,18 +10,19 @@
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
 #include "Select/SelectWidget.h"
-#include "Tools/JSONModel.h"
+
 #include "Tools/Settings.h"
 
 MainWindow::MainWindow()
    : QSplitter(nullptr)
-   , Central()
+   , FunctionHub()
+   , central()
 {
    setWindowTitle("Help For Max");
 
-   Select::Widget* selectWidget = new Select::Widget(this, this);
-   Component::Widget* componentWidget = new Component::Widget(this, this);
-   Edit::Widget* editWidget = new Edit::Widget(this);
+   Select::Widget* selectWidget = new Select::Widget(this, &central);
+   Component::Widget* componentWidget = new Component::Widget(this, &central);
+   Edit::Widget* editWidget = new Edit::Widget(this, &central);
 
    addWidget(selectWidget);
    addWidget(componentWidget);
@@ -38,21 +39,6 @@ void MainWindow::setPackagePath(QString packageDir)
       setWindowTitle("Help For Max");
    else
       setWindowTitle("Help For Max - [*]" + packageDir);
-
-   const QString fileName = packageDir + "/package-info.json";
-
-   QJsonObject object = JSON::fromFile(fileName);
-   if (object.empty())
-   {
-      packageAuthor = "";
-      packageName = "";
-      return;
-   }
-
-   packageAuthor = object["author"].toString();
-   packageName = object["name"].toString();
-
-   // qDebug() << packageAuthor << packageName;
 }
 
 void MainWindow::setModified(bool enabled, QString key)
@@ -62,7 +48,7 @@ void MainWindow::setModified(bool enabled, QString key)
    setWindowModified(enabled);
 
    if (enabled)
-      blockRef().markModified();
+      central.blockRef().markModified();
 }
 
 void MainWindow::closeEvent(QCloseEvent* ce)

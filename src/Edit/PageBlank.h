@@ -6,12 +6,13 @@
 
 namespace Page
 {
-   class Blank : public Abstract, private Ui::Blank
+   class Blank : public Abstract,
+                 private Ui::Blank
    {
       Q_OBJECT
 
    public:
-      Blank(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Blank(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

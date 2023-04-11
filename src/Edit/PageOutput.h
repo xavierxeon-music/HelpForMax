@@ -8,12 +8,13 @@
 
 namespace Page
 {
-   class Output : public Abstract, private Ui::Output
+   class Output : public Abstract,
+                  private Ui::Output
    {
       Q_OBJECT
 
    public:
-      Output(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Output(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

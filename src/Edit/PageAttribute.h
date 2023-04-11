@@ -19,7 +19,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Attribute(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Attribute(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private slots:
       void slotItemChanged(QStandardItem* item);

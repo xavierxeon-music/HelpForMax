@@ -2,10 +2,8 @@
 
 #include <QButtonGroup>
 
-#include "MainWindow.h"
-
-Page::Patch::Patch(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , standardMethodGroup(nullptr)
 {
@@ -29,7 +27,7 @@ Page::Patch::Patch(MainWindow* mainWindow, const Block::Item::Marker& marker)
 void Page::Patch::slotAddStandardMethond(int typeId)
 {
    const Block::Structure::Type type = static_cast<Block::Structure::Type>(typeId);
-   if (mainWindow->block().messageStandardMap.contains(type))
+   if (central->block().messageStandardMap.contains(type))
       return;
 
    Block::Structure::Argument argument;
@@ -38,18 +36,18 @@ void Page::Patch::slotAddStandardMethond(int typeId)
    Block::Structure::Message message;
    message.arguments.append(argument);
 
-   mainWindow->blockRef().messageStandardMap[type] = message;
-   callOnOtherHubInstances(&Central::setModified, true, mainWindow->getCurrentKey());
+   central->blockRef().messageStandardMap[type] = message;
+   callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
 }
 
 void Page::Patch::update(const QVariant& data)
 {
    Q_UNUSED(data)
 
-   keyInfo->setText("patch @ " + mainWindow->getCurrentKey());
-   monitor(openAsBPatcherCheck, &mainWindow->blockRef().patch.openAsBPatcher, mainWindow->getCurrentKey());
-   monitor(metaTagEdit, &mainWindow->blockRef().patch.metaTagList, mainWindow->getCurrentKey());
-   monitor(digestEdit, &mainWindow->blockRef().patch.digest.text, mainWindow->getCurrentKey());
-   monitor(descrptionEdit, &mainWindow->blockRef().patch.digest.description, mainWindow->getCurrentKey());
-   monitor(seeAlsoEdit, &mainWindow->blockRef().patch.seeAlsoList, mainWindow->getCurrentKey());
+   keyInfo->setText("patch @ " + central->getCurrentKey());
+   monitor(openAsBPatcherCheck, &central->blockRef().patch.openAsBPatcher, central->getCurrentKey());
+   monitor(metaTagEdit, &central->blockRef().patch.metaTagList, central->getCurrentKey());
+   monitor(digestEdit, &central->blockRef().patch.digest.text, central->getCurrentKey());
+   monitor(descrptionEdit, &central->blockRef().patch.digest.description, central->getCurrentKey());
+   monitor(seeAlsoEdit, &central->blockRef().patch.seeAlsoList, central->getCurrentKey());
 }

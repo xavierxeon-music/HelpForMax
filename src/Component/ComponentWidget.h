@@ -3,11 +3,12 @@
 
 #include <QWidget>
 
-class Central;
+#include "Tools/Central.h"
 
 namespace Component
 {
-   class Widget : public QWidget
+   class Widget : public QWidget,
+                  public FunctionHub
    {
    public:
       Widget(QWidget* parent, Central* central);

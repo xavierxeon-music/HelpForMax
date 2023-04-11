@@ -2,12 +2,10 @@
 
 #include "Tools/Central.h"
 
-#include <MainWindow.h>
-
-Page::Abstract::Abstract(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : QWidget(mainWindow)
+Page::Abstract::Abstract(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : QWidget(parent)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
    , editMarker(marker)
    , connectionMap()
    , blocked(false)

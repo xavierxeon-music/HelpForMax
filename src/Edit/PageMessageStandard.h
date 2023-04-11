@@ -8,12 +8,13 @@
 
 namespace Page
 {
-   class MessageStandard : public Abstract, private Ui::MessageStandard
+   class MessageStandard : public Abstract,
+                           private Ui::MessageStandard
    {
       Q_OBJECT
 
    public:
-      MessageStandard(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      MessageStandard(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

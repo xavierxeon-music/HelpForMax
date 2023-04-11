@@ -13,7 +13,7 @@ namespace Edit
       Q_OBJECT
 
    public:
-      Widget(MainWindow* mainWindow);
+      Widget(QWidget* parent, Central* central);
 
    private:
       using EditorMap = QMap<Block::Item::Marker, Page::Abstract*>;
@@ -26,7 +26,7 @@ namespace Edit
       void componentSelected(Block::Item::Marker marker, QVariant data) override;
 
    private:
-      MainWindow* mainWindow;
+      Central* central;
       EditorMap editorMap;
    };
 } // namespace Edit

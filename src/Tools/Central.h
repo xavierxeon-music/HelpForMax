@@ -16,7 +16,7 @@ struct FunctionHub : public Abstract::FunctionHub<Central>
    virtual void componentSelected(Block::Item::Marker marker, QVariant data);
 };
 
-class Central : public FunctionHub
+class Central
 {
 public:
    Central();
@@ -38,11 +38,14 @@ public:
 
    void saveBlocks();
 
+   void readPackageInfo(QString packagePath);
+
 protected:
+
+private:
    static QString packageAuthor;
    static QString packageName;
 
-private:
    QString currentKey;
    Block::Item::Map blockMap;
 };

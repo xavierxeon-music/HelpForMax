@@ -1,9 +1,7 @@
 #include "PageArgument.h"
 
-#include "MainWindow.h"
-
-Page::Argument::Argument(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::Argument::Argument(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , argumentIndex()
 {
@@ -17,12 +15,12 @@ Page::Argument::Argument(MainWindow* mainWindow, const Block::Item::Marker& mark
 void Page::Argument::update(const QVariant& data)
 {
    argumentIndex = data.toInt();
-   Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
-   keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + mainWindow->getCurrentKey());
+   Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
+   keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + central->getCurrentKey());
 
-   monitor(digestEdit, &argument.digest.text, mainWindow->getCurrentKey());
-   monitor(descrptionEdit, &argument.digest.description, mainWindow->getCurrentKey());
+   monitor(digestEdit, &argument.digest.text, central->getCurrentKey());
+   monitor(descrptionEdit, &argument.digest.description, central->getCurrentKey());
 
-   argumentView->clearMonitors(mainWindow->getCurrentKey());
+   argumentView->clearMonitors(central->getCurrentKey());
    argumentView->monitor(&argument);
 }

@@ -17,7 +17,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Abstract(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Abstract(QWidget* parent, Central* central, const Block::Item::Marker& marker);
       virtual ~Abstract();
 
    protected:
@@ -28,7 +28,7 @@ namespace Page
       void monitor(QPlainTextEdit* textEdit, QString* variable, const QString& patchKey);
 
    protected:
-      MainWindow* mainWindow;
+      Central* central;
       const Block::Item::Marker editMarker;
 
    private:

@@ -48,7 +48,7 @@ void Component::View::slotReloadPatch()
    central->blockRef().load();
 
    getModel<Model>()->patchSelected(QString(), QString());
-   callOnOtherHubInstances(&Central::setModified, false, central->getCurrentKey());
+   callOnOtherHubInstances(&FunctionHub::setModified, false, central->getCurrentKey());
 }
 
 void Component::View::slotOpenInExternalEditor()
@@ -172,7 +172,7 @@ void Component::View::slotPaste()
          return;
    }
 
-   callOnOtherHubInstances(&Component::View::componentSelected, targetMarker, data);
+   callOnOtherHubInstances(&FunctionHub::componentSelected, targetMarker, data);
    callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
 }
 
@@ -202,7 +202,7 @@ void Component::View::clicked(ModelItem* item)
    const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
 
    const QVariant data = uDocItem->data(Block::Item::RoleData);
-   callOnOtherHubInstances(&Component::View::componentSelected, marker, data);
+   callOnOtherHubInstances(&FunctionHub::componentSelected, marker, data);
 }
 
 void Component::View::setModified(bool modified, QString key)

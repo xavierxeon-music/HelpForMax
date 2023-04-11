@@ -25,7 +25,7 @@ void Select::View::clicked(ModelItem* item)
 
    central->selectBlock(key);
 
-   callOnOtherHubInstances(&View::patchSelected, patchPath, key);
+   callOnOtherHubInstances(&FunctionHub::patchSelected, patchPath, key);
 }
 
 void Select::View::doubleClicked(ModelItem* item)

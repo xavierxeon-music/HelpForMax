@@ -1,10 +1,9 @@
 #include "PageAttribute.h"
 
-#include "MainWindow.h"
 #include "Tools/Lock.h"
 
-Page::Attribute::Attribute(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::Attribute::Attribute(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
    , TypeDelegate::Proxy()
    , highlighter(nullptr)
    , attributeName()
@@ -46,16 +45,16 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    if (updating)
       return;
 
-   Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
+   Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
    if (0 == item->column())
    {
       attribute.get = (item->checkState() == Qt::Checked);
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
    }
    else if (1 == item->column())
    {
       attribute.set = (item->checkState() == Qt::Checked);
-      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
    }
    else if (2 == item->column())
    {
@@ -68,7 +67,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
          if (number != attribute.size)
          {
             attribute.size = number;
-            FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
+            FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
          }
       }
       else
@@ -82,7 +81,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
       if (type != attribute.type)
       {
          attribute.type = type;
-         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
+         FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
       }
    }
 
@@ -94,11 +93,11 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
 void Page::Attribute::update(const QVariant& data)
 {
    attributeName = data.toString();
-   Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
-   keyInfo->setText("attribute " + attributeName + " @ " + mainWindow->getCurrentKey());
+   Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
+   keyInfo->setText("attribute " + attributeName + " @ " + central->getCurrentKey());
 
-   monitor(digestEdit, &attribute.digest.text, mainWindow->getCurrentKey());
-   monitor(descrptionEdit, &attribute.digest.description, mainWindow->getCurrentKey());
+   monitor(digestEdit, &attribute.digest.text, central->getCurrentKey());
+   monitor(descrptionEdit, &attribute.digest.description, central->getCurrentKey());
 
    {
       Lock lock(updating);
@@ -125,6 +124,6 @@ Block::Structure::Type Page::Attribute::getType(const int index)
 {
    Q_UNUSED(index);
 
-   const Block::Structure::Attribute& attribute = mainWindow->block().attributeMap.value(attributeName);
+   const Block::Structure::Attribute& attribute = central->block().attributeMap.value(attributeName);
    return attribute.type;
 }

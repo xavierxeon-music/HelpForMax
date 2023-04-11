@@ -1,7 +1,7 @@
 #include "PageBlank.h"
 
-Page::Blank::Blank(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::Blank::Blank(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
 {
    setupUi(this);
 

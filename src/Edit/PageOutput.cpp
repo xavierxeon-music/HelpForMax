@@ -1,9 +1,7 @@
 #include "PageOutput.h"
 
-#include "MainWindow.h"
-
-Page::Output::Output(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::Output::Output(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , outputIndex()
 {
@@ -16,8 +14,8 @@ Page::Output::Output(MainWindow* mainWindow, const Block::Item::Marker& marker)
 void Page::Output::update(const QVariant& data)
 {
    outputIndex = data.toInt();
-   Block::Structure::Output& output = mainWindow->blockRef().outputMap[outputIndex];
-   keyInfo->setText("output " + QString::number(outputIndex) + " @ " + mainWindow->getCurrentKey());
+   Block::Structure::Output& output = central->blockRef().outputMap[outputIndex];
+   keyInfo->setText("output " + QString::number(outputIndex) + " @ " + central->getCurrentKey());
 
-   monitor(descrptionEdit, &output.digest.description, mainWindow->getCurrentKey());
+   monitor(descrptionEdit, &output.digest.description, central->getCurrentKey());
 }

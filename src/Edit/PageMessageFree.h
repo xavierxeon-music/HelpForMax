@@ -8,12 +8,13 @@
 
 namespace Page
 {
-   class MessageFree : public Abstract, private Ui::MessageFree
+   class MessageFree : public Abstract,
+                       private Ui::MessageFree
    {
       Q_OBJECT
 
    public:
-      MessageFree(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      MessageFree(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

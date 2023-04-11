@@ -9,6 +9,7 @@
 #include "Clean/CleanModel.h"
 #include "SelectModel.h"
 #include "SelectView.h"
+
 #include "Tools/Settings.h"
 
 Select::Widget::Widget(QWidget* parent, Central* central)
@@ -46,10 +47,10 @@ void Select::Widget::slotOpenPackage()
       Settings settings;
       settings.write("LastPackage", packagePath);
 
-      setPackagePath(packagePath);
+      central->readPackageInfo(packagePath);
       central->compileBlockMap(packagePath);
 
-      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
+      callOnOtherHubInstances(&FunctionHub::setPackagePath, packagePath);
    }
 }
 
@@ -59,12 +60,12 @@ void Select::Widget::slotReloadPackage()
    if (packagePath.isEmpty())
       return;
 
-   Widget::setPackagePath(packagePath); // avoid compiler warning "when called from constructor ..."
+   central->readPackageInfo(packagePath);
    central->compileBlockMap(packagePath);
    QTimer::singleShot(1000, this, &Widget::slotCheckUmmatchedFiles);
 
    if (!packagePath.isEmpty())
-      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
+      callOnOtherHubInstances(&FunctionHub::setPackagePath, packagePath);
 }
 
 void Select::Widget::slotCheckUmmatchedFiles()

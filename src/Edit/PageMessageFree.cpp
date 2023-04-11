@@ -1,9 +1,7 @@
 #include "PageMessageFree.h"
 
-#include "MainWindow.h"
-
-Page::MessageFree::MessageFree(MainWindow* mainWindow, const Block::Item::Marker& marker)
-   : Abstract(mainWindow, marker)
+Page::MessageFree::MessageFree(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+   : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , messageName()
 {
@@ -17,13 +15,13 @@ Page::MessageFree::MessageFree(MainWindow* mainWindow, const Block::Item::Marker
 void Page::MessageFree::update(const QVariant& data)
 {
    messageName = data.toString();
-   Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
-   keyInfo->setText("messsage " + messageName + " @ " + mainWindow->getCurrentKey());
+   Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
+   keyInfo->setText("messsage " + messageName + " @ " + central->getCurrentKey());
 
-   monitor(digestEdit, &message.digest.text, mainWindow->getCurrentKey());
-   monitor(descrptionEdit, &message.digest.description, mainWindow->getCurrentKey());
+   monitor(digestEdit, &message.digest.text, central->getCurrentKey());
+   monitor(descrptionEdit, &message.digest.description, central->getCurrentKey());
 
-   argumentView->clearMonitors(mainWindow->getCurrentKey());
+   argumentView->clearMonitors(central->getCurrentKey());
    for (Block::Structure::Argument& argument : message.arguments)
       argumentView->monitor(&argument);
 }

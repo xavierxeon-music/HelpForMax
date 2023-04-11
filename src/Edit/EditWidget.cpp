@@ -12,10 +12,10 @@
 #include "Edit/PageOutput.h"
 #include "Edit/PagePatch.h"
 
-Edit::Widget::Widget(MainWindow* mainWindow)
-   : QStackedWidget(mainWindow)
+Edit::Widget::Widget(QWidget* parent, Central* central)
+   : QStackedWidget(parent)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
    , editorMap()
 {
    addEditor<Page::Blank>(Block::Item::Marker::Undefined);
@@ -30,7 +30,7 @@ Edit::Widget::Widget(MainWindow* mainWindow)
 template <typename EditorType>
 void Edit::Widget::addEditor(const Block::Item::Marker& marker)
 {
-   Page::Abstract* abstract = new EditorType(mainWindow, marker);
+   Page::Abstract* abstract = new EditorType(this, central, marker);
    addWidget(abstract);
 
    editorMap[marker] = abstract;

@@ -8,12 +8,13 @@
 
 namespace Page
 {
-   class Argument : public Abstract, private Ui::Argument
+   class Argument : public Abstract,
+                    private Ui::Argument
    {
       Q_OBJECT
 
    public:
-      Argument(MainWindow* mainWindow, const Block::Item::Marker& marker);
+      Argument(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
    private:
       void update(const QVariant& data) override;
