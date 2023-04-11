@@ -16,6 +16,10 @@ namespace Page
    public:
       Patch(QWidget* parent, Central* central, const Block::Item::Marker& marker);
 
+   signals:
+      void signalShowMetaTags();
+      void signalShowSeeAlso();
+
    private slots:
       void slotAddStandardMethond(int typeId);
 

@@ -24,16 +24,21 @@ Edit::Widget::Widget(QWidget* parent, Central* central)
    addEditor<Page::MessageStandard>(Block::Item::Marker::MessageStandard);
    addEditor<Page::MessageFree>(Block::Item::Marker::MessageFree);
    addEditor<Page::Output>(Block::Item::Marker::Output);
-   addEditor<Page::Patch>(Block::Item::Marker::Patch);
+
+   Page::Patch* pagePatch = addEditor<Page::Patch>(Block::Item::Marker::Patch);
+   connect(pagePatch, &Page::Patch::signalShowMetaTags, this, &Widget::signalShowMetaTags);
+   connect(pagePatch, &Page::Patch::signalShowSeeAlso, this, &Widget::signalShowSeeAlso);
 }
 
 template <typename EditorType>
-void Edit::Widget::addEditor(const Block::Item::Marker& marker)
+EditorType* Edit::Widget::addEditor(const Block::Item::Marker& marker)
 {
-   Page::Abstract* abstract = new EditorType(this, central, marker);
+   EditorType* abstract = new EditorType(this, central, marker);
    addWidget(abstract);
 
    editorMap[marker] = abstract;
+
+   return abstract;
 }
 
 void Edit::Widget::patchSelected(QString patchPath, QString key)

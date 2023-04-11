@@ -1,15 +1,20 @@
 #ifndef ComponentSeeAlsoWidgetH
 #define ComponentSeeAlsoWidgetH
 
-#include <QWidget>
+#include <QTreeView>
+
+#include <QStandardItemModel>
 
 namespace Component
 {
-   class SeeAlsoWidget : public QWidget
+   class SeeAlsoWidget : public QTreeView
    {
       Q_OBJECT
    public:
       SeeAlsoWidget(QWidget* parent);
+
+   public:
+      QStandardItemModel* model;
    };
 } // namespace Component
 

@@ -15,12 +15,16 @@ namespace Edit
    public:
       Widget(QWidget* parent, Central* central);
 
+   signals:
+      void signalShowMetaTags();
+      void signalShowSeeAlso();
+
    private:
       using EditorMap = QMap<Block::Item::Marker, Page::Abstract*>;
 
    private:
       template <typename EditorType>
-      void addEditor(const Block::Item::Marker& marker);
+      EditorType* addEditor(const Block::Item::Marker& marker);
 
       void patchSelected(QString patchPath, QString key) override;
       void componentSelected(Block::Item::Marker marker, QVariant data) override;

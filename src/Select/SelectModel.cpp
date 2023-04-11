@@ -67,23 +67,3 @@ void Select::Model::setModified(bool enabled, QString key)
       }
    }
 }
-
-void Select::Model::recursiveSearch(const QString& path, InfoMap& infoMap)
-{
-   const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files | QDir::Dirs;
-   for (QFileInfo fileInfo : QDir(path).entryInfoList(filters))
-   {
-      if (fileInfo.isDir())
-      {
-         recursiveSearch(fileInfo.absoluteFilePath(), infoMap);
-         continue;
-      }
-
-      if (!fileInfo.fileName().endsWith(".maxpat"))
-         continue;
-
-      const QString key = fileInfo.fileName().replace(".maxpat", "");
-
-      infoMap[key] = fileInfo;
-   }
-}

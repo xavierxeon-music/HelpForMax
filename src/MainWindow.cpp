@@ -24,6 +24,9 @@ MainWindow::MainWindow()
    Component::Widget* componentWidget = new Component::Widget(this, &central);
    Edit::Widget* editWidget = new Edit::Widget(this, &central);
 
+   connect(editWidget, &Edit::Widget::signalShowMetaTags, componentWidget, &Component::Widget::slotShowMetaTags);
+   connect(editWidget, &Edit::Widget::signalShowSeeAlso, componentWidget, &Component::Widget::slotShowSeeAlso);
+
    addWidget(selectWidget);
    addWidget(componentWidget);
    addWidget(editWidget);

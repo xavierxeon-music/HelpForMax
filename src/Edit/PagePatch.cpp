@@ -22,6 +22,9 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
    standardMethodGroup->addButton(messageAnythingButton, static_cast<int>(Block::Structure::Type::Anything));
 
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
+
+   connect(selectMetaTagsButton, &QToolButton::clicked, this, &Patch::signalShowMetaTags);
+   connect(selectSeeAlsoButton, &QToolButton::clicked, this, &Patch::signalShowSeeAlso);
 }
 
 void Page::Patch::slotAddStandardMethond(int typeId)
