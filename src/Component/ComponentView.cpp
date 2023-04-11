@@ -9,7 +9,7 @@
 #include "ComponentModel.h"
 #include "MainWindow.h"
 
-ComponentsView::Clip::Clip(const Block::Item::Marker& marker)
+Component::View::Clip::Clip(const Block::Item::Marker& marker)
    : marker(marker)
    , digest{}
    , type(Block::Structure::Type::Unkown)
@@ -18,10 +18,10 @@ ComponentsView::Clip::Clip(const Block::Item::Marker& marker)
 
 // main class
 
-ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
-   : Abstract::ItemTreeView(mainWindow, model, true)
+Component::View::View(QWidget* parent, Central* central, Model* model)
+   : Abstract::ItemTreeView(parent, model, true)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
    , helpPath()
    , copyAction()
    , pasteAction()
@@ -33,25 +33,25 @@ ComponentsView::ComponentsView(MainWindow* mainWindow, ComponentsModel* model)
 
    copyAction = new QAction(QIcon(), "Copy", this);
    copyAction->setShortcut(QKeySequence::Copy);
-   connect(copyAction, &QAction::triggered, this, &ComponentsView::slotCopy);
+   connect(copyAction, &QAction::triggered, this, &Component::View::slotCopy);
    addAction(copyAction);
 
    pasteAction = new QAction(QIcon(), "Paste", this);
    pasteAction->setShortcut(QKeySequence::Paste);
-   connect(pasteAction, &QAction::triggered, this, &ComponentsView::slotPaste);
+   connect(pasteAction, &QAction::triggered, this, &Component::View::slotPaste);
    addAction(pasteAction);
 }
 
-void ComponentsView::slotReloadPatch()
+void Component::View::slotReloadPatch()
 {
-   mainWindow->blockRef().clear();
-   mainWindow->blockRef().load();
+   central->blockRef().clear();
+   central->blockRef().load();
 
-   getModel<ComponentsModel>()->patchSelected(QString(), QString());
-   callOnOtherHubInstances(&Central::setModified, false, mainWindow->getCurrentKey());
+   getModel<Model>()->patchSelected(QString(), QString());
+   callOnOtherHubInstances(&Central::setModified, false, central->getCurrentKey());
 }
 
-void ComponentsView::slotOpenInExternalEditor()
+void Component::View::slotOpenInExternalEditor()
 {
    if (helpPath.isEmpty())
       return;
@@ -59,7 +59,7 @@ void ComponentsView::slotOpenInExternalEditor()
    QDesktopServices::openUrl(QUrl::fromLocalFile(helpPath));
 }
 
-void ComponentsView::slotCopy()
+void Component::View::slotCopy()
 {
    QStandardItem* uDocItem = actionItem();
    if (!uDocItem)
@@ -79,7 +79,7 @@ void ComponentsView::slotCopy()
       case Block::Item::Marker::Argument:
       {
          const int argumentIndex = data.toInt();
-         const Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
+         const Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
 
          clip.digest = argument.digest;
          clip.type = argument.type;
@@ -88,7 +88,7 @@ void ComponentsView::slotCopy()
       case Block::Item::Marker::Attribute:
       {
          const QString attributeName = data.toString();
-         const Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
+         const Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
 
          clip.digest = attribute.digest;
          clip.type = attribute.type;
@@ -97,7 +97,7 @@ void ComponentsView::slotCopy()
       case Block::Item::Marker::MessageStandard:
       {
          const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
-         const Block::Structure::Message& message = mainWindow->blockRef().messageStandardMap[messageType];
+         const Block::Structure::Message& message = central->blockRef().messageStandardMap[messageType];
 
          clip.digest = message.digest;
          break;
@@ -105,7 +105,7 @@ void ComponentsView::slotCopy()
       case Block::Item::Marker::MessageFree:
       {
          const QString messageName = data.toString();
-         const Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
+         const Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
 
          clip.digest = message.digest;
          break;
@@ -115,7 +115,7 @@ void ComponentsView::slotCopy()
    }
 }
 
-void ComponentsView::slotPaste()
+void Component::View::slotPaste()
 {
    QStandardItem* uDocItem = actionItem();
    if (!uDocItem)
@@ -131,7 +131,7 @@ void ComponentsView::slotPaste()
       case Block::Item::Marker::Argument:
       {
          const int argumentIndex = data.toInt();
-         Block::Structure::Argument& argument = mainWindow->blockRef().argumentList[argumentIndex];
+         Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
 
          argument.digest = clip.digest;
          if (Block::Structure::Type::Unkown != clip.type)
@@ -142,7 +142,7 @@ void ComponentsView::slotPaste()
       case Block::Item::Marker::Attribute:
       {
          const QString attributeName = data.toString();
-         Block::Structure::Attribute& attribute = mainWindow->blockRef().attributeMap[attributeName];
+         Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
 
          attribute.digest = clip.digest;
          if (Block::Structure::Type::Unkown != clip.type)
@@ -153,7 +153,7 @@ void ComponentsView::slotPaste()
       case Block::Item::Marker::MessageStandard:
       {
          const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
-         Block::Structure::Message& message = mainWindow->blockRef().messageStandardMap[messageType];
+         Block::Structure::Message& message = central->blockRef().messageStandardMap[messageType];
 
          message.digest = clip.digest;
 
@@ -162,7 +162,7 @@ void ComponentsView::slotPaste()
       case Block::Item::Marker::MessageFree:
       {
          const QString messageName = data.toString();
-         Block::Structure::Message& message = mainWindow->blockRef().messageFreeMap[messageName];
+         Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
 
          message.digest = clip.digest;
 
@@ -172,11 +172,11 @@ void ComponentsView::slotPaste()
          return;
    }
 
-   callOnOtherHubInstances(&ComponentsView::componentSelected, targetMarker, data);
-   callOnOtherHubInstances(&FunctionHub::setModified, true, mainWindow->getCurrentKey());
+   callOnOtherHubInstances(&Component::View::componentSelected, targetMarker, data);
+   callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
 }
 
-void ComponentsView::patchSelected(QString patchPath, QString key)
+void Component::View::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(key);
 
@@ -193,28 +193,28 @@ void ComponentsView::patchSelected(QString patchPath, QString key)
    helpPath = packagePath + "/docs/" + patchName + ".maxref.xml";
 }
 
-void ComponentsView::clicked(ModelItem* item)
+void Component::View::clicked(ModelItem* item)
 {
    int row = item->row();
-   QStandardItem* uDocItem = getModel<ComponentsModel>()->item(row); // first column item
+   QStandardItem* uDocItem = getModel<Model>()->item(row); // first column item
 
    const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
    const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
 
    const QVariant data = uDocItem->data(Block::Item::RoleData);
-   callOnOtherHubInstances(&ComponentsView::componentSelected, marker, data);
+   callOnOtherHubInstances(&Component::View::componentSelected, marker, data);
 }
 
-void ComponentsView::setModified(bool modified, QString key)
+void Component::View::setModified(bool modified, QString key)
 {
    if (modified)
       return;
 
-   if (key.isEmpty() || mainWindow->getCurrentKey() == key)
-      getModel<ComponentsModel>()->patchSelected(QString(), QString());
+   if (key.isEmpty() || central->getCurrentKey() == key)
+      getModel<Model>()->patchSelected(QString(), QString());
 }
 
-void ComponentsView::contextMenuEvent(QContextMenuEvent* event)
+void Component::View::contextMenuEvent(QContextMenuEvent* event)
 {
    QModelIndex index = indexAt(event->pos());
    if (!index.isValid())
@@ -226,7 +226,7 @@ void ComponentsView::contextMenuEvent(QContextMenuEvent* event)
    menu.exec(event->globalPos());
 }
 
-QStandardItem* ComponentsView::actionItem()
+QStandardItem* Component::View::actionItem()
 {
    if (!hasFocus())
       return nullptr;
@@ -235,7 +235,7 @@ QStandardItem* ComponentsView::actionItem()
       return nullptr;
 
    QModelIndex index = selectedIndexes().first();
-   QStandardItem* uDocItem = getModel<ComponentsModel>()->getItem(index.row());
+   QStandardItem* uDocItem = getModel<Model>()->getItem(index.row());
 
    //const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
    //const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();

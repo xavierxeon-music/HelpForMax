@@ -17,7 +17,7 @@ windows {
 
 include(Block/Block.pri)
 include(Clean/Clean.pri)
-include(Components/Components.pri)
+include(Component/Component.pri)
 include(Edit/Edit.pri)
 include(Select/Select.pri)
 include(Tools/Tools.pri)

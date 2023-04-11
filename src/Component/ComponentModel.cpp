@@ -2,16 +2,14 @@
 
 #include "Tools/ModelItem.h"
 
-#include "MainWindow.h"
-
-ComponentsModel::ComponentsModel(MainWindow* mainWindow)
-   : QStandardItemModel(mainWindow)
+Component::Model::Model(QObject* parent, Central* central)
+   : QStandardItemModel(parent)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
 {
 }
 
-void ComponentsModel::patchSelected(QString patchPath, QString key)
+void Component::Model::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(patchPath)
    Q_UNUSED(key)
@@ -20,9 +18,9 @@ void ComponentsModel::patchSelected(QString patchPath, QString key)
    update();
 }
 
-void ComponentsModel::update()
+void Component::Model::update()
 {
-   const Block::Item block = mainWindow->block();
+   const Block::Item block = central->block();
    int row = 0;
 
    auto setUdocStatus = [&](QStandardItem* item, const Block::Structure::Base& base, bool append = false)
@@ -128,7 +126,7 @@ void ComponentsModel::update()
    }
 }
 
-QStandardItem* ComponentsModel::getItem(const int& row, const int& column) const
+QStandardItem* Component::Model::getItem(const int& row, const int& column) const
 {
    int rowCount = 0;
    for (int index = 0; index < invisibleRootItem()->rowCount(); index++)
@@ -146,7 +144,7 @@ QStandardItem* ComponentsModel::getItem(const int& row, const int& column) const
    return nullptr;
 }
 
-void ComponentsModel::setModified(bool enabled, QString key)
+void Component::Model::setModified(bool enabled, QString key)
 {
    Q_UNUSED(key)
 
@@ -154,13 +152,13 @@ void ComponentsModel::setModified(bool enabled, QString key)
       update();
 }
 
-void ComponentsModel::rebuild()
+void Component::Model::rebuild()
 {
    beginResetModel();
 
    clear();
 
-   const Block::Item& block = mainWindow->block();
+   const Block::Item& block = central->block();
 
    auto createUDocItem = [](const QString& iconPath, const Block::Item::Marker& marker, const QVariant& data)
    {

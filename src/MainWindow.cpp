@@ -15,7 +15,7 @@
 
 #include "Clean/CleanDialog.h"
 #include "Clean/CleanModel.h"
-#include "Components/ComponentWidget.h"
+#include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
 #include "Select/SelectWidget.h"
 #include "Tools/JSONModel.h"
@@ -28,7 +28,7 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max");
 
    Select::Widget* selectWidget = new Select::Widget(this, this);
-   Component::Widget* componentsWidget = new Component::Widget(this, this);
+   Component::Widget* componentWidget = new Component::Widget(this, this);
 
    Edit::Widget* editWidget = new Edit::Widget(this);
 
@@ -51,6 +51,7 @@ MainWindow::MainWindow()
 
    toolBar->addSeparator();
 
+   /*
    QAction* reloadAction = toolBar->addAction(QIcon(":/ReloadPatch.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
    reloadAction->setShortcut(QKeySequence::Refresh);
 
@@ -59,7 +60,7 @@ MainWindow::MainWindow()
 
    QAction* editorAction = toolBar->addAction(QIcon(":/Editor.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
    editorAction->setShortcut(QKeySequence::Print);
-
+*/
    for (QAction* action : this->findChildren<QAction*>())
    {
       const QString& shortcutName = action->shortcut().toString();
