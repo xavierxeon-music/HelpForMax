@@ -1,25 +1,27 @@
 #ifndef SelectViewH
 #define SelectViewH
 
-#include "Tools/Central.h"
 #include "Tools/AbstractItemTreeView.h"
+#include "Tools/Central.h"
 
-class SelectModel;
-class Persona;
-
-class SelectView : public Abstract::ItemTreeView,
-                   private FunctionHub
+namespace Select
 {
-   Q_OBJECT
-public:
-   SelectView(MainWindow* mainWindow, SelectModel* model);
+   class Model;
 
-private:
-   void clicked(ModelItem* item) override;
-   void doubleClicked(ModelItem* item) override;
+   class View : public Abstract::ItemTreeView,
+                private FunctionHub
+   {
+      Q_OBJECT
+   public:
+      View(QWidget* parent, Central* central, Model* model);
 
-private:
-   MainWindow* mainWindow;
-};
+   private:
+      void clicked(ModelItem* item) override;
+      void doubleClicked(ModelItem* item) override;
+
+   private:
+      Central* central;
+   };
+} // namespace Select
 
 #endif // NOT SelectViewH

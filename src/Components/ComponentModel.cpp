@@ -1,4 +1,4 @@
-#include "ComponentsModel.h"
+#include "ComponentModel.h"
 
 #include "Tools/ModelItem.h"
 

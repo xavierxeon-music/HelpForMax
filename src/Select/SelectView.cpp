@@ -3,35 +3,34 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-#include "MainWindow.h"
 #include "SelectModel.h"
 
-SelectView::SelectView(MainWindow* mainWindow, SelectModel* model)
-   : Abstract::ItemTreeView(mainWindow, model)
+Select::View::View(QWidget* parent, Central* central, Model* model)
+   : Abstract::ItemTreeView(parent, model)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
 {
    setHeaderHidden(true);
    setRootIsDecorated(false);
 }
 
-void SelectView::clicked(ModelItem* item)
+void Select::View::clicked(ModelItem* item)
 {
-   const QVariant data = item->data(SelectModel::RolePatchPath);
+   const QVariant data = item->data(Model::RolePatchPath);
    if (!data.isValid())
       return;
 
    const QString patchPath = data.toString();
-   const QString key = item->data(SelectModel::RoleKey).toString();
+   const QString key = item->data(Model::RoleKey).toString();
 
-   mainWindow->selectBlock(key);
+   central->selectBlock(key);
 
-   callOnOtherHubInstances(&SelectView::patchSelected, patchPath, key);
+   callOnOtherHubInstances(&View::patchSelected, patchPath, key);
 }
 
-void SelectView::doubleClicked(ModelItem* item)
+void Select::View::doubleClicked(ModelItem* item)
 {
-   const QVariant data = item->data(SelectModel::RolePatchPath);
+   const QVariant data = item->data(Model::RolePatchPath);
    if (!data.isValid())
       return;
 

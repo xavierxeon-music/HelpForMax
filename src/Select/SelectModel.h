@@ -7,31 +7,34 @@
 #include "Tools/Central.h"
 #include <QFileInfo>
 
-class SelectModel : public QStandardItemModel,
-                    private FunctionHub
+namespace Select
 {
-   Q_OBJECT
-
-public:
-   enum Role
+   class Model : public QStandardItemModel,
+                 private FunctionHub
    {
-      RolePatchPath = Qt::UserRole + 1,
-      RoleKey = Qt::UserRole + 2
+      Q_OBJECT
+
+   public:
+      enum Role
+      {
+         RolePatchPath = Qt::UserRole + 1,
+         RoleKey = Qt::UserRole + 2
+      };
+
+   public:
+      Model(QObject* parent, Central* central);
+
+   private:
+      using InfoMap = QMap<QString, QFileInfo>;
+
+   private:
+      void setPackagePath(QString packageDir) override;
+      void setModified(bool enabled, QString key) override;
+      void recursiveSearch(const QString& path, InfoMap& infoMap);
+
+   private:
+      Central* central;
    };
-
-public:
-   SelectModel(MainWindow* mainWindow);
-
-private:
-   using InfoMap = QMap<QString, QFileInfo>;
-
-private:
-   void setPackagePath(QString packageDir) override;
-   void setModified(bool enabled, QString key) override;
-   void recursiveSearch(const QString& path, InfoMap& infoMap);
-
-private:
-   MainWindow* mainWindow;
-};
+} // namespace Select
 
 #endif // NOT SelectModelH

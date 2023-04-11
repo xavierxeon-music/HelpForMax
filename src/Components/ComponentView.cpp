@@ -1,4 +1,4 @@
-#include "ComponentsView.h"
+#include "ComponentView.h"
 
 #include <QContextMenuEvent>
 #include <QDesktopServices>
@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QUrl>
 
-#include "ComponentsModel.h"
+#include "ComponentModel.h"
 #include "MainWindow.h"
 
 ComponentsView::Clip::Clip(const Block::Item::Marker& marker)

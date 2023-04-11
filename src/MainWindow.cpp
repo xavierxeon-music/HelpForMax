@@ -15,11 +15,9 @@
 
 #include "Clean/CleanDialog.h"
 #include "Clean/CleanModel.h"
-#include "Components/ComponentsModel.h"
-#include "Components/ComponentsView.h"
+#include "Components/ComponentWidget.h"
 #include "Edit/EditWidget.h"
-#include "Select/SelectModel.h"
-#include "Select/SelectView.h"
+#include "Select/SelectWidget.h"
 #include "Tools/JSONModel.h"
 #include "Tools/Settings.h"
 
@@ -29,11 +27,9 @@ MainWindow::MainWindow()
 {
    setWindowTitle("Help For Max");
 
-   SelectModel* selectModel = new SelectModel(this);
-   ComponentsModel* componentsModel = new ComponentsModel(this);
+   Select::Widget* selectWidget = new Select::Widget(this, this);
+   Component::Widget* componentsWidget = new Component::Widget(this, this);
 
-   SelectView* selectView = new SelectView(this, selectModel);
-   ComponentsView* componentsView = new ComponentsView(this, componentsModel);
    Edit::Widget* editWidget = new Edit::Widget(this);
 
    {
@@ -41,8 +37,8 @@ MainWindow::MainWindow()
       splitter->setObjectName("central_splitter");
       setCentralWidget(splitter);
 
-      splitter->addWidget(selectView);
-      splitter->addWidget(componentsView);
+      splitter->addWidget(selectWidget);
+      splitter->addWidget(componentWidget);
       splitter->addWidget(editWidget);
    }
 
@@ -78,13 +74,7 @@ MainWindow::MainWindow()
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
 
-   // load package
-   const QString packagePath = Central::getPackagePath();
-   compileBlockMap(packagePath);
-   QTimer::singleShot(1000, this, &MainWindow::slotCheckUmmatchedFiles);
-
-   if (!packagePath.isEmpty())
-      callOnAllHubInstances(&Central::setPackagePath, packagePath);
+   slotReloadPackage();
 }
 
 void MainWindow::slotOpenPackage()
@@ -99,8 +89,10 @@ void MainWindow::slotOpenPackage()
       Settings settings;
       settings.write("LastPackage", packagePath);
 
+      setPackagePath(packagePath);
       compileBlockMap(packagePath);
-      callOnAllHubInstances(&Central::setPackagePath, packagePath);
+
+      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
    }
 }
 
@@ -110,8 +102,12 @@ void MainWindow::slotReloadPackage()
    if (packagePath.isEmpty())
       return;
 
+   MainWindow::setPackagePath(packagePath); // avoid compiler warning "when called from constructor ..."
    compileBlockMap(packagePath);
-   callOnAllHubInstances(&Central::setPackagePath, packagePath);
+   QTimer::singleShot(1000, this, &MainWindow::slotCheckUmmatchedFiles);
+
+   if (!packagePath.isEmpty())
+      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
 }
 
 void MainWindow::slotSavePatches()
@@ -130,6 +126,7 @@ void MainWindow::slotCheckUmmatchedFiles()
       return;
 
    model.apply();
+   slotReloadPackage();
 }
 
 void MainWindow::setPackagePath(QString packageDir)
@@ -152,7 +149,7 @@ void MainWindow::setPackagePath(QString packageDir)
    packageAuthor = object["author"].toString();
    packageName = object["name"].toString();
 
-   // qDebug() << packageAuthor << packageName;
+   qDebug() << packageAuthor << packageName;
 }
 
 void MainWindow::setModified(bool enabled, QString key)

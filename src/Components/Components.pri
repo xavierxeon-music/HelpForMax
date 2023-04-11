@@ -1,7 +1,13 @@
 HEADERS += \
-   $$PWD/ComponentsModel.h \
-   $$PWD/ComponentsView.h
+   $$PWD/ComponentMetaTagWidget.h \
+   $$PWD/ComponentModel.h \
+   $$PWD/ComponentSeeAlsoWidget.h \
+   $$PWD/ComponentView.h \
+   $$PWD/ComponentWidget.h
 
 SOURCES += \
-   $$PWD/ComponentsModel.cpp \
-   $$PWD/ComponentsView.cpp
+   $$PWD/ComponentMetaTagWidget.cpp \
+   $$PWD/ComponentModel.cpp \
+   $$PWD/ComponentSeeAlsoWidget.cpp \
+   $$PWD/ComponentView.cpp \
+   $$PWD/ComponentWidget.cpp

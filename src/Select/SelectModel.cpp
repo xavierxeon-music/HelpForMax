@@ -3,18 +3,17 @@
 #include <QApplication>
 #include <QDir>
 
+#include "Tools/Central.h"
 #include "Tools/ModelItem.h"
 
-#include "MainWindow.h"
-
-SelectModel::SelectModel(MainWindow* mainWindow)
-   : QStandardItemModel(mainWindow)
+Select::Model::Model(QObject* parent, Central* central)
+   : QStandardItemModel(parent)
    , FunctionHub()
-   , mainWindow(mainWindow)
+   , central(central)
 {
 }
 
-void SelectModel::setPackagePath(QString packageDir)
+void Select::Model::setPackagePath(QString packageDir)
 {
    Q_UNUSED(packageDir)
 
@@ -25,7 +24,7 @@ void SelectModel::setPackagePath(QString packageDir)
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
-   const Block::Item::Map map = mainWindow->getBlockMap();
+   const Block::Item::Map map = central->getBlockMap();
    for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString key = it.key();
@@ -38,7 +37,7 @@ void SelectModel::setPackagePath(QString packageDir)
 
       invisibleRootItem()->appendRow({undocumntedItem, patchItem});
 
-      if (mainWindow->isBlockUndocumented(key))
+      if (central->isBlockUndocumented(key))
          undocumntedItem->setText(" *");
    }
 
@@ -47,7 +46,7 @@ void SelectModel::setPackagePath(QString packageDir)
    endResetModel();
 }
 
-void SelectModel::setModified(bool enabled, QString key)
+void Select::Model::setModified(bool enabled, QString key)
 {
    if (enabled)
       return;
@@ -61,7 +60,7 @@ void SelectModel::setModified(bool enabled, QString key)
 
       if (key.isEmpty() || rowKey == key)
       {
-         if (mainWindow->isBlockUndocumented(rowKey))
+         if (central->isBlockUndocumented(rowKey))
             undocumntedItem->setText(" *");
          else
             undocumntedItem->setText("");
@@ -69,7 +68,7 @@ void SelectModel::setModified(bool enabled, QString key)
    }
 }
 
-void SelectModel::recursiveSearch(const QString& path, InfoMap& infoMap)
+void Select::Model::recursiveSearch(const QString& path, InfoMap& infoMap)
 {
    const QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Files | QDir::Dirs;
    for (QFileInfo fileInfo : QDir(path).entryInfoList(filters))
