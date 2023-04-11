@@ -1,11 +1,11 @@
 #ifndef MainWindowH
 #define MainWindowH
 
-#include <QMainWindow>
+#include <QSplitter>
 
 #include "Tools/Central.h"
 
-class MainWindow : public QMainWindow,
+class MainWindow : public QSplitter,
                    public Central
 {
    Q_OBJECT
@@ -13,11 +13,6 @@ class MainWindow : public QMainWindow,
 public:
    MainWindow();
 
-private slots:
-   void slotOpenPackage();
-   void slotReloadPackage();
-   void slotSavePatches();
-   void slotCheckUmmatchedFiles();
 
 private:
    void setPackagePath(QString packageDir) override;

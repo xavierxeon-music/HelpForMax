@@ -12,6 +12,9 @@ namespace Component
    public:
       Widget(QWidget* parent, Central* central);
 
+   private slots:
+      void slotSavePatches();
+
    private:
       Central* central;
    };

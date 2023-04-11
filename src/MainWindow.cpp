@@ -1,20 +1,12 @@
 #include "MainWindow.h"
 
-#include <QAction>
 #include <QApplication>
 #include <QCloseEvent>
-#include <QDockWidget>
-#include <QFileDialog>
-#include <QSplitter>
-#include <QTimer>
-#include <QToolBar>
 
 #ifdef Q_OS_MACX
 #include "Tools/MacTheme.h"
 #endif // Q_OS_MACX
 
-#include "Clean/CleanDialog.h"
-#include "Clean/CleanModel.h"
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
 #include "Select/SelectWidget.h"
@@ -22,112 +14,22 @@
 #include "Tools/Settings.h"
 
 MainWindow::MainWindow()
-   : QMainWindow(nullptr)
+   : QSplitter(nullptr)
    , Central()
 {
    setWindowTitle("Help For Max");
 
    Select::Widget* selectWidget = new Select::Widget(this, this);
    Component::Widget* componentWidget = new Component::Widget(this, this);
-
    Edit::Widget* editWidget = new Edit::Widget(this);
 
-   {
-      QSplitter* splitter = new QSplitter(this);
-      splitter->setObjectName("central_splitter");
-      setCentralWidget(splitter);
-
-      splitter->addWidget(selectWidget);
-      splitter->addWidget(componentWidget);
-      splitter->addWidget(editWidget);
-   }
-
-   QToolBar* toolBar = addToolBar("Main");
-   toolBar->setObjectName("main_toolbar");
-   toolBar->setMovable(false);
-
-   toolBar->addAction(QIcon(":/OpenPackage.svg"), "Open Package", this, &MainWindow::slotOpenPackage);
-   toolBar->addAction(QIcon(":/ReloadPackage.svg"), "Reload Package", this, &MainWindow::slotReloadPackage);
-
-   toolBar->addSeparator();
-
-   /*
-   QAction* reloadAction = toolBar->addAction(QIcon(":/ReloadPatch.svg"), "Reload Patch", componentsView, &ComponentsView::slotReloadPatch);
-   reloadAction->setShortcut(QKeySequence::Refresh);
-
-   QAction* saveAction = toolBar->addAction(QIcon(":/SaveAllPatches.svg"), "Save All Patches", this, &MainWindow::slotSavePatches);
-   saveAction->setShortcut(QKeySequence::Save);
-
-   QAction* editorAction = toolBar->addAction(QIcon(":/Editor.svg"), "Open Patch In External Editor", componentsView, &ComponentsView::slotOpenInExternalEditor);
-   editorAction->setShortcut(QKeySequence::Print);
-*/
-   for (QAction* action : this->findChildren<QAction*>())
-   {
-      const QString& shortcutName = action->shortcut().toString();
-      if (shortcutName.isEmpty())
-         continue;
-
-      const QString text = action->text();
-      action->setText(text + " (" + shortcutName + ")");
-   }
+   addWidget(selectWidget);
+   addWidget(componentWidget);
+   addWidget(editWidget);
 
    Settings widgetSettings("MainWidget");
    restoreGeometry(widgetSettings.bytes("Geometry"));
    restoreState(widgetSettings.bytes("State"));
-
-   slotReloadPackage();
-}
-
-void MainWindow::slotOpenPackage()
-{
-   const QString fileName = QFileDialog::getOpenFileName(this, "package", QString(), "package-info.json");
-   if (fileName.isEmpty())
-      return;
-
-   const QString packagePath = QFileInfo(fileName).absolutePath();
-
-   {
-      Settings settings;
-      settings.write("LastPackage", packagePath);
-
-      setPackagePath(packagePath);
-      compileBlockMap(packagePath);
-
-      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
-   }
-}
-
-void MainWindow::slotReloadPackage()
-{
-   const QString packagePath = Central::getPackagePath();
-   if (packagePath.isEmpty())
-      return;
-
-   MainWindow::setPackagePath(packagePath); // avoid compiler warning "when called from constructor ..."
-   compileBlockMap(packagePath);
-   QTimer::singleShot(1000, this, &MainWindow::slotCheckUmmatchedFiles);
-
-   if (!packagePath.isEmpty())
-      callOnOtherHubInstances(&Central::setPackagePath, packagePath);
-}
-
-void MainWindow::slotSavePatches()
-{
-   saveBlocks();
-}
-
-void MainWindow::slotCheckUmmatchedFiles()
-{
-   Clean::Model model(this, getBlockMap().keys());
-   if (!model.needCleaning())
-      return;
-
-   Clean::Dialog dialog(this, &model);
-   if (QDialog::Accepted != dialog.exec())
-      return;
-
-   model.apply();
-   slotReloadPackage();
 }
 
 void MainWindow::setPackagePath(QString packageDir)
@@ -150,7 +52,7 @@ void MainWindow::setPackagePath(QString packageDir)
    packageAuthor = object["author"].toString();
    packageName = object["name"].toString();
 
-   qDebug() << packageAuthor << packageName;
+   // qDebug() << packageAuthor << packageName;
 }
 
 void MainWindow::setModified(bool enabled, QString key)
