@@ -18,8 +18,10 @@ Component::Widget::Widget(QWidget* parent, Central* central)
    Model* componentModel = new Model(this, central);
    View* componentView = new View(this, central, componentModel);
 
-   MetaTagWidget* metaTagWidget = new MetaTagWidget(this);
-   SeeAlsoWidget* seeAlsoWidget = new SeeAlsoWidget(this);
+   MetaTagWidget* metaTagWidget = new MetaTagWidget(this, central);
+   SeeAlsoWidget* seeAlsoWidget = new SeeAlsoWidget(this, central);
+
+   connect(seeAlsoWidget, &SeeAlsoWidget::signalShowComponents, this, &Widget::slotShowComponents);
 
    QToolBar* toolBar = new QToolBar(this);
    toolBar->setMovable(false);
@@ -62,6 +64,11 @@ void Component::Widget::slotSavePatches()
 {
    central->saveBlocks();
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());
+}
+
+void Component::Widget::slotShowComponents()
+{
+   setStack(0);
 }
 
 void Component::Widget::slotShowMetaTags()

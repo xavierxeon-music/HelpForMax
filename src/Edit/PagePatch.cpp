@@ -23,6 +23,11 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
 
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 
+   selectMetaTagsButton->setIcon(QIcon(":/ArrowLeft.svg"));
+   selectSeeAlsoButton->setIcon(QIcon(":/ArrowLeft.svg"));
+
+   selectMetaTagsButton->hide();
+
    connect(selectMetaTagsButton, &QToolButton::clicked, this, &Patch::signalShowMetaTags);
    connect(selectSeeAlsoButton, &QToolButton::clicked, this, &Patch::signalShowSeeAlso);
 }

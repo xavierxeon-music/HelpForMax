@@ -16,6 +16,7 @@ namespace Component
       Widget(QWidget* parent, Central* central);
 
    public slots:
+      void slotShowComponents();
       void slotShowMetaTags();
       void slotShowSeeAlso();
 
