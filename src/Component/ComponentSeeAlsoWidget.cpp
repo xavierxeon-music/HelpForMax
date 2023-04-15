@@ -23,7 +23,6 @@ Component::SeeAlsoWidget::SeeAlsoWidget(QWidget* parent, Central* central)
    connect(applyButton, &QPushButton::clicked, this, &SeeAlsoWidget::slotApply);
 
    QVBoxLayout* masterLayout = new QVBoxLayout(this);
-
    masterLayout->addWidget(treeView);
    masterLayout->addWidget(applyButton);
 }
@@ -35,15 +34,17 @@ void Component::SeeAlsoWidget::slotApply()
    const int rowCount = model->invisibleRootItem()->rowCount();
    for (int row = 0; row < rowCount; row++)
    {
-      bool checked = (Qt::Checked == model->invisibleRootItem()->child(row, 0)->checkState());
-      if (!checked)
-         continue;
+      bool newChecked = (Qt::Checked == model->invisibleRootItem()->child(row, 0)->checkState());
 
       const QString key = model->invisibleRootItem()->child(row, 1)->text();
-      if (seeAlsoList.contains(key))
-         continue;
+      bool prevChecked = seeAlsoList.contains(key);
 
-      seeAlsoList.append(key);
+      if (newChecked == prevChecked)
+         continue;
+      else if (newChecked)
+         seeAlsoList.append(key);
+      else if (prevChecked)
+         seeAlsoList.removeAll(key);
    }
 
    central->blockRef().patch.seeAlsoList = seeAlsoList;
