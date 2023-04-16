@@ -1,6 +1,6 @@
 #include "PageMessageStandard.h"
 
-Page::MessageStandard::MessageStandard(QWidget* parent, Central* cental, const Block::Item::Marker& marker)
+Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const Block::Item::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , messageType(Block::Structure::Type::Unkown)
