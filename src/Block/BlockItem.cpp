@@ -46,6 +46,8 @@ Block::Item::Map Block::Item::compileMap(const QString& packagePath)
 
          if (!fileInfo.fileName().endsWith(".maxpat"))
             continue;
+         if (fileInfo.fileName().startsWith("_"))
+            continue;
 
          const QString key = fileInfo.fileName().replace(".maxpat", "");
          infoMap[key] = fileInfo;
