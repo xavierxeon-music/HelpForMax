@@ -3,9 +3,9 @@
 #include <QApplication>
 #include <QCloseEvent>
 
-#ifdef Q_OS_MACX
+#ifdef Q_OS_MACOS
 #include "Tools/MacTheme.h"
-#endif // Q_OS_MACX
+#endif // Q_OS_MACOS
 
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
@@ -68,9 +68,9 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 int main(int argc, char** argv)
 {
    QApplication app(argc, argv);
-#ifdef Q_OS_MACX
+#ifdef Q_OS_MACOS
    MacTheme::dark();
-#endif // Q_OS_MACX
+#endif // Q_OS_MACOS
 
    MainWindow mw;
    mw.show();

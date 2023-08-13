@@ -101,7 +101,7 @@ bool Central::isBlockUndocumented(const QString& key) const
 
 void Central::saveBlocks()
 {
-   for (Block::Item* block : qAsConst(blockMap))
+   for (Block::Item* block : std::as_const(blockMap))
    {
       block->save();
    }
