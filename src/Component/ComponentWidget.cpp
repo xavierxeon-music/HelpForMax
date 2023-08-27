@@ -62,7 +62,7 @@ Component::Widget::Widget(QWidget* parent, Central* central)
 
 void Component::Widget::slotSavePatches()
 {
-   central->saveBlocks();
+   central->saveBlocks(Block::Item::Component::All);
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }
 

@@ -36,12 +36,11 @@ public:
    void selectBlock(const QString& key);
    bool isBlockUndocumented(const QString& key) const;
 
-   void saveBlocks();
+   void saveBlocks(Block::Item::Component component);
 
    void readPackageInfo(QString packagePath);
 
 protected:
-
 private:
    static QString packageAuthor;
    static QString packageName;

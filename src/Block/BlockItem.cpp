@@ -118,19 +118,26 @@ void Block::Item::load()
    }
 }
 
-void Block::Item::save()
+void Block::Item::save(Component component)
 {
-   if (!isModified)
-      return;
+   if (Component::All == component)
+   {
+      if (!isModified)
+         return;
 
-   isModified = false;
+      isModified = false;
 
-   ref.write();
-   help.write();
-   settings.write();
+      ref.write();
+      help.write();
+      settings.write();
 
-   clear();
-   load();
+      clear();
+      load();
+   }
+   else if (Component::Settings == component)
+   {
+      settings.write();
+   }
 }
 
 void Block::Item::markUndocumented(Base& base)

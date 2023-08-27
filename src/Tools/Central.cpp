@@ -99,11 +99,11 @@ bool Central::isBlockUndocumented(const QString& key) const
    return blockMap[key]->foundUndocumented();
 }
 
-void Central::saveBlocks()
+void Central::saveBlocks(Block::Item::Component component)
 {
    for (Block::Item* block : std::as_const(blockMap))
    {
-      block->save();
+      block->save(component);
    }
 }
 

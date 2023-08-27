@@ -17,7 +17,6 @@ namespace Select
 
    private:
       void clicked(ModelItem* item) override;
-      void doubleClicked(ModelItem* item) override;
 
    private:
       Central* central;

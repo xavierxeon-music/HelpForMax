@@ -39,6 +39,15 @@ namespace Block
       };
       Q_ENUM(Marker)
 
+      enum class Component
+      {
+         All,
+         Patcher,
+         Ref,
+         Help,
+         Settings,
+      };
+
       static const QList<QByteArray> descriptionMaxTags;
 
    public:
@@ -49,7 +58,7 @@ namespace Block
       static Map compileMap(const QString& packageDir);
 
       void load();
-      void save();
+      void save(Component component);
 
       void clear() override;
       bool foundUndocumented() const;
