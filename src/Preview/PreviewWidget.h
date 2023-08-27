@@ -16,15 +16,34 @@ namespace Preview
    public:
       Widget(QWidget* parent, Central* central);
 
+   private:
+      struct Box
+      {
+         QGraphicsRectItem* rectItem = nullptr;
+         QGraphicsSimpleTextItem* textItem = nullptr;
+         int inletCount = 0;
+         int outletCount = 0;
+      };
+
+      using IdMap = QMap<QString, Box>;
+
    private slots:
       void slotOpenInMax();
 
    private:
       void patchSelected(QString patchPath, QString key) override;
 
+      IdMap makeObjects(const QJsonObject patcherObject);
+      void moveItems(const IdMap& idMap);
+      void makeLines(const QJsonObject patcherObject, const IdMap& idMap);
+
    private:
       Central* central;
       QGraphicsScene* scene;
+
+      static const QPen blackPen;
+      static const QBrush whiteBrush;
+      static const QFont font;
    };
 } // namespace Preview
 

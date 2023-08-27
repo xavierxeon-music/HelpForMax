@@ -12,6 +12,15 @@
 
 #include "Tools/JSONModel.h"
 
+const QPen Preview::Widget::blackPen(QColor(0, 0, 0));
+const QBrush Preview::Widget::whiteBrush(QColor(255, 255, 255));
+const QFont Preview::Widget::font = []()
+{
+   QFont font = QApplication::font();
+   font.setPixelSize(10);
+   return font;
+}();
+
 Preview::Widget::Widget(QWidget* parent, Central* central)
    : QWidget(parent)
    , central(central)
@@ -54,29 +63,18 @@ void Preview::Widget::patchSelected(QString patchPath, QString key)
    if (object.empty())
       return;
 
-   static const QPen blackPen(QColor(0, 0, 0));
-   static const QBrush whiteBrush(QColor(255, 255, 255));
-
-   static const QStringList skipList = {"comment"};
-   static const QFont font = [&]()
-   {
-      QFont font = QApplication::font();
-      font.setPixelSize(10);
-      return font;
-   }();
-
    const QJsonObject patcherObject = object["patcher"].toObject();
+
+   IdMap idMap = makeObjects(patcherObject);
+   moveItems(idMap);
+   makeLines(patcherObject, idMap);
+}
+
+Preview::Widget::IdMap Preview::Widget::makeObjects(const QJsonObject patcherObject)
+{
+   static const QStringList skipList = {"comment", "panel"};
    const QJsonArray boxArray = patcherObject["boxes"].toArray();
-   const QJsonArray lineArray = patcherObject["lines"].toArray();
 
-   struct Box
-   {
-      QRectF rect;
-      int inletCount = 0;
-      int outletCount = 0;
-   };
-
-   using IdMap = QMap<QString, Box>;
    IdMap idMap;
 
    for (int index = 0; index < boxArray.size(); index++)
@@ -101,13 +99,8 @@ void Preview::Widget::patchSelected(QString patchPath, QString key)
       patchRect.setWidth(patchRectData[2].toDouble());
       patchRect.setHeight(patchRectData[3].toDouble());
 
-      const int inletCount = boxObject["numinlets"].toInt();
-      const int outletCount = boxObject["numoutlets"].toInt();
-
-      idMap[id] = {patchRect, inletCount, outletCount};
-
-      QGraphicsRectItem* rectItem = scene->addRect(patchRect, blackPen, whiteBrush);
-      Q_UNUSED(rectItem)
+      QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackPen, whiteBrush);
+      rectItem->setPos(patchRect.x(), patchRect.y());
 
       if ("inlet" == className)
          text = "IN";
@@ -117,9 +110,20 @@ void Preview::Widget::patchSelected(QString patchPath, QString key)
       QGraphicsSimpleTextItem* textItem = scene->addSimpleText(text);
       textItem->setPos(patchRect.x() + 5, patchRect.y() + 5);
       textItem->setFont(font);
+
+      const int inletCount = boxObject["numinlets"].toInt();
+      const int outletCount = boxObject["numoutlets"].toInt();
+
+      idMap[id] = {rectItem, textItem, inletCount, outletCount};
    }
 
-   // find objects connected to inlets
+   return idMap;
+}
+
+void Preview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& idMap)
+{
+   const QJsonArray lineArray = patcherObject["lines"].toArray();
+
    for (int index = 0; index < lineArray.size(); index++)
    {
       QJsonObject lineObject = lineArray.at(index).toObject();
@@ -127,22 +131,69 @@ void Preview::Widget::patchSelected(QString patchPath, QString key)
 
       const QJsonArray sourceArray = lineObject["source"].toArray();
       const QString sourceId = sourceArray.at(0).toString();
+      if (!idMap.contains(sourceId))
+         continue;
+
       const Box sourceBox = idMap[sourceId];
       const int sourceOffset = sourceArray.at(1).toInt();
+      const QRectF sourceRect = QRectF(sourceBox.rectItem->pos().x(), sourceBox.rectItem->pos().y(), sourceBox.rectItem->rect().width(), sourceBox.rectItem->rect().height());
 
-      const int outletDist = sourceBox.rect.width() / sourceBox.outletCount;
-      const int sourceX = 10 + sourceBox.rect.x() + (outletDist * sourceOffset);
-      const int sourceY = sourceBox.rect.y() + sourceBox.rect.height();
+      const int outletDist = sourceRect.width() / sourceBox.outletCount;
+      const int sourceX = 10 + sourceRect.x() + (outletDist * sourceOffset);
+      const int sourceY = sourceRect.y() + sourceRect.height();
 
       const QJsonArray destArray = lineObject["destination"].toArray();
       const QString destId = destArray.at(0).toString();
+      if (!idMap.contains(destId))
+         continue;
+
       const Box destBox = idMap[destId];
       const int destOffset = destArray.at(1).toInt();
+      const QRectF destRect = QRectF(destBox.rectItem->pos().x(), destBox.rectItem->pos().y(), destBox.rectItem->rect().width(), destBox.rectItem->rect().height());
 
-      const int inletDist = destBox.rect.width() / destBox.inletCount;
-      const int destX = 10 + destBox.rect.x() + (inletDist * destOffset);
-      const int destY = destBox.rect.y();
+      const int inletDist = destRect.width() / destBox.inletCount;
+      const int destX = 10 + destRect.x() + (inletDist * destOffset);
+      const int destY = destRect.y();
 
       scene->addLine(sourceX, sourceY, destX, destY, blackPen);
+   }
+}
+
+void Preview::Widget::moveItems(const IdMap& idMap)
+{
+   static const int margin = 5;
+
+   QPointF minPoint;
+
+   for (Box box : idMap.values())
+   {
+      QPointF ipos = box.rectItem->pos();
+      if (ipos.isNull())
+         continue;
+
+      if (minPoint.isNull())
+      {
+         minPoint = ipos;
+         continue;
+      }
+
+      if (minPoint.x() > ipos.x())
+         minPoint.setX(ipos.x());
+
+      if (minPoint.y() > ipos.y())
+         minPoint.setY(ipos.y());
+   }
+
+   if (minPoint.x() < margin)
+      minPoint.setX(margin);
+
+   if (minPoint.y() < margin)
+      minPoint.setY(margin);
+
+   for (Box box : idMap.values())
+   {
+      QPointF newPos = box.rectItem->pos() - minPoint;
+      box.rectItem->setPos(newPos);
+      box.textItem->setPos(newPos + QPointF(5, 5));
    }
 }
