@@ -13,5 +13,6 @@
         <file>PatchMessageStandard.svg</file>
         <file>ReloadPackage.svg</file>
         <file>ArrowLeft.svg</file>
+        <file>OpenPatch.svg</file>
     </qresource>
 </RCC>

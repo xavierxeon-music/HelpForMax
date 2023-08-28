@@ -12,7 +12,7 @@ namespace Block
    public:
       enum class Type
       {
-         Unkown,
+         Anything,
          Symbol,
          Float,
          Integer,
@@ -20,7 +20,8 @@ namespace Block
          List,
          Signal,
          MultiSignal,
-         Anything
+         Dictionary,
+         Matrix
       };
 
       struct Base

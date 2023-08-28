@@ -3,7 +3,7 @@
 Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const Block::Item::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
-   , messageType(Block::Structure::Type::Unkown)
+   , messageType(Block::Structure::Type::Anything)
 {
    setupUi(this);
    highlighter = new DescriptionHighlighter(descrptionEdit->document());

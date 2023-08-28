@@ -41,9 +41,9 @@ namespace Preview
       Central* central;
       QGraphicsScene* scene;
 
-      static const QPen blackPen;
-      static const QBrush whiteBrush;
-      static const QFont font;
+      QPen blackPen;
+      QBrush whiteBrush;
+      QFont font;
    };
 } // namespace Preview
 

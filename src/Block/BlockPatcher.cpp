@@ -136,7 +136,7 @@ void Block::Patcher::read()
          {
             const QString& messageText = contentList.at(i);
             const Structure::Type type = Structure::toType(messageText);
-            if (Structure::Type::Unkown == type)
+            if (Structure::Type::Anything == type)
             {
                if (!item->messageFreeMap.contains(messageText))
                {

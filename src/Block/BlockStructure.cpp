@@ -1,6 +1,6 @@
 #include "BlockStructure.h"
 
-const QMap<Block::Structure::Type, QString> Block::Structure::typeNameMap = {{Type::Unkown, "???"}, // must be max names!
+const QMap<Block::Structure::Type, QString> Block::Structure::typeNameMap = {{Type::Anything, "anything"}, // must be max names!
                                                                              {Type::Bang, "bang"},
                                                                              {Type::Integer, "int"},
                                                                              {Type::Float, "float"},
@@ -8,7 +8,8 @@ const QMap<Block::Structure::Type, QString> Block::Structure::typeNameMap = {{Ty
                                                                              {Type::List, "list"},
                                                                              {Type::Signal, "signal"},
                                                                              {Type::MultiSignal, "multichannelsignal"},
-                                                                             {Type::Anything, "anything"}};
+                                                                             {Type::Dictionary, "dictionary"},
+                                                                             {Type::Matrix, "matrix"}};
 
 void Block::Structure::clear()
 {
@@ -28,7 +29,7 @@ Block::Structure::Type Block::Structure::toType(const QString& name)
          return it.key();
    }
 
-   return Type::Unkown;
+   return Type::Anything;
 }
 
 QList<Block::Structure::Type> Block::Structure::typeList()

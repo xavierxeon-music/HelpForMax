@@ -12,27 +12,24 @@
 
 #include "Tools/JSONModel.h"
 
-const QPen Preview::Widget::blackPen(QColor(0, 0, 0));
-const QBrush Preview::Widget::whiteBrush(QColor(255, 255, 255));
-const QFont Preview::Widget::font = []()
-{
-   QFont font = QApplication::font();
-   font.setPixelSize(10);
-   return font;
-}();
-
 Preview::Widget::Widget(QWidget* parent, Central* central)
    : QWidget(parent)
    , central(central)
    , scene(nullptr)
+   , blackPen(QColor(0, 0, 0))
+   , whiteBrush(QColor(255, 255, 255))
+   , font()
+
 {
    QToolBar* toolBar = new QToolBar(this);
    toolBar->setMovable(false);
 
-   toolBar->addAction(QIcon(":/OpenPackage.svg"), "Open In Max", this, &Widget::slotOpenInMax);
+   toolBar->addAction(QIcon(":/OpenPatch.svg"), "Open In Max", this, &Widget::slotOpenInMax);
+
+   font.setPixelSize(10);
 
    scene = new QGraphicsScene(this);
-   scene->setBackgroundBrush(Qt::lightGray);
+   scene->setBackgroundBrush(whiteBrush);
    QGraphicsView* graphicsView = new QGraphicsView(scene, this);
 
    QVBoxLayout* masterLayout = new QVBoxLayout(this);
@@ -89,7 +86,7 @@ Preview::Widget::IdMap Preview::Widget::makeObjects(const QJsonObject patcherObj
       if (skipList.contains(className))
          continue;
 
-      QString text = boxObject["text"].toString();
+      QString text = boxObject["text"].toString().simplified();
       const QString id = boxObject["id"].toString();
 
       QJsonArray patchRectData = boxObject["patching_rect"].toArray();
@@ -107,9 +104,8 @@ Preview::Widget::IdMap Preview::Widget::makeObjects(const QJsonObject patcherObj
       else if ("outlet" == className)
          text = "OUT";
 
-      QGraphicsSimpleTextItem* textItem = scene->addSimpleText(text);
+      QGraphicsSimpleTextItem* textItem = scene->addSimpleText(text, font);
       textItem->setPos(patchRect.x() + 5, patchRect.y() + 5);
-      textItem->setFont(font);
 
       const int inletCount = boxObject["numinlets"].toInt();
       const int outletCount = boxObject["numoutlets"].toInt();
@@ -161,8 +157,6 @@ void Preview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& id
 
 void Preview::Widget::moveItems(const IdMap& idMap)
 {
-   static const int margin = 5;
-
    QPointF minPoint;
 
    for (Box box : idMap.values())
@@ -183,12 +177,6 @@ void Preview::Widget::moveItems(const IdMap& idMap)
       if (minPoint.y() > ipos.y())
          minPoint.setY(ipos.y());
    }
-
-   if (minPoint.x() < margin)
-      minPoint.setX(margin);
-
-   if (minPoint.y() < margin)
-      minPoint.setY(margin);
 
    for (Box box : idMap.values())
    {

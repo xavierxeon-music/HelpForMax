@@ -12,7 +12,7 @@
 Component::View::Clip::Clip(const Block::Item::Marker& marker)
    : marker(marker)
    , digest{}
-   , type(Block::Structure::Type::Unkown)
+   , type(Block::Structure::Type::Anything)
 {
 }
 
@@ -134,7 +134,7 @@ void Component::View::slotPaste()
          Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
 
          argument.digest = clip.digest;
-         if (Block::Structure::Type::Unkown != clip.type)
+         if (Block::Structure::Type::Anything != clip.type)
             argument.type = clip.type;
 
          break;
@@ -145,7 +145,7 @@ void Component::View::slotPaste()
          Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
 
          attribute.digest = clip.digest;
-         if (Block::Structure::Type::Unkown != clip.type)
+         if (Block::Structure::Type::Anything != clip.type)
             attribute.type = clip.type;
 
          break;
