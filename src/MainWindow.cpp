@@ -22,6 +22,7 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max");
 
    splitter = new QSplitter(this);
+   splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
    Select::Widget* selectWidget = new Select::Widget(this, &central);
    Preview::Widget* previewWidgeet = new Preview::Widget(this, &central);

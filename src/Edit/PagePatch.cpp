@@ -20,6 +20,8 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
    standardMethodGroup->addButton(messageSignalButton, static_cast<int>(Block::Structure::Type::Signal));
    standardMethodGroup->addButton(messageMultiSignalButton, static_cast<int>(Block::Structure::Type::MultiSignal));
    standardMethodGroup->addButton(messageAnythingButton, static_cast<int>(Block::Structure::Type::Anything));
+   standardMethodGroup->addButton(messageMatrixButton, static_cast<int>(Block::Structure::Type::Matrix));
+   standardMethodGroup->addButton(messageDictButton, static_cast<int>(Block::Structure::Type::Dictionary));
 
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 
@@ -53,7 +55,7 @@ void Page::Patch::update(const QVariant& data)
    Q_UNUSED(data)
 
    keyInfo->setText("patch @ " + central->getCurrentKey());
-   monitor(openAsBPatcherCheck, &central->blockRef().patch.openAsBPatcher, central->getCurrentKey());
+   monitor(openAsCombo, (int*)&central->blockRef().patch.patcherType, central->getCurrentKey());
    monitor(metaTagEdit, &central->blockRef().patch.metaTagList, central->getCurrentKey());
    monitor(digestEdit, &central->blockRef().patch.digest.text, central->getCurrentKey());
    monitor(descrptionEdit, &central->blockRef().patch.digest.description, central->getCurrentKey());

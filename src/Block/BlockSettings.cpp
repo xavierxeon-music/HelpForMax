@@ -17,10 +17,10 @@ void Block::Settings::write()
 {
    auto writeFile = [&]()
    {
-      if (item->patch.openAsBPatcher)
-         return true;
+      if (item->patch.patcherType == Block::Structure::PatcherStandard)
+         return false;
 
-      return false;
+      return true;
    };
 
    QFile file(initPath);

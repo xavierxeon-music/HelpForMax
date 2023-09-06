@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QLineEdit>
 #include <QPlainTextEdit>
 
@@ -26,6 +27,7 @@ namespace Page
       void monitor(QLineEdit* lineEdit, QString* variable, const QString& patchKey);
       void monitor(QLineEdit* lineEdit, QStringList* variable, const QString& patchKey);
       void monitor(QPlainTextEdit* textEdit, QString* variable, const QString& patchKey);
+      void monitor(QComboBox* comboBox, int* variable, const QString& patchKey);
 
    protected:
       Central* central;

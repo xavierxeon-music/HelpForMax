@@ -73,7 +73,11 @@ void Block::Patcher::read()
          if (text.startsWith("patcherargs"))
             readPatcherargs(text);
          else if (text.startsWith("wa.setup.bpatcher"))
-            item->patch.openAsBPatcher = true;
+            item->patch.patcherType = Block::Structure::PatcherGui;
+         else if (text.startsWith("wa.setup.poly"))
+            item->patch.patcherType = Block::Structure::PatcherPoly;
+         else if (text.startsWith("wa.setup.pfft"))
+            item->patch.patcherType = Block::Structure::PatcherFourier;
       }
    }
 

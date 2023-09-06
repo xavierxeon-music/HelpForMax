@@ -40,7 +40,7 @@ void Block::Ref::read()
    if (item->patch.digest.description.isEmpty())
       item->markUndocumented(item->patch.digest);
 
-   item->patch.openAsBPatcher = (1 == rootElement.attribute("as_bpatcher", "0").toInt());
+   item->patch.patcherType = (Block::Structure::PatcherType)rootElement.attribute("patcher_type", "0").toInt();
 
    {
       const QDomElement metaDataElement = rootElement.firstChildElement("metadatalist");
@@ -185,7 +185,8 @@ void Block::Ref::write()
    QDomElement rootElement = doc.createElement("c74object");
    doc.appendChild(rootElement);
    rootElement.setAttribute("name", item->key);
-   rootElement.setAttribute("as_bpatcher", item->patch.openAsBPatcher);
+
+   rootElement.setAttribute("patcher_type", item->patch.patcherType);
    addDigest(rootElement, item->patch.digest);
 
    {

@@ -92,6 +92,25 @@ void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable, const 
    connectionMap[textEdit] = connect(textEdit, &QPlainTextEdit::textChanged, update);
 }
 
+void Page::Abstract::monitor(QComboBox* comboBox, int* variable, const QString& patchKey)
+{
+   auto update = [&, comboBox, variable, patchKey](int index)
+   {
+      const int oldIndex = *variable;
+      if (oldIndex == index)
+         return;
+
+      *variable = index;
+      FunctionHub::callOnOtherHubInstances(&FunctionHub::setModified, true, patchKey);
+   };
+
+   if (connectionMap.contains(comboBox))
+      disconnect(connectionMap.value(comboBox));
+
+   comboBox->setCurrentIndex(*variable);
+   connectionMap[comboBox] = connect(comboBox, &QComboBox::currentIndexChanged, update);
+}
+
 void Page::Abstract::componentSelected(Block::Item::Marker marker, QVariant data)
 {
    if (editMarker != marker)

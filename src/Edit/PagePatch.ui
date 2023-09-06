@@ -116,31 +116,10 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="messageIntButton">
+      <item row="3" column="2">
+       <widget class="QPushButton" name="messageSignalButton">
         <property name="text">
-         <string>int</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="messageBangButton">
-        <property name="text">
-         <string>bang</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="messageFloatButton">
-        <property name="text">
-         <string>float</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="messageListButton">
-        <property name="text">
-         <string>list</string>
+         <string>signal</string>
         </property>
        </widget>
       </item>
@@ -151,17 +130,52 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QPushButton" name="messageSignalButton">
+      <item row="4" column="3">
+       <widget class="QPushButton" name="messageDictButton">
         <property name="text">
-         <string>signal</string>
+         <string>dict</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="messageMatrixButton">
+        <property name="text">
+         <string>matrix</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="messageAnythingButton">
+        <property name="text">
+         <string>anything</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QPushButton" name="messageAnythingButton">
+       <widget class="QPushButton" name="messageListButton">
         <property name="text">
-         <string>anything</string>
+         <string>list</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="messageFloatButton">
+        <property name="text">
+         <string>float</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="messageIntButton">
+        <property name="text">
+         <string>int</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="messageBangButton">
+        <property name="text">
+         <string>bang</string>
         </property>
        </widget>
       </item>
@@ -169,7 +183,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="extraGroup">
+    <widget class="QGroupBox" name="openAsGroup">
      <property name="title">
       <string>Extras</string>
      </property>
@@ -178,10 +192,27 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QCheckBox" name="openAsBPatcherCheck">
-        <property name="text">
-         <string>open as bpatcher</string>
-        </property>
+       <widget class="QComboBox" name="openAsCombo">
+        <item>
+         <property name="text">
+          <string>Standard Patcher</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>GUI Patcher</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Poly Patcher</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PFFT Patcher</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>

@@ -31,6 +31,7 @@ Preview::Widget::Widget(QWidget* parent, Central* central)
    scene = new QGraphicsScene(this);
    scene->setBackgroundBrush(whiteBrush);
    QGraphicsView* graphicsView = new QGraphicsView(scene, this);
+   graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
    QVBoxLayout* masterLayout = new QVBoxLayout(this);
    masterLayout->setContentsMargins(0, 0, 0, 0);
@@ -157,30 +158,35 @@ void Preview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& id
 
 void Preview::Widget::moveItems(const IdMap& idMap)
 {
-   QPointF minPoint;
-
-   for (Box box : idMap.values())
+   auto compileMinPoint = [&]()
    {
-      QPointF ipos = box.rectItem->pos();
-      if (ipos.isNull())
-         continue;
+      QPointF minPoint;
+      bool first = true;
 
-      if (minPoint.isNull())
+      for (Box box : idMap.values())
       {
-         minPoint = ipos;
-         continue;
+         const QPointF ipos = box.rectItem->pos();
+         if (first)
+         {
+            minPoint = ipos;
+            first = false;
+            continue;
+         }
+
+         if (minPoint.x() > ipos.x())
+            minPoint.setX(ipos.x());
+
+         if (minPoint.y() > ipos.y())
+            minPoint.setY(ipos.y());
       }
+      return minPoint;
+   };
 
-      if (minPoint.x() > ipos.x())
-         minPoint.setX(ipos.x());
-
-      if (minPoint.y() > ipos.y())
-         minPoint.setY(ipos.y());
-   }
-
+   const QPointF minPoint = compileMinPoint();
    for (Box box : idMap.values())
    {
-      QPointF newPos = box.rectItem->pos() - minPoint;
+      const QPointF oldPos = box.rectItem->pos();
+      QPointF newPos = oldPos - minPoint;
       box.rectItem->setPos(newPos);
       box.textItem->setPos(newPos + QPointF(5, 5));
    }

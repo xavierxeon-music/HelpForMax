@@ -24,6 +24,14 @@ namespace Block
          Matrix
       };
 
+      enum PatcherType
+      {
+         PatcherStandard,
+         PatcherGui,
+         PatcherPoly,
+         PatcherFourier
+      };
+
       struct Base
       {
          bool undocumented = false;
@@ -39,7 +47,7 @@ namespace Block
       struct Patch
       {
          Digest digest;
-         bool openAsBPatcher = false;
+         PatcherType patcherType = PatcherStandard;
          int inletCount = 0;
          QStringList metaTagList;
          QStringList seeAlsoList;
