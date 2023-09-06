@@ -102,7 +102,7 @@ namespace Block
       Argument::List argumentList;
       Attribute::Map attributeMap;
       Message::StandardMap messageStandardMap;
-      Message::FreeMap messageFreeMap;
+      Message::FreeMap messageUserDefinedMap;
 
    public:
       virtual void clear();

@@ -14,7 +14,7 @@ Block::Item::Item(const QString& key, const QString& patchPath)
    , patcher(this, patchPath)
    , ref(this)
    , help(this)
-   , settings(this)
+   , init(this)
 {
 }
 
@@ -129,14 +129,14 @@ void Block::Item::save(Component component)
 
       ref.write();
       help.write();
-      settings.write();
+      init.write();
 
       clear();
       load();
    }
-   else if (Component::Settings == component)
+   else if (Component::InitFile == component)
    {
-      settings.write();
+      init.write();
    }
 }
 

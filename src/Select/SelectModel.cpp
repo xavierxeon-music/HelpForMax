@@ -25,20 +25,48 @@ void Select::Model::setPackagePath(QString packageDir)
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
    const Block::Item::Map map = central->getBlockMap();
+
+   auto folderName = [&](Block::Item::Map::ConstIterator it)
+   {
+      QString path = it.value()->getPatchPath();
+      path.replace(packageDir + "/patchers/", "");
+      int index = path.indexOf("/");
+
+      path = path.mid(0, index);
+
+      return path;
+   };
+
+   QMap<QString, QStandardItem*> folderMap;
+
+   for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
+   {
+      const QString folder = folderName(it);
+      if (folderMap.contains(folder))
+         continue;
+
+      QStandardItem* folderItem = new QStandardItem(folder);
+      folderItem->setEditable(false);
+      invisibleRootItem()->appendRow(folderItem);
+
+      folderMap.insert(folder, folderItem);
+   }
+
    for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString key = it.key();
-
-      ModelItem* undocumntedItem = new ModelItem();
 
       ModelItem* patchItem = new ModelItem(key);
       patchItem->setData(it.value()->getPatchPath(), RolePatchPath);
       patchItem->setData(key, RoleKey);
 
-      invisibleRootItem()->appendRow({undocumntedItem, patchItem});
+      const QString folder = folderName(it);
+      folderMap.value(folder)->appendRow(patchItem);
 
       if (central->isBlockUndocumented(key))
-         undocumntedItem->setText(" *");
+         patchItem->setIcon(QIcon(":/DocMissing.svg"));
+      else
+         patchItem->setIcon(QIcon(":/DocComplete.svg"));
    }
 
    QApplication::restoreOverrideCursor();
@@ -53,17 +81,16 @@ void Select::Model::setModified(bool enabled, QString key)
 
    for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
    {
-      QStandardItem* undocumntedItem = invisibleRootItem()->child(row, 0);
-      QStandardItem* patchItem = invisibleRootItem()->child(row, 1);
+      QStandardItem* patchItem = invisibleRootItem()->child(row, 0);
 
       const QString& rowKey = patchItem->text();
 
       if (key.isEmpty() || rowKey == key)
       {
          if (central->isBlockUndocumented(rowKey))
-            undocumntedItem->setText(" *");
+            patchItem->setIcon(QIcon(":/DocMissing.svg"));
          else
-            undocumntedItem->setText("");
+            patchItem->setIcon(QIcon(":/DocComplete.svg"));
       }
    }
 }

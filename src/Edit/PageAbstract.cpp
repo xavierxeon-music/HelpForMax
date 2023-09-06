@@ -94,7 +94,7 @@ void Page::Abstract::monitor(QPlainTextEdit* textEdit, QString* variable, const 
 
 void Page::Abstract::monitor(QComboBox* comboBox, int* variable, const QString& patchKey)
 {
-   auto update = [&, comboBox, variable, patchKey](int index)
+   auto update = [&, variable, patchKey](int index)
    {
       const int oldIndex = *variable;
       if (oldIndex == index)

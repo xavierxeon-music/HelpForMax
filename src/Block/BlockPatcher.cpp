@@ -142,13 +142,13 @@ void Block::Patcher::read()
             const Structure::Type type = Structure::toType(messageText);
             if (Structure::Type::Anything == type)
             {
-               if (!item->messageFreeMap.contains(messageText))
+               if (!item->messageUserDefinedMap.contains(messageText))
                {
-                  item->messageFreeMap[messageText] = Structure::Message();
-                  item->markUndocumented(item->messageFreeMap[messageText]);
+                  item->messageUserDefinedMap[messageText] = Structure::Message();
+                  item->markUndocumented(item->messageUserDefinedMap[messageText]);
                }
 
-               Structure::Message& message = item->messageFreeMap[messageText];
+               Structure::Message& message = item->messageUserDefinedMap[messageText];
                if (message.arguments.empty())
                {
                   message.arguments.append(Structure::Argument());

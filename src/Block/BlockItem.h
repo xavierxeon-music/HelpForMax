@@ -8,9 +8,9 @@
 #include <QString>
 
 #include "BlockHelp.h"
+#include "BlockInitFile.h"
 #include "BlockPatcher.h"
 #include "BlockRef.h"
-#include "BlockSettings.h"
 
 namespace Block
 {
@@ -34,7 +34,7 @@ namespace Block
          Argument,
          Attribute,
          MessageStandard,
-         MessageFree,
+         MessageUserDefined,
          Output
       };
       Q_ENUM(Marker)
@@ -45,7 +45,7 @@ namespace Block
          Patcher,
          Ref,
          Help,
-         Settings,
+         InitFile,
       };
 
       static const QList<QByteArray> descriptionMaxTags;
@@ -71,7 +71,7 @@ namespace Block
       friend class Patcher;
       friend class Ref;
       friend class Help;
-      friend class Settings;
+      friend class InitFile;
 
    private:
       void markUndocumented(Base& base);
@@ -84,7 +84,7 @@ namespace Block
       Patcher patcher;
       Ref ref;
       Help help;
-      Settings settings;
+      InitFile init;
    };
 } // namespace Block
 

@@ -1,6 +1,6 @@
-#include "PageMessageFree.h"
+#include "PageMessageUserDefined.h"
 
-Page::MessageFree::MessageFree(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::MessageUserDefined::MessageUserDefined(QWidget* parent, Central* central, const Block::Item::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , messageName()
@@ -12,10 +12,10 @@ Page::MessageFree::MessageFree(QWidget* parent, Central* central, const Block::I
    argumentView->allowNameEdit(false);
 }
 
-void Page::MessageFree::update(const QVariant& data)
+void Page::MessageUserDefined::update(const QVariant& data)
 {
    messageName = data.toString();
-   Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
+   Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
    keyInfo->setText("messsage " + messageName + " @ " + central->getCurrentKey());
 
    monitor(digestEdit, &message.digest.text, central->getCurrentKey());

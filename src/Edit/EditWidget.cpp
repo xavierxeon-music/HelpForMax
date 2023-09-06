@@ -7,7 +7,7 @@
 #include "Edit/PageArgument.h"
 #include "Edit/PageAttribute.h"
 #include "Edit/PageBlank.h"
-#include "Edit/PageMessageFree.h"
+#include "Edit/PageMessageUserDefined.h"
 #include "Edit/PageMessageStandard.h"
 #include "Edit/PageOutput.h"
 #include "Edit/PagePatch.h"
@@ -22,7 +22,7 @@ Edit::Widget::Widget(QWidget* parent, Central* central)
    addEditor<Page::Argument>(Block::Item::Marker::Argument);
    addEditor<Page::Attribute>(Block::Item::Marker::Attribute);
    addEditor<Page::MessageStandard>(Block::Item::Marker::MessageStandard);
-   addEditor<Page::MessageFree>(Block::Item::Marker::MessageFree);
+   addEditor<Page::MessageUserDefined>(Block::Item::Marker::MessageUserDefined);
    addEditor<Page::Output>(Block::Item::Marker::Output);
 
    Page::Patch* pagePatch = addEditor<Page::Patch>(Block::Item::Marker::Patch);

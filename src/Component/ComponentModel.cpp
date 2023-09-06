@@ -95,7 +95,7 @@ void Component::Model::update()
          row++;
       }
 
-      for (Block::Structure::Message::FreeMap::ConstIterator it = block.messageFreeMap.constBegin(); it != block.messageFreeMap.constEnd(); it++)
+      for (Block::Structure::Message::FreeMap::ConstIterator it = block.messageUserDefinedMap.constBegin(); it != block.messageUserDefinedMap.constEnd(); it++)
       {
          const Block::Structure::Message& message = it.value();
 
@@ -224,9 +224,9 @@ void Component::Model::rebuild()
          invisibleRootItem()->appendRow({udocItem, msgItem, msgDigestItem});
       }
 
-      for (Block::Structure::Message::FreeMap::ConstIterator it = block.messageFreeMap.constBegin(); it != block.messageFreeMap.constEnd(); it++)
+      for (Block::Structure::Message::FreeMap::ConstIterator it = block.messageUserDefinedMap.constBegin(); it != block.messageUserDefinedMap.constEnd(); it++)
       {
-         ModelItem* udocItem = createUDocItem(":/PatchMessageFree.svg", Block::Item::Marker::MessageFree, it.key());
+         ModelItem* udocItem = createUDocItem(":/PatchMessageUserDefined.svg", Block::Item::Marker::MessageUserDefined, it.key());
 
          ModelItem* msgItem = new ModelItem(it.key()); // read only
          ModelItem* msgDigestItem = new ModelItem();

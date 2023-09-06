@@ -159,7 +159,7 @@ void Block::Ref::read()
             }
             else
             {
-               item->messageFreeMap[name] = message;
+               item->messageUserDefinedMap[name] = message;
             }
          }
       }
@@ -276,7 +276,7 @@ void Block::Ref::write()
          addMessage(message, name, true);
       }
 
-      for (Structure::Message::FreeMap::ConstIterator it = item->messageFreeMap.constBegin(); it != item->messageFreeMap.constEnd(); it++)
+      for (Structure::Message::FreeMap::ConstIterator it = item->messageUserDefinedMap.constBegin(); it != item->messageUserDefinedMap.constEnd(); it++)
       {
          const Structure::Message& message = it.value();
          const QString& name = it.key();

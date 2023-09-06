@@ -9,10 +9,12 @@
         <file>PatchOutput.svg</file>
         <file>ReloadPatch.svg</file>
         <file>SaveAllPatches.svg</file>
-        <file>PatchMessageFree.svg</file>
+        <file>PatchMessageUserDefined.svg</file>
         <file>PatchMessageStandard.svg</file>
         <file>ReloadPackage.svg</file>
         <file>ArrowLeft.svg</file>
         <file>OpenPatch.svg</file>
+        <file>DocComplete.svg</file>
+        <file>DocMissing.svg</file>
     </qresource>
 </RCC>

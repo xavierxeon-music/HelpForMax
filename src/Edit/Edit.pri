@@ -6,7 +6,7 @@ HEADERS += \
    $$PWD/PageArgument.h \
    $$PWD/PageAttribute.h \
    $$PWD/PageBlank.h \
-   $$PWD/PageMessageFree.h \
+   $$PWD/PageMessageUserDefined.h \
    $$PWD/PageMessageStandard.h \
    $$PWD/PageOutput.h \
    $$PWD/PagePatch.h
@@ -19,7 +19,7 @@ SOURCES += \
    $$PWD/PageArgument.cpp \
    $$PWD/PageAttribute.cpp \
    $$PWD/PageBlank.cpp \
-   $$PWD/PageMessageFree.cpp \
+   $$PWD/PageMessageUserDefined.cpp \
    $$PWD/PageMessageStandard.cpp \
    $$PWD/PageOutput.cpp \
    $$PWD/PagePatch.cpp
@@ -28,7 +28,7 @@ FORMS += \
    $$PWD/PageArgument.ui \
    $$PWD/PageAttribute.ui \
    $$PWD/PageBlank.ui \
-   $$PWD/PageMessageFree.ui \
+   $$PWD/PageMessageUserDefined.ui \
    $$PWD/PageMessageStandard.ui \
    $$PWD/PageOutput.ui \
    $$PWD/PagePatch.ui

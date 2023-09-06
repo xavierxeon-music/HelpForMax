@@ -1,5 +1,5 @@
-#ifndef BlockSettingsH
-#define BlockSettingsH
+#ifndef BlockInitFileH
+#define BlockInitFileH
 
 #include "BlockStructure.h"
 
@@ -7,10 +7,10 @@ namespace Block
 {
    class Item;
 
-   class Settings
+   class InitFile
    {
    public:
-      Settings(Item* item);
+      InitFile(Item* item);
 
    public:
       void write();
@@ -21,4 +21,4 @@ namespace Block
    };
 } // namespace Block
 
-#endif // NOT BlockSettingsH
+#endif // NOT BlockInitFileH

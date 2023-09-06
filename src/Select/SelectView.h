@@ -15,6 +15,9 @@ namespace Select
    public:
       View(QWidget* parent, Central* central, Model* model);
 
+   private slots:
+      void slotHasBeenLoaded();
+
    private:
       void clicked(ModelItem* item) override;
 

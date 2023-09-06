@@ -102,10 +102,10 @@ void Component::View::slotCopy()
          clip.digest = message.digest;
          break;
       }
-      case Block::Item::Marker::MessageFree:
+      case Block::Item::Marker::MessageUserDefined:
       {
          const QString messageName = data.toString();
-         const Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
+         const Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
 
          clip.digest = message.digest;
          break;
@@ -159,10 +159,10 @@ void Component::View::slotPaste()
 
          break;
       }
-      case Block::Item::Marker::MessageFree:
+      case Block::Item::Marker::MessageUserDefined:
       {
          const QString messageName = data.toString();
-         Block::Structure::Message& message = central->blockRef().messageFreeMap[messageName];
+         Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
 
          message.digest = clip.digest;
 

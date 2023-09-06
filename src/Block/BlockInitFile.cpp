@@ -1,11 +1,11 @@
-#include "BlockSettings.h"
+#include "BlockInitFile.h"
 
 #include <QFile>
 #include <QTextStream>
 
 #include "Tools/Central.h"
 
-Block::Settings::Settings(Item* item)
+Block::InitFile::InitFile(Item* item)
    : item(item)
    , initPath()
 {
@@ -13,19 +13,11 @@ Block::Settings::Settings(Item* item)
    initPath = packagePath + "/init/" + item->key + ".txt";
 }
 
-void Block::Settings::write()
+void Block::InitFile::write()
 {
-   auto writeFile = [&]()
-   {
-      if (item->patch.patcherType == Block::Structure::PatcherStandard)
-         return false;
-
-      return true;
-   };
-
    QFile file(initPath);
 
-   if (!writeFile()) // delete file
+   if (item->patch.patcherType == Block::Structure::PatcherStandard) // delete file
    {
       if (!file.exists()) // nothing to delete
          return;
@@ -37,11 +29,17 @@ void Block::Settings::write()
       if (!file.open(QIODevice::WriteOnly))
          return;
 
-      {
-         QTextStream stream(&file);
+      QTextStream stream(&file);
 
+      if (item->patch.patcherType == Block::Structure::PatcherGui)
+      {
          stream << "max objectfile " << item->key << " " << item->key << ";\n";
          stream << "max definesubstitution " << item->key << " bpatcher @name " << item->key << ".maxpat;\n";
+      }
+      else if (item->patch.patcherType == Block::Structure::PatcherPoly)
+      {
+         stream << "max objectfile " << item->key << " " << item->key << ";\n";
+         stream << "max definesubstitution " << item->key << " poly " << item->key << " 16;\n";
       }
       file.close();
    }
