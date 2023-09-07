@@ -39,7 +39,7 @@ void Block::InitFile::write()
       else if (item->patch.patcherType == Block::Structure::PatcherPoly)
       {
          stream << "max objectfile " << item->key << " " << item->key << ";\n";
-         stream << "max definesubstitution " << item->key << " poly " << item->key << " 16;\n";
+         stream << "max definesubstitution " << item->key << " poly~ " << item->key << " 16;\n";
       }
       file.close();
    }
