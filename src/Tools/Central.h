@@ -40,6 +40,10 @@ public:
 
    void readPackageInfo(QString packagePath);
 
+public:
+   static const QBrush redBrush;
+   static const QBrush blackBrush;
+
 protected:
 private:
    static QString packageAuthor;

@@ -8,7 +8,7 @@ Select::View::View(QWidget* parent, Central* central, Model* model)
    , central(central)
 {
    setHeaderHidden(true);
-   setRootIsDecorated(true);
+   setRootIsDecorated(false);
 
    connect(model, &QStandardItemModel::modelReset, this, &View::slotHasBeenLoaded);
 }
@@ -16,6 +16,7 @@ Select::View::View(QWidget* parent, Central* central, Model* model)
 void Select::View::slotHasBeenLoaded()
 {
    expandAll();
+   setItemsExpandable(false);
 }
 
 void Select::View::clicked(ModelItem* item)

@@ -26,9 +26,9 @@ void Component::Model::update()
    auto setUdocStatus = [&](QStandardItem* item, const Block::Structure::Base& base, bool append = false)
    {
       if (base.undocumented)
-         item->setText("*");
+         item->setForeground(Central::redBrush);
       else if (!append)
-         item->setText("");
+         item->setForeground(Central::blackBrush);
    };
 
    {

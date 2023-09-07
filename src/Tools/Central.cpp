@@ -34,6 +34,9 @@ void FunctionHub::componentSelected(Block::Item::Marker marker, QVariant data)
 
 // central
 
+const QBrush Central::redBrush(Qt::red);
+const QBrush Central::blackBrush(Qt::black);
+
 QString Central::packageAuthor = QString();
 QString Central::packageName = QString();
 

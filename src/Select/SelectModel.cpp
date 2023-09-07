@@ -20,7 +20,7 @@ void Select::Model::setPackagePath(QString packageDir)
    beginResetModel();
 
    clear();
-   setHorizontalHeaderLabels({"U", "Patch"});
+   setHorizontalHeaderLabels({"Patch"});
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
@@ -64,9 +64,9 @@ void Select::Model::setPackagePath(QString packageDir)
       folderMap.value(folder)->appendRow(patchItem);
 
       if (central->isBlockUndocumented(key))
-         patchItem->setIcon(QIcon(":/DocMissing.svg"));
+         patchItem->setForeground(Central::redBrush);
       else
-         patchItem->setIcon(QIcon(":/DocComplete.svg"));
+         patchItem->setForeground(Central::blackBrush);
    }
 
    QApplication::restoreOverrideCursor();
@@ -88,9 +88,9 @@ void Select::Model::setModified(bool enabled, QString key)
       if (key.isEmpty() || rowKey == key)
       {
          if (central->isBlockUndocumented(rowKey))
-            patchItem->setIcon(QIcon(":/DocMissing.svg"));
+            patchItem->setForeground(Central::redBrush);
          else
-            patchItem->setIcon(QIcon(":/DocComplete.svg"));
+            patchItem->setForeground(Central::blackBrush);
       }
    }
 }
