@@ -82,7 +82,7 @@ void Component::Model::update()
    {
       for (const Block::Structure::Type& type : Block::Structure::typeList())
       {
-         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 1);
+         ModelItem* msgDigestItem = static_cast<ModelItem*>(invisibleRootItem()->child(row, 1));
 
          if (block.messageStandardMap.contains(type))
          {
@@ -90,6 +90,11 @@ void Component::Model::update()
             setUdocStatus(row, message);
 
             msgDigestItem->setText(message.digest.text);
+            msgDigestItem->setVisible(true);
+         }
+         else
+         {
+            msgDigestItem->setVisible(false);
          }
 
          row++;
@@ -205,6 +210,11 @@ void Component::Model::rebuild()
          if (block.messageStandardMap.contains(type))
          {
             msgDigestItem->setText(block.messageStandardMap.value(type).digest.text);
+            msgItem->setVisible(true);
+         }
+         else
+         {
+            msgItem->setVisible(false);
          }
 
          tagRow(msgItem, ":/PatchMessageStandard.svg", Block::Item::Marker::MessageStandard, QVariant::fromValue(type));
