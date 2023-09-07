@@ -1,5 +1,8 @@
 #include "Central.h"
 
+#include <QApplication>
+#include <QPalette>
+
 #include "Tools/JSONModel.h"
 #include "Tools/Settings.h"
 
@@ -34,8 +37,8 @@ void FunctionHub::componentSelected(Block::Item::Marker marker, QVariant data)
 
 // central
 
-const QBrush Central::redBrush(Qt::red);
-const QBrush Central::blackBrush(Qt::black);
+const QBrush Central::udocBrush = QApplication::palette().alternateBase();
+const QBrush Central::docBrush = QApplication::palette().base();
 
 QString Central::packageAuthor = QString();
 QString Central::packageName = QString();

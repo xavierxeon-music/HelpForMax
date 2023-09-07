@@ -23,19 +23,27 @@ void Component::Model::update()
    const Block::Item block = central->block();
    int row = 0;
 
-   auto setUdocStatus = [&](QStandardItem* item, const Block::Structure::Base& base, bool append = false)
+   auto setUdocStatus = [&](int row, const Block::Structure::Base& base, bool append = false)
    {
+      QStandardItem* itemA = invisibleRootItem()->child(row, 0);
+      QStandardItem* itemB = invisibleRootItem()->child(row, 1);
+
       if (base.undocumented)
-         item->setForeground(Central::redBrush);
+      {
+         itemA->setBackground(Central::udocBrush);
+         itemB->setBackground(Central::udocBrush);
+      }
       else if (!append)
-         item->setForeground(Central::blackBrush);
+      {
+         itemA->setBackground(Central::docBrush);
+         itemB->setBackground(Central::docBrush);
+      }
    };
 
    {
-      QStandardItem* udocItem = invisibleRootItem()->child(row, 0);
-      setUdocStatus(udocItem, block.patch.digest);
+      setUdocStatus(row, block.patch.digest);
 
-      QStandardItem* patchDigestItem = invisibleRootItem()->child(row, 2);
+      QStandardItem* patchDigestItem = invisibleRootItem()->child(row, 1);
       patchDigestItem->setText(block.patch.digest.text);
       row++;
    }
@@ -45,14 +53,13 @@ void Component::Model::update()
       {
          const Block::Structure::Argument& argument = block.argumentList.at(index);
 
-         QStandardItem* udocItem = invisibleRootItem()->child(row + index, 0);
-         setUdocStatus(udocItem, argument);
-         setUdocStatus(udocItem, argument.digest, true);
+         setUdocStatus(row + index, argument);
+         setUdocStatus(row + index, argument.digest, true);
 
-         QStandardItem* argItem = invisibleRootItem()->child(row + index, 1);
+         QStandardItem* argItem = invisibleRootItem()->child(row + index, 0);
          argItem->setText(argument.name);
 
-         QStandardItem* argDigestItem = invisibleRootItem()->child(row + index, 2);
+         QStandardItem* argDigestItem = invisibleRootItem()->child(row + index, 1);
          argDigestItem->setText(argument.digest.text);
       }
       row += block.argumentList.count();
@@ -63,11 +70,10 @@ void Component::Model::update()
       {
          const Block::Structure::Attribute& attribute = it.value();
 
-         QStandardItem* udocItem = invisibleRootItem()->child(row, 0);
-         setUdocStatus(udocItem, attribute);
-         setUdocStatus(udocItem, attribute.digest, true);
+         setUdocStatus(row, attribute);
+         setUdocStatus(row, attribute.digest, true);
 
-         QStandardItem* attrrDigestItem = invisibleRootItem()->child(row, 2);
+         QStandardItem* attrrDigestItem = invisibleRootItem()->child(row, 1);
          attrrDigestItem->setText(attribute.digest.text);
          row++;
       }
@@ -76,20 +82,14 @@ void Component::Model::update()
    {
       for (const Block::Structure::Type& type : Block::Structure::typeList())
       {
-         ModelItem* udocItem = static_cast<ModelItem*>(invisibleRootItem()->child(row, 0));
-         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 2);
+         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 1);
 
          if (block.messageStandardMap.contains(type))
          {
             const Block::Structure::Message& message = block.messageStandardMap.value(type);
+            setUdocStatus(row, message);
 
             msgDigestItem->setText(message.digest.text);
-            udocItem->setVisible(true);
-            setUdocStatus(udocItem, message);
-         }
-         else
-         {
-            udocItem->setVisible(false);
          }
 
          row++;
@@ -99,10 +99,9 @@ void Component::Model::update()
       {
          const Block::Structure::Message& message = it.value();
 
-         QStandardItem* udocItem = invisibleRootItem()->child(row, 0);
-         setUdocStatus(udocItem, message);
+         setUdocStatus(row, message);
 
-         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 2);
+         QStandardItem* msgDigestItem = invisibleRootItem()->child(row, 1);
          msgDigestItem->setText(message.digest.text);
 
          row++;
@@ -114,11 +113,10 @@ void Component::Model::update()
       {
          const Block::Structure::Output& output = it.value();
 
-         QStandardItem* udocItem = invisibleRootItem()->child(row, 0);
-         setUdocStatus(udocItem, output);
-         setUdocStatus(udocItem, output.digest);
+         setUdocStatus(row, output);
+         setUdocStatus(row, output.digest, true);
 
-         QStandardItem* outputItem = invisibleRootItem()->child(row, 2);
+         QStandardItem* outputItem = invisibleRootItem()->child(row, 1);
          outputItem->setText(output.name);
 
          row++;
@@ -160,55 +158,47 @@ void Component::Model::rebuild()
 
    const Block::Item& block = central->block();
 
-   auto createUDocItem = [](const QString& iconPath, const Block::Item::Marker& marker, const QVariant& data)
+   auto tagRow = [](ModelItem* firstItem, const QString& iconPath, const Block::Item::Marker& marker, const QVariant& data)
    {
-      ModelItem* udocItem = new ModelItem();
-      udocItem->setIcon(QIcon(iconPath));
+      firstItem->setIcon(QIcon(iconPath));
 
-      udocItem->setData(QVariant::fromValue(marker), Block::Item::RoleMarker);
-      udocItem->setData(data, Block::Item::RoleData);
-
-      return udocItem;
+      firstItem->setData(QVariant::fromValue(marker), Block::Item::RoleMarker);
+      firstItem->setData(data, Block::Item::RoleData);
    };
 
    {
-      ModelItem* udocItem = createUDocItem(":/PatchGeneral.svg", Block::Item::Marker::Patch, true);
-
       ModelItem* patchItem = new ModelItem("PATCH");
       ModelItem* patchDigestItem = new ModelItem();
 
-      invisibleRootItem()->appendRow({udocItem, patchItem, patchDigestItem});
+      tagRow(patchItem, ":/PatchGeneral.svg", Block::Item::Marker::Patch, true);
+      invisibleRootItem()->appendRow({patchItem, patchDigestItem});
    }
 
    {
       for (int index = 0; index < block.argumentList.count(); index++)
       {
-         ModelItem* udocItem = createUDocItem(":/PatchArgument.svg", Block::Item::Marker::Argument, index);
-
          ModelItem* argItem = new ModelItem();
          ModelItem* argDigestItem = new ModelItem();
 
-         invisibleRootItem()->appendRow({udocItem, argItem, argDigestItem});
+         tagRow(argItem, ":/PatchArgument.svg", Block::Item::Marker::Argument, index);
+         invisibleRootItem()->appendRow({argItem, argDigestItem});
       }
    }
 
    {
       for (Block::Structure::Attribute::Map::ConstIterator it = block.attributeMap.constBegin(); it != block.attributeMap.constEnd(); it++)
       {
-         ModelItem* udocItem = createUDocItem(":/PatchAttribute.svg", Block::Item::Marker::Attribute, it.key());
-
          ModelItem* attrItem = new ModelItem(it.key()); // read only
          ModelItem* attrrDigestItem = new ModelItem();
 
-         invisibleRootItem()->appendRow({udocItem, attrItem, attrrDigestItem});
+         tagRow(attrItem, ":/PatchAttribute.svg", Block::Item::Marker::Attribute, it.key());
+         invisibleRootItem()->appendRow({attrItem, attrrDigestItem});
       }
    }
 
    {
       for (const Block::Structure::Type& type : Block::Structure::typeList())
       {
-         ModelItem* udocItem = createUDocItem(":/PatchMessageStandard.svg", Block::Item::Marker::MessageStandard, QVariant::fromValue(type));
-
          ModelItem* msgItem = new ModelItem(Block::Structure::typeName(type)); // read only
          ModelItem* msgDigestItem = new ModelItem();
 
@@ -216,34 +206,29 @@ void Component::Model::rebuild()
          {
             msgDigestItem->setText(block.messageStandardMap.value(type).digest.text);
          }
-         else
-         {
-            udocItem->setVisible(false);
-         }
 
-         invisibleRootItem()->appendRow({udocItem, msgItem, msgDigestItem});
+         tagRow(msgItem, ":/PatchMessageStandard.svg", Block::Item::Marker::MessageStandard, QVariant::fromValue(type));
+         invisibleRootItem()->appendRow({msgItem, msgDigestItem});
       }
 
       for (Block::Structure::Message::FreeMap::ConstIterator it = block.messageUserDefinedMap.constBegin(); it != block.messageUserDefinedMap.constEnd(); it++)
       {
-         ModelItem* udocItem = createUDocItem(":/PatchMessageUserDefined.svg", Block::Item::Marker::MessageUserDefined, it.key());
-
          ModelItem* msgItem = new ModelItem(it.key()); // read only
          ModelItem* msgDigestItem = new ModelItem();
 
-         invisibleRootItem()->appendRow({udocItem, msgItem, msgDigestItem});
+         tagRow(msgItem, ":/PatchMessageUserDefined.svg", Block::Item::Marker::MessageUserDefined, it.key());
+         invisibleRootItem()->appendRow({msgItem, msgDigestItem});
       }
    }
 
    {
       for (Block::Structure::Output::Map::ConstIterator it = block.outputMap.constBegin(); it != block.outputMap.constEnd(); it++)
       {
-         ModelItem* udocItem = createUDocItem(":/PatchOutput.svg", Block::Item::Marker::Output, it.key());
-
          ModelItem* outputNumberItem = new ModelItem("#" + QString::number(it.key())); // read only
          ModelItem* outputItem = new ModelItem();
 
-         invisibleRootItem()->appendRow({udocItem, outputNumberItem, outputItem});
+         tagRow(outputNumberItem, ":/PatchOutput.svg", Block::Item::Marker::Output, it.key());
+         invisibleRootItem()->appendRow({outputNumberItem, outputItem});
       }
    }
 

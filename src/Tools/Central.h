@@ -41,8 +41,8 @@ public:
    void readPackageInfo(QString packagePath);
 
 public:
-   static const QBrush redBrush;
-   static const QBrush blackBrush;
+   static const QBrush udocBrush;
+   static const QBrush docBrush;
 
 protected:
 private:

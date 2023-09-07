@@ -64,9 +64,9 @@ void Select::Model::setPackagePath(QString packageDir)
       folderMap.value(folder)->appendRow(patchItem);
 
       if (central->isBlockUndocumented(key))
-         patchItem->setForeground(Central::redBrush);
+         patchItem->setBackground(Central::udocBrush);
       else
-         patchItem->setForeground(Central::blackBrush);
+         patchItem->setBackground(Central::docBrush);
    }
 
    QApplication::restoreOverrideCursor();
@@ -88,9 +88,9 @@ void Select::Model::setModified(bool enabled, QString key)
       if (key.isEmpty() || rowKey == key)
       {
          if (central->isBlockUndocumented(rowKey))
-            patchItem->setForeground(Central::redBrush);
+            patchItem->setBackground(Central::udocBrush);
          else
-            patchItem->setForeground(Central::blackBrush);
+            patchItem->setBackground(Central::docBrush);
       }
    }
 }
