@@ -7,17 +7,22 @@
 #include "Edit/PageArgument.h"
 #include "Edit/PageAttribute.h"
 #include "Edit/PageBlank.h"
-#include "Edit/PageMessageUserDefined.h"
 #include "Edit/PageMessageStandard.h"
+#include "Edit/PageMessageUserDefined.h"
 #include "Edit/PageOutput.h"
 #include "Edit/PagePatch.h"
 
 Edit::Widget::Widget(QWidget* parent, Central* central)
-   : QStackedWidget(parent)
+   : Abstract::Widget(parent, central)
    , FunctionHub()
-   , central(central)
+   , stackWidget(nullptr)
    , editorMap()
 {
+   toolBarAction(QIcon(":/DocMissing.svg"), "Apply Changes", this, &Widget::slotApplyChanges);
+
+   stackWidget = new QStackedWidget(this);
+   setPayload(stackWidget);
+
    addEditor<Page::Blank>(Block::Item::Marker::Undefined);
    addEditor<Page::Argument>(Block::Item::Marker::Argument);
    addEditor<Page::Attribute>(Block::Item::Marker::Attribute);
@@ -30,11 +35,15 @@ Edit::Widget::Widget(QWidget* parent, Central* central)
    connect(pagePatch, &Page::Patch::signalShowSeeAlso, this, &Widget::signalShowSeeAlso);
 }
 
+void Edit::Widget::slotApplyChanges()
+{
+}
+
 template <typename EditorType>
 EditorType* Edit::Widget::addEditor(const Block::Item::Marker& marker)
 {
    EditorType* abstract = new EditorType(this, central, marker);
-   addWidget(abstract);
+   stackWidget->addWidget(abstract);
 
    editorMap[marker] = abstract;
 
@@ -46,7 +55,7 @@ void Edit::Widget::patchSelected(QString patchPath, QString key)
    Q_UNUSED(patchPath)
    Q_UNUSED(key)
 
-   setCurrentWidget(editorMap.value(Block::Item::Marker::Undefined));
+   stackWidget->setCurrentWidget(editorMap.value(Block::Item::Marker::Undefined));
 }
 
 void Edit::Widget::componentSelected(Block::Item::Marker marker, QVariant data)
@@ -56,5 +65,5 @@ void Edit::Widget::componentSelected(Block::Item::Marker marker, QVariant data)
    if (!editorMap.contains(marker))
       return;
 
-   setCurrentWidget(editorMap.value(marker));
+   stackWidget->setCurrentWidget(editorMap.value(marker));
 }

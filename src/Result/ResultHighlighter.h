@@ -18,22 +18,20 @@ namespace Result
       void highlightBlock(const QString& text) override;
 
    private:
-      struct HighlightingRule
-      {
-         QRegularExpression pattern;
-         QTextCharFormat format;
-      };
-      QList<HighlightingRule> highlightingRules;
+      void highlightByRegex(const QTextCharFormat& format, const QRegularExpression& regex, const QString& text);
 
-      QRegularExpression commentStartExpression;
-      QRegularExpression commentEndExpression;
+   private:
+      QTextCharFormat xmlKeywordFormat;
+      QTextCharFormat xmlElementFormat;
+      QTextCharFormat xmlAttributeFormat;
+      QTextCharFormat xmlValueFormat;
+      QTextCharFormat xmlCommentFormat;
 
-      QTextCharFormat keywordFormat;
-      QTextCharFormat classFormat;
-      QTextCharFormat singleLineCommentFormat;
-      QTextCharFormat multiLineCommentFormat;
-      QTextCharFormat quotationFormat;
-      QTextCharFormat functionFormat;
+      QList<QRegularExpression> xmlKeywordRegexes;
+      QRegularExpression xmlElementRegex;
+      QRegularExpression xmlAttributeRegex;
+      QRegularExpression xmlValueRegex;
+      QRegularExpression xmlCommentRegex;
    };
 } // namespace Result
 

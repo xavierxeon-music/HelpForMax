@@ -1,10 +1,8 @@
 #include "ComponentView.h"
 
 #include <QContextMenuEvent>
-#include <QDesktopServices>
 #include <QFileInfo>
 #include <QMenu>
-#include <QUrl>
 
 #include "ComponentModel.h"
 #include "MainWindow.h"
@@ -49,14 +47,6 @@ void Component::View::slotReloadPatch()
 
    getModel<Model>()->patchSelected(QString(), QString());
    callOnOtherHubInstances(&FunctionHub::setModified, false, central->getCurrentKey());
-}
-
-void Component::View::slotOpenInExternalEditor()
-{
-   if (helpPath.isEmpty())
-      return;
-
-   QDesktopServices::openUrl(QUrl::fromLocalFile(helpPath));
 }
 
 void Component::View::slotCopy()

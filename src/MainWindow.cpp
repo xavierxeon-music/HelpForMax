@@ -9,6 +9,7 @@
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
 #include "Overview/OverviewWidget.h"
+#include "Result/ResultWidget.h"
 #include "Select/SelectWidget.h"
 
 #include "Tools/Settings.h"
@@ -28,6 +29,7 @@ MainWindow::MainWindow()
    Overview::Widget* previewWidgeet = new Overview::Widget(this, &central);
    Component::Widget* componentWidget = new Component::Widget(this, &central);
    Edit::Widget* editWidget = new Edit::Widget(this, &central);
+   Result::Widget* resultWidget = new Result::Widget(this, &central);
 
    connect(editWidget, &Edit::Widget::signalShowMetaTags, componentWidget, &Component::Widget::slotShowMetaTags);
    connect(editWidget, &Edit::Widget::signalShowSeeAlso, componentWidget, &Component::Widget::slotShowSeeAlso);
@@ -36,6 +38,7 @@ MainWindow::MainWindow()
    splitter->addWidget(previewWidgeet);
    splitter->addWidget(componentWidget);
    splitter->addWidget(editWidget);
+   splitter->addWidget(resultWidget);
 
    QMenuBar* menuBar = new QMenuBar(this);
    QMenu* manualMenu = menuBar->addMenu("Manual");

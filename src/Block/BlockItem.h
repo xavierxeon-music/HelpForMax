@@ -67,6 +67,9 @@ namespace Block
       const QString& getPatchPath() const;
       const QString& getRefPath() const;
 
+      QString getRefContent();
+      void setRefContent(const QString& content);
+
    private:
       friend class Patcher;
       friend class Ref;

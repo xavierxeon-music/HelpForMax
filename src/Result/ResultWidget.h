@@ -1,12 +1,27 @@
 #ifndef ResultWidgetH
 #define ResultWidgetH
 
+#include "Tools/AbstractWidget.h"
+
+#include <QTextEdit>
+
 namespace Result
 {
-   class Widget
+   class Widget : public Abstract::Widget,
+                  private FunctionHub
    {
+      Q_OBJECT
    public:
-      Widget();
+      Widget(QWidget* parent, Central* central);
+
+   private slots:
+      void slotApplyChanges();
+
+   private:
+      void patchSelected(QString patchPath, QString key) override;
+
+   private:
+      QTextEdit* textEdit;
    };
 } // namespace Result
 

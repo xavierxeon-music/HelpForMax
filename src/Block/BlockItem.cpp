@@ -102,6 +102,16 @@ const QString& Block::Item::getRefPath() const
    return ref.getPath();
 }
 
+QString Block::Item::getRefContent()
+{
+   return ref.writeContent();
+}
+
+void Block::Item::setRefContent(const QString& content)
+{
+   ref.readContent(content);
+}
+
 void Block::Item::load()
 {
    ref.read();

@@ -18,7 +18,6 @@ namespace Component
 
    public slots:
       void slotReloadPatch();
-      void slotOpenInExternalEditor();
 
    private:
       struct Clip

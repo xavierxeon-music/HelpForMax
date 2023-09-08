@@ -3,90 +3,53 @@
 Result::Highlighter::Highlighter(QTextDocument* parent)
    : QSyntaxHighlighter(parent)
 {
-   HighlightingRule rule;
+   xmlKeywordFormat.setForeground(Qt::blue);
+   xmlKeywordFormat.setFontWeight(QFont::Bold);
 
-   keywordFormat.setForeground(Qt::darkBlue);
-   keywordFormat.setFontWeight(QFont::Bold);
-   const QString keywordPatterns[] = {
-      QStringLiteral("\\bchar\\b"), QStringLiteral("\\bclass\\b"), QStringLiteral("\\bconst\\b"),
-      QStringLiteral("\\bdouble\\b"), QStringLiteral("\\benum\\b"), QStringLiteral("\\bexplicit\\b"),
-      QStringLiteral("\\bfriend\\b"), QStringLiteral("\\binline\\b"), QStringLiteral("\\bint\\b"),
-      QStringLiteral("\\blong\\b"), QStringLiteral("\\bnamespace\\b"), QStringLiteral("\\boperator\\b"),
-      QStringLiteral("\\bprivate\\b"), QStringLiteral("\\bprotected\\b"), QStringLiteral("\\bpublic\\b"),
-      QStringLiteral("\\bshort\\b"), QStringLiteral("\\bsignals\\b"), QStringLiteral("\\bsigned\\b"),
-      QStringLiteral("\\bslots\\b"), QStringLiteral("\\bstatic\\b"), QStringLiteral("\\bstruct\\b"),
-      QStringLiteral("\\btemplate\\b"), QStringLiteral("\\btypedef\\b"), QStringLiteral("\\btypename\\b"),
-      QStringLiteral("\\bunion\\b"), QStringLiteral("\\bunsigned\\b"), QStringLiteral("\\bvirtual\\b"),
-      QStringLiteral("\\bvoid\\b"), QStringLiteral("\\bvolatile\\b"), QStringLiteral("\\bbool\\b")};
+   xmlElementFormat.setForeground(Qt::darkMagenta);
+   xmlElementFormat.setFontWeight(QFont::Bold);
 
-   for (const QString& pattern : keywordPatterns)
-   {
-      rule.pattern = QRegularExpression(pattern);
-      rule.format = keywordFormat;
-      highlightingRules.append(rule);
-   }
+   xmlAttributeFormat.setForeground(Qt::darkGreen);
+   xmlAttributeFormat.setFontWeight(QFont::Bold);
+   xmlAttributeFormat.setFontItalic(true);
 
-   classFormat.setFontWeight(QFont::Bold);
-   classFormat.setForeground(Qt::darkMagenta);
-   rule.pattern = QRegularExpression(QStringLiteral("\\bQ[A-Za-z]+\\b"));
-   rule.format = classFormat;
-   highlightingRules.append(rule);
+   xmlValueFormat.setForeground(Qt::darkRed);
 
-   quotationFormat.setForeground(Qt::darkGreen);
-   rule.pattern = QRegularExpression(QStringLiteral("\".*\""));
-   rule.format = quotationFormat;
-   highlightingRules.append(rule);
+   xmlCommentFormat.setForeground(Qt::gray);
+   xmlElementRegex.setPattern("<[?\\s]*[/]?[\\s]*([^\\n][^>]*)(?=[\\s/>])");
+   xmlAttributeRegex.setPattern("\\w+(?=\\=)");
+   xmlValueRegex.setPattern("\"[^\\n\"]+\"(?=[?\\s/>])");
+   xmlCommentRegex.setPattern("<!--[^\\n]*-->");
 
-   functionFormat.setFontItalic(true);
-   functionFormat.setForeground(Qt::blue);
-   rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
-   rule.format = functionFormat;
-   highlightingRules.append(rule);
-
-   singleLineCommentFormat.setForeground(Qt::red);
-   rule.pattern = QRegularExpression(QStringLiteral("//[^\n]*"));
-   rule.format = singleLineCommentFormat;
-   highlightingRules.append(rule);
-
-   multiLineCommentFormat.setForeground(Qt::red);
-
-   commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
-   commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
+   xmlKeywordRegexes << QRegularExpression("<\\?");
+   xmlKeywordRegexes << QRegularExpression("/>");
+   xmlKeywordRegexes << QRegularExpression(">");
+   xmlKeywordRegexes << QRegularExpression("<");
+   xmlKeywordRegexes << QRegularExpression("</");
+   xmlKeywordRegexes << QRegularExpression("\\?>");
 }
 
 void Result::Highlighter::highlightBlock(const QString& text)
 {
-   for (const HighlightingRule& rule : std::as_const(highlightingRules))
+   highlightByRegex(xmlElementFormat, xmlElementRegex, text);
+
+   for (QList<QRegularExpression>::const_iterator it = xmlKeywordRegexes.constBegin(); it != xmlKeywordRegexes.constEnd(); ++it)
    {
-      QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
-      while (matchIterator.hasNext())
-      {
-         QRegularExpressionMatch match = matchIterator.next();
-         setFormat(match.capturedStart(), match.capturedLength(), rule.format);
-      }
+      const QRegularExpression& regex = *it;
+      highlightByRegex(xmlKeywordFormat, regex, text);
    }
 
-   setCurrentBlockState(0);
+   highlightByRegex(xmlAttributeFormat, xmlAttributeRegex, text);
+   highlightByRegex(xmlCommentFormat, xmlCommentRegex, text);
+   highlightByRegex(xmlValueFormat, xmlValueRegex, text);
+}
 
-   int startIndex = 0;
-   if (previousBlockState() != 1)
-      startIndex = text.indexOf(commentStartExpression);
-
-   while (startIndex >= 0)
+void Result::Highlighter::highlightByRegex(const QTextCharFormat& format, const QRegularExpression& regex, const QString& text)
+{
+   QRegularExpressionMatchIterator regexIterator = regex.globalMatch(text);
+   while (regexIterator.hasNext())
    {
-      QRegularExpressionMatch match = commentEndExpression.match(text, startIndex);
-      int endIndex = match.capturedStart();
-      int commentLength = 0;
-      if (endIndex == -1)
-      {
-         setCurrentBlockState(1);
-         commentLength = text.length() - startIndex;
-      }
-      else
-      {
-         commentLength = endIndex - startIndex + match.capturedLength();
-      }
-      setFormat(startIndex, commentLength, multiLineCommentFormat);
-      startIndex = text.indexOf(commentStartExpression, startIndex + commentLength);
+      QRegularExpressionMatch match = regexIterator.next();
+      setFormat(match.capturedStart(), match.capturedLength(), format);
    }
 }

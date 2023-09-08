@@ -1,15 +1,13 @@
 #ifndef ComponentWidgetH
 #define ComponentWidgetH
 
-#include <QWidget>
+#include "Tools/AbstractWidget.h"
 
-#include "Tools/Central.h"
-
-class QStackedLayout;
+class QStackedWidget;
 
 namespace Component
 {
-   class Widget : public QWidget,
+   class Widget : public Abstract::Widget,
                   public FunctionHub
    {
    public:
@@ -28,8 +26,7 @@ namespace Component
       void setStack(const int& index);
 
    private:
-      Central* central;
-      QStackedLayout* stackLayout;
+      QStackedWidget* stackWidget;
    };
 } // namespace Component
 

@@ -23,6 +23,7 @@ Component::SeeAlsoWidget::SeeAlsoWidget(QWidget* parent, Central* central)
    connect(applyButton, &QPushButton::clicked, this, &SeeAlsoWidget::slotApply);
 
    QVBoxLayout* masterLayout = new QVBoxLayout(this);
+   masterLayout->setContentsMargins(0, 0, 0, 0);
    masterLayout->addWidget(treeView);
    masterLayout->addWidget(applyButton);
 }

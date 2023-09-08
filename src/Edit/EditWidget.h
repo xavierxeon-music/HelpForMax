@@ -1,17 +1,18 @@
 #ifndef EditWidgetH
 #define EditWidgetH
 
+#include "Tools/AbstractWidget.h"
+
 #include <QStackedWidget>
 
 #include "Edit/PageAbstract.h"
 
 namespace Edit
 {
-   class Widget : public QStackedWidget,
+   class Widget : public Abstract::Widget,
                   private FunctionHub
    {
       Q_OBJECT
-
    public:
       Widget(QWidget* parent, Central* central);
 
@@ -22,6 +23,9 @@ namespace Edit
    private:
       using EditorMap = QMap<Block::Item::Marker, Page::Abstract*>;
 
+   private slots:
+      void slotApplyChanges();
+
    private:
       template <typename EditorType>
       EditorType* addEditor(const Block::Item::Marker& marker);
@@ -30,7 +34,7 @@ namespace Edit
       void componentSelected(Block::Item::Marker marker, QVariant data) override;
 
    private:
-      Central* central;
+      QStackedWidget* stackWidget;
       EditorMap editorMap;
    };
 } // namespace Edit

@@ -24,9 +24,14 @@ void Block::Ref::read()
    if (!file.open(QIODevice::ReadOnly))
       return;
 
-   const QByteArray content = maxFileToDom(file.readAll());
+   const QString content = maxFileToDom(QString::fromUtf8(file.readAll()));
    file.close();
 
+   readContent(content);
+}
+
+void Block::Ref::readContent(const QString& content)
+{
    QString errorMessage;
    QDomDocument doc;
    if (!doc.setContent(content, false, &errorMessage))
@@ -180,6 +185,19 @@ void Block::Ref::read()
 
 void Block::Ref::write()
 {
+   QFile file(refPath);
+   if (!file.open(QIODevice::WriteOnly))
+      return;
+
+   QString content = writeContent();
+   content = domToMaxFile(content);
+
+   file.write(content.toUtf8());
+   file.close();
+}
+
+QString Block::Ref::writeContent()
+{
    QDomDocument doc;
 
    QDomElement rootElement = doc.createElement("c74object");
@@ -292,19 +310,12 @@ void Block::Ref::write()
       }
    }
 
-   QFile file(refPath);
-   if (!file.open(QIODevice::WriteOnly))
-      return;
-
-   QByteArray content;
+   QString content;
    content += "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n";
    content += "<?xml-stylesheet href=\"./_c74_ref.xsl\" type=\"text/xsl\"?>\n";
-   content += doc.toByteArray(4);
+   content += doc.toString(4);
 
-   content = domToMaxFile(content);
-
-   file.write(content);
-   file.close();
+   return content;
 }
 
 QDomElement Block::Ref::createSubElement(QDomElement parent, const QString& name, const QString& text, const TagMap& tagMap)
@@ -416,7 +427,7 @@ QList<QDomElement> Block::Ref::compileAllDirectChildElements(const QDomElement& 
    return list;
 }
 
-QByteArray Block::Ref::domToMaxFile(QByteArray domXML) const
+QString Block::Ref::domToMaxFile(QString domXML) const
 {
    domXML.replace("&amp;", "&");
    domXML.replace("&lt;", "<");
@@ -425,7 +436,7 @@ QByteArray Block::Ref::domToMaxFile(QByteArray domXML) const
    return domXML;
 }
 
-QByteArray Block::Ref::maxFileToDom(QByteArray maxXML) const
+QString Block::Ref::maxFileToDom(QString maxXML) const
 {
    for (const QByteArray& tag : Item::descriptionMaxTags)
    {

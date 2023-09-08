@@ -19,12 +19,13 @@ windows {
 
 include(Block/Block.pri)
 include(Clean/Clean.pri)
-include(Component/Component.pri)
-include(Edit/Edit.pri)
-include(Overview/Overview.pri)
-include(Result/Result.pri)
-include(Select/Select.pri)
 include(Tools/Tools.pri)
+
+include(Select/01_Select.pri)
+include(Overview/02_Overview.pri)
+include(Component/03_Component.pri)
+include(Edit/04_Edit.pri)
+include(Result/05_Result.pri)
 
 HEADERS += \
    MainWindow.h

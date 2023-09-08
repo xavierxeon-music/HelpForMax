@@ -16,8 +16,12 @@ namespace Block
 
    public:
       const QString& getPath() const;
+
       void read();
+      void readContent(const QString& content);
+
       void write();
+      QString writeContent();
 
    private:
       using TagMap = QMap<QString, QString>;
@@ -30,8 +34,9 @@ namespace Block
       QString readText(const QDomElement& element) const;
       QDomElement findFirstDirectChildElementWithAttributes(const QDomElement& element, const QString& tag, const TagMap& tagMap) const;
       QList<QDomElement> compileAllDirectChildElements(const QDomElement& element, const QString& tag, const TagMap& tagMap = TagMap()) const;
-      QByteArray domToMaxFile(QByteArray domXML) const;
-      QByteArray maxFileToDom(QByteArray maxXML) const;
+
+      QString domToMaxFile(QString domXML) const;
+      QString maxFileToDom(QString maxXML) const;
 
    private:
       Item* item;
