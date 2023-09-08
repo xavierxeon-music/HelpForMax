@@ -19,6 +19,9 @@ namespace Result
 
    private:
       void patchSelected(QString patchPath, QString key) override;
+      void setModified(bool enabled, QString key) override;
+
+      void loadPatch();
 
    private:
       QTextEdit* textEdit;

@@ -8,6 +8,8 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
    , standardMethodGroup(nullptr)
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("PATCH");

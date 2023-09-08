@@ -6,6 +6,8 @@ Page::MessageUserDefined::MessageUserDefined(QWidget* parent, Central* central, 
    , messageName()
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("MESSAGE");

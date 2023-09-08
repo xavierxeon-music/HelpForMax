@@ -8,10 +8,12 @@
 #include "ComponentView.h"
 
 Component::Widget::Widget(QWidget* parent, Central* central)
-   : Abstract::Widget(parent, central)
+   : Abstract::Widget(parent, central, "Choose patch component")
    , FunctionHub()
    , stackWidget(nullptr)
 {
+   setMinimumWidth(200);
+
    Model* componentModel = new Model(this, central);
    View* componentView = new View(this, central, componentModel);
 

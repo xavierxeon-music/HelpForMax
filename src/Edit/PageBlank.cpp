@@ -4,6 +4,7 @@ Page::Blank::Blank(QWidget* parent, Central* central, const Block::Item::Marker&
    : Abstract(parent, central, marker)
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
 
    const QIcon icon(":/HelpForMax.svg");
    label->setPixmap(icon.pixmap(150, 150));

@@ -6,6 +6,8 @@ Page::Output::Output(QWidget* parent, Central* central, const Block::Item::Marke
    , outputIndex()
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("OUTPUT");

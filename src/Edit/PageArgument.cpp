@@ -6,6 +6,8 @@ Page::Argument::Argument(QWidget* parent, Central* central, const Block::Item::M
    , argumentIndex()
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("ARGUMENT");

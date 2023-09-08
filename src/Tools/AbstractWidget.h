@@ -14,7 +14,7 @@ namespace Abstract
    class Widget : public QWidget
    {
    public:
-      Widget(QWidget* parent, Central* central);
+      Widget(QWidget* parent, Central* central, const QString tilte);
 
    protected:
       void setPayload(QWidget* widget);

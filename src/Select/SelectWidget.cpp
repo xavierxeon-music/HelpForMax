@@ -13,7 +13,7 @@
 #include "Tools/Settings.h"
 
 Select::Widget::Widget(QWidget* parent, Central* central)
-   : Abstract::Widget(parent, central)
+   : Abstract::Widget(parent, central, "Select patch")
 {
    Model* selectModel = new Model(this, central);
    View* selectView = new View(this, central, selectModel);

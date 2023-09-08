@@ -6,7 +6,7 @@
 #include "OverviewGraph.h"
 
 Overview::Widget::Widget(QWidget* parent, Central* central)
-   : Abstract::Widget(parent, central)
+   : Abstract::Widget(parent, central, "Patch overview")
 {
    toolBarAction(QIcon(":/OpenPatch.svg"), "Open In Max", this, &Widget::slotOpenInMax);
 

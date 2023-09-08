@@ -6,6 +6,8 @@ Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const 
    , messageType(Block::Structure::Type::Anything)
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("MESSAGE");

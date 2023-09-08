@@ -11,6 +11,8 @@ Page::Attribute::Attribute(QWidget* parent, Central* central, const Block::Item:
    , updating(false)
 {
    setupUi(this);
+   layout()->setContentsMargins(0, 0, 0, 0);
+
    highlighter = new DescriptionHighlighter(descrptionEdit->document());
 
    keyInfo->setText("ATTRIBUTE");

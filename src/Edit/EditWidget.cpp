@@ -13,7 +13,7 @@
 #include "Edit/PagePatch.h"
 
 Edit::Widget::Widget(QWidget* parent, Central* central)
-   : Abstract::Widget(parent, central)
+   : Abstract::Widget(parent, central, "Edit component")
    , FunctionHub()
    , stackWidget(nullptr)
    , editorMap()
@@ -21,6 +21,7 @@ Edit::Widget::Widget(QWidget* parent, Central* central)
    toolBarAction(QIcon(":/DocMissing.svg"), "Apply Changes", this, &Widget::slotApplyChanges);
 
    stackWidget = new QStackedWidget(this);
+   stackWidget->setContentsMargins(0, 0, 0, 0);
    setPayload(stackWidget);
 
    addEditor<Page::Blank>(Block::Item::Marker::Undefined);
