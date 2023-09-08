@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Page::MessageUserDefined</class>
- <widget class="QWidget" name="Page::MessageUserDefined">
+ <class>Page::Argument</class>
+ <widget class="QWidget" name="Page::Argument">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>441</height>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,7 +61,7 @@
    <item>
     <widget class="QGroupBox" name="digestGroup">
      <property name="title">
-      <string>Diget / Description</string>
+      <string>Digest / Description</string>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -89,7 +89,7 @@
   <customwidget>
    <class>ArgumentView</class>
    <extends>QTreeView</extends>
-   <header>Edit/ArgumentView.h</header>
+   <header>Component/ArgumentView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

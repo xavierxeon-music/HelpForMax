@@ -30,3 +30,16 @@ void Abstract::Widget::setPayload(QWidget* widget)
 {
    masterLayout->addWidget(widget);
 }
+
+void Abstract::Widget::showShortcuts()
+{
+   for (QAction* action : this->findChildren<QAction*>())
+   {
+      const QString& shortcutName = action->shortcut().toString();
+      if (shortcutName.isEmpty())
+         continue;
+
+      const QString text = action->text();
+      action->setText(text + " (" + shortcutName + ")");
+   }
+}

@@ -14,6 +14,8 @@ struct FunctionHub : public Abstract::FunctionHub<Central>
    virtual void setModified(bool enabled, QString key);
    virtual void patchSelected(QString patchPath, QString key);
    virtual void componentSelected(Block::Item::Marker marker, QVariant data);
+   virtual void restoreState();
+   virtual void saveState();
 };
 
 class Central

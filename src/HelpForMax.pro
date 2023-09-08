@@ -22,10 +22,9 @@ include(Clean/Clean.pri)
 include(Tools/Tools.pri)
 
 include(Select/01_Select.pri)
-include(Overview/02_Overview.pri)
-include(Component/03_Component.pri)
-include(Edit/04_Edit.pri)
-include(Result/05_Result.pri)
+include(Component/02_Component.pri)
+include(Result/03_Result.pri)
+include(Overview/04_Overview.pri)
 
 HEADERS += \
    MainWindow.h

@@ -1,7 +1,11 @@
 HEADERS += \
+   $$PWD/ComponentMetaTagWidget.h \
+   $$PWD/ComponentModel.h \
+   $$PWD/ComponentSeeAlsoWidget.h \
+   $$PWD/ComponentView.h \
+   $$PWD/ComponentWidget.h \
    $$PWD/ArgumentView.h \
    $$PWD/DescriptionHighlighter.h \
-   $$PWD/EditWidget.h \
    $$PWD/PageAbstract.h \
    $$PWD/PageArgument.h \
    $$PWD/PageAttribute.h \
@@ -12,9 +16,13 @@ HEADERS += \
    $$PWD/PagePatch.h
 
 SOURCES += \
+   $$PWD/ComponentMetaTagWidget.cpp \
+   $$PWD/ComponentModel.cpp \
+   $$PWD/ComponentSeeAlsoWidget.cpp \
+   $$PWD/ComponentView.cpp \
+   $$PWD/ComponentWidget.cpp \
    $$PWD/ArgumentView.cpp \
    $$PWD/DescriptionHighlighter.cpp \
-   $$PWD/EditWidget.cpp \
    $$PWD/PageAbstract.cpp \
    $$PWD/PageArgument.cpp \
    $$PWD/PageAttribute.cpp \

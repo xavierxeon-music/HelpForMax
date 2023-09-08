@@ -35,6 +35,14 @@ void FunctionHub::componentSelected(Block::Item::Marker marker, QVariant data)
    Q_UNUSED(data)
 }
 
+void FunctionHub::restoreState()
+{
+}
+
+void FunctionHub::saveState()
+{
+}
+
 // central
 
 const QBrush Central::udocBrush = QApplication::palette().alternateBase();

@@ -25,6 +25,8 @@ namespace Abstract
          return toolBar->addAction(icon, text, std::forward<Args>(args)...);
       }
 
+      void showShortcuts();
+
    protected:
       Central* central;
 
