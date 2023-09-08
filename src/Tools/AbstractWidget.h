@@ -20,7 +20,7 @@ namespace Abstract
       void setPayload(QWidget* widget);
 
       template <typename... Args>
-      QAction* addToToolBar(const QIcon& icon, const QString& text, Args&&... args)
+      QAction* toolBarAction(const QIcon& icon, const QString& text, Args&&... args)
       {
          return toolBar->addAction(icon, text, std::forward<Args>(args)...);
       }

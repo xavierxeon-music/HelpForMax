@@ -1,13 +1,11 @@
 #ifndef SelectWidgetH
 #define SelectWidgetH
 
-#include <QWidget>
-
-#include "Tools/Central.h"
+#include "Tools/AbstractWidget.h"
 
 namespace Select
 {
-   class Widget : public QWidget,
+   class Widget : public Abstract::Widget,
                   private FunctionHub
    {
       Q_OBJECT
@@ -18,9 +16,6 @@ namespace Select
       void slotOpenPackage();
       void slotReloadPackage();
       void slotCheckUmmatchedFiles();
-
-   private:
-      Central* central;
    };
 } // namespace Select
 

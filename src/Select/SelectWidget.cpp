@@ -13,24 +13,15 @@
 #include "Tools/Settings.h"
 
 Select::Widget::Widget(QWidget* parent, Central* central)
-   : QWidget(parent)
-   , central(central)
+   : Abstract::Widget(parent, central)
 {
    Model* selectModel = new Model(this, central);
    View* selectView = new View(this, central, selectModel);
 
-   QToolBar* toolBar = new QToolBar(this);
-   toolBar->setMovable(false);
+   toolBarAction(QIcon(":/OpenPackage.svg"), "Open Package", this, &Widget::slotOpenPackage);
+   toolBarAction(QIcon(":/ReloadPackage.svg"), "Reload Package", this, &Widget::slotReloadPackage);
 
-   toolBar->addAction(QIcon(":/OpenPackage.svg"), "Open Package", this, &Widget::slotOpenPackage);
-   toolBar->addAction(QIcon(":/ReloadPackage.svg"), "Reload Package", this, &Widget::slotReloadPackage);
-
-   QVBoxLayout* masterLayout = new QVBoxLayout(this);
-   masterLayout->setContentsMargins(0, 0, 0, 0);
-   masterLayout->setSpacing(0);
-
-   masterLayout->addWidget(toolBar);
-   masterLayout->addWidget(selectView);
+   setPayload(selectView);
 
    slotReloadPackage();
 }
