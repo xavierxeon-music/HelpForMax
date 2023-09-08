@@ -1,7 +1,7 @@
 #ifndef OverviewGraphH
 #define OverviewGraphH
 
-#include <QWidget>
+#include <QGraphicsView>
 
 #include <QGraphicsScene>
 
@@ -9,12 +9,12 @@
 
 namespace Overview
 {
-   class Widget : public QWidget,
-                  private FunctionHub
+   class Graph : public QGraphicsView,
+                 private FunctionHub
    {
       Q_OBJECT
    public:
-      Widget(QWidget* parent, Central* central);
+      Graph(QWidget* parent, Central* central);
 
    private:
       struct Box
@@ -26,9 +26,6 @@ namespace Overview
       };
 
       using IdMap = QMap<QString, Box>;
-
-   private slots:
-      void slotOpenInMax();
 
    private:
       void patchSelected(QString patchPath, QString key) override;

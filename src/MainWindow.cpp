@@ -8,7 +8,7 @@
 
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
-#include "Overview/OverviewGraph.h"
+#include "Overview/OverviewWidget.h"
 #include "Select/SelectWidget.h"
 
 #include "Tools/Settings.h"

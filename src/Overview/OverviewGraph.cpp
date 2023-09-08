@@ -1,19 +1,15 @@
 #include "OverviewGraph.h"
 
 #include <QApplication>
-#include <QDesktopServices>
 #include <QGraphicsItem>
-#include <QGraphicsView>
 #include <QJsonArray>
 #include <QJsonValue>
-#include <QToolBar>
-#include <QUrl>
 #include <QVBoxLayout>
 
 #include "Tools/JSONModel.h"
 
-Overview::Widget::Widget(QWidget* parent, Central* central)
-   : QWidget(parent)
+Overview::Graph::Graph(QWidget* parent, Central* central)
+   : QGraphicsView(parent)
    , central(central)
    , scene(nullptr)
    , blackPen(QColor(0, 0, 0))
@@ -21,38 +17,16 @@ Overview::Widget::Widget(QWidget* parent, Central* central)
    , font()
 
 {
-   QToolBar* toolBar = new QToolBar(this);
-   toolBar->setMovable(false);
-
-   toolBar->addAction(QIcon(":/OpenPatch.svg"), "Open In Max", this, &Widget::slotOpenInMax);
-
    font.setPixelSize(10);
 
    scene = new QGraphicsScene(this);
    scene->setBackgroundBrush(whiteBrush);
-   QGraphicsView* graphicsView = new QGraphicsView(scene, this);
-   graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-   QVBoxLayout* masterLayout = new QVBoxLayout(this);
-   masterLayout->setContentsMargins(0, 0, 0, 0);
-   masterLayout->setSpacing(0);
-
-   masterLayout->addWidget(toolBar);
-   masterLayout->addWidget(graphicsView);
+   setScene(scene);
+   setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
-void Overview::Widget::slotOpenInMax()
-{
-   if (central->getCurrentKey().isEmpty())
-      return;
-
-   const Block::Item block = central->block();
-   const QString patchPath = block.getPatchPath();
-
-   QDesktopServices::openUrl(QUrl::fromLocalFile(patchPath));
-}
-
-void Overview::Widget::patchSelected(QString patchPath, QString key)
+void Overview::Graph::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(key)
    scene->clear();
@@ -68,7 +42,7 @@ void Overview::Widget::patchSelected(QString patchPath, QString key)
    makeLines(patcherObject, idMap);
 }
 
-Overview::Widget::IdMap Overview::Widget::makeObjects(const QJsonObject patcherObject)
+Overview::Graph::IdMap Overview::Graph::makeObjects(const QJsonObject patcherObject)
 {
    static const QStringList skipList = {"comment", "panel"};
    const QJsonArray boxArray = patcherObject["boxes"].toArray();
@@ -117,7 +91,7 @@ Overview::Widget::IdMap Overview::Widget::makeObjects(const QJsonObject patcherO
    return idMap;
 }
 
-void Overview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& idMap)
+void Overview::Graph::makeLines(const QJsonObject patcherObject, const IdMap& idMap)
 {
    const QJsonArray lineArray = patcherObject["lines"].toArray();
 
@@ -156,7 +130,7 @@ void Overview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& i
    }
 }
 
-void Overview::Widget::moveItems(const IdMap& idMap)
+void Overview::Graph::moveItems(const IdMap& idMap)
 {
    auto compileMinPoint = [&]()
    {

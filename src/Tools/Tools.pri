@@ -9,6 +9,7 @@ HEADERS += \
    $$PWD/AbstractFunctionHub.hpp \
    $$PWD/AbstractItemTreeView.h \
    $$PWD/AbstractItemTreeView.hpp \
+   $$PWD/AbstractWidget.h \
    $$PWD/Central.h \
    $$PWD/JSONModel.h \
    $$PWD/Lock.h \
@@ -18,6 +19,7 @@ HEADERS += \
 
 SOURCES += \
    $$PWD/AbstractItemTreeView.cpp \
+   $$PWD/AbstractWidget.cpp \
    $$PWD/Central.cpp \
    $$PWD/JSONModel.cpp \
    $$PWD/Lock.cpp \
