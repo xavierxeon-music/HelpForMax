@@ -8,7 +8,7 @@
 
 #include "Component/ComponentWidget.h"
 #include "Edit/EditWidget.h"
-#include "Preview/PreviewWidget.h"
+#include "Overview/OverviewGraph.h"
 #include "Select/SelectWidget.h"
 
 #include "Tools/Settings.h"
@@ -25,7 +25,7 @@ MainWindow::MainWindow()
    splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
    Select::Widget* selectWidget = new Select::Widget(this, &central);
-   Preview::Widget* previewWidgeet = new Preview::Widget(this, &central);
+   Overview::Widget* previewWidgeet = new Overview::Widget(this, &central);
    Component::Widget* componentWidget = new Component::Widget(this, &central);
    Edit::Widget* editWidget = new Edit::Widget(this, &central);
 

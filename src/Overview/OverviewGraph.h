@@ -1,5 +1,5 @@
-#ifndef PreviewWidgetH
-#define PreviewWidgetH
+#ifndef OverviewGraphH
+#define OverviewGraphH
 
 #include <QWidget>
 
@@ -7,7 +7,7 @@
 
 #include "Tools/Central.h"
 
-namespace Preview
+namespace Overview
 {
    class Widget : public QWidget,
                   private FunctionHub
@@ -45,6 +45,6 @@ namespace Preview
       QBrush whiteBrush;
       QFont font;
    };
-} // namespace Preview
+} // namespace Overview
 
-#endif // NOT PreviewWidgetH
+#endif // NOT OverviewGraphH

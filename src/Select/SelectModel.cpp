@@ -81,16 +81,20 @@ void Select::Model::setModified(bool enabled, QString key)
 
    for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
    {
-      QStandardItem* patchItem = invisibleRootItem()->child(row, 0);
+      QStandardItem* folderItem = invisibleRootItem()->child(row, 0);
 
-      const QString& rowKey = patchItem->text();
-
-      if (key.isEmpty() || rowKey == key)
+      for (int row2 = 0; row2 < folderItem->rowCount(); row2++)
       {
-         if (central->isBlockUndocumented(rowKey))
-            patchItem->setBackground(Central::udocBrush);
-         else
-            patchItem->setBackground(Central::docBrush);
+         QStandardItem* patchItem = folderItem->child(row2, 0);
+         const QString& rowKey = patchItem->text();
+
+         if (key.isEmpty() || rowKey == key)
+         {
+            if (central->isBlockUndocumented(rowKey))
+               patchItem->setBackground(Central::udocBrush);
+            else
+               patchItem->setBackground(Central::docBrush);
+         }
       }
    }
 }

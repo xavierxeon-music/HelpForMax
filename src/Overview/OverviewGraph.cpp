@@ -1,4 +1,4 @@
-#include "PreviewWidget.h"
+#include "OverviewGraph.h"
 
 #include <QApplication>
 #include <QDesktopServices>
@@ -12,7 +12,7 @@
 
 #include "Tools/JSONModel.h"
 
-Preview::Widget::Widget(QWidget* parent, Central* central)
+Overview::Widget::Widget(QWidget* parent, Central* central)
    : QWidget(parent)
    , central(central)
    , scene(nullptr)
@@ -41,7 +41,7 @@ Preview::Widget::Widget(QWidget* parent, Central* central)
    masterLayout->addWidget(graphicsView);
 }
 
-void Preview::Widget::slotOpenInMax()
+void Overview::Widget::slotOpenInMax()
 {
    if (central->getCurrentKey().isEmpty())
       return;
@@ -52,7 +52,7 @@ void Preview::Widget::slotOpenInMax()
    QDesktopServices::openUrl(QUrl::fromLocalFile(patchPath));
 }
 
-void Preview::Widget::patchSelected(QString patchPath, QString key)
+void Overview::Widget::patchSelected(QString patchPath, QString key)
 {
    Q_UNUSED(key)
    scene->clear();
@@ -68,7 +68,7 @@ void Preview::Widget::patchSelected(QString patchPath, QString key)
    makeLines(patcherObject, idMap);
 }
 
-Preview::Widget::IdMap Preview::Widget::makeObjects(const QJsonObject patcherObject)
+Overview::Widget::IdMap Overview::Widget::makeObjects(const QJsonObject patcherObject)
 {
    static const QStringList skipList = {"comment", "panel"};
    const QJsonArray boxArray = patcherObject["boxes"].toArray();
@@ -117,7 +117,7 @@ Preview::Widget::IdMap Preview::Widget::makeObjects(const QJsonObject patcherObj
    return idMap;
 }
 
-void Preview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& idMap)
+void Overview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& idMap)
 {
    const QJsonArray lineArray = patcherObject["lines"].toArray();
 
@@ -156,7 +156,7 @@ void Preview::Widget::makeLines(const QJsonObject patcherObject, const IdMap& id
    }
 }
 
-void Preview::Widget::moveItems(const IdMap& idMap)
+void Overview::Widget::moveItems(const IdMap& idMap)
 {
    auto compileMinPoint = [&]()
    {
