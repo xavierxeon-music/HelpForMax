@@ -14,7 +14,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Patch(QWidget* parent, Central* central, const Block::Item::Marker& marker);
+      Patch(QWidget* parent, Central* central, const Block::Marker& marker);
 
    signals:
       void signalShowMetaTags();

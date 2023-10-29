@@ -23,14 +23,14 @@ namespace Component
       void slotShowSeeAlso();
 
    private:
-      using EditorMap = QMap<Block::Item::Marker, Page::Abstract*>;
+      using EditorMap = QMap<Block::Marker, Page::Abstract*>;
 
    private slots:
       void slotSavePatches();
 
    private:
       void patchSelected(QString patchPath, QString key) override;
-      void componentSelected(Block::Item::Marker marker, QVariant data) override;
+      void componentSelected(Block::Marker marker, QVariant data) override;
       void restoreState() override;
       void saveState() override;
 
@@ -40,7 +40,7 @@ namespace Component
       void setupEdit();
 
       template <typename EditorType>
-      EditorType* addEditor(const Block::Item::Marker& marker);
+      EditorType* addEditor(const Block::Marker& marker);
 
    private:
       QSplitter* splitter;

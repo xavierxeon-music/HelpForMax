@@ -14,7 +14,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Output(QWidget* parent, Central* central, const Block::Item::Marker& marker);
+      Output(QWidget* parent, Central* central, const Block::Marker& marker);
 
    private:
       void update(const QVariant& data) override;

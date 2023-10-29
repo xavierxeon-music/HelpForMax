@@ -1,9 +1,9 @@
 #include "PageMessageStandard.h"
 
-Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
-   , messageType(Block::Structure::Type::Anything)
+   , messageType(Structure::Type::Anything)
 {
    setupUi(this);
    layout()->setContentsMargins(0, 0, 0, 0);
@@ -15,9 +15,9 @@ Page::MessageStandard::MessageStandard(QWidget* parent, Central* central, const 
 
 void Page::MessageStandard::update(const QVariant& data)
 {
-   messageType = data.value<Block::Structure::Type>();
-   Block::Structure::Message& message = central->blockRef().messageStandardMap[messageType];
-   keyInfo->setText("messsage " + Block::Structure::typeName(messageType) + " @ " + central->getCurrentKey());
+   messageType = data.value<Structure::Type>();
+   Structure::Message& message = central->blockRef().messageStandardMap[messageType];
+   keyInfo->setText("messsage " + Structure::typeName(messageType) + " @ " + central->getCurrentKey());
 
    monitor(descrptionEdit, &message.digest.description, central->getCurrentKey());
 }

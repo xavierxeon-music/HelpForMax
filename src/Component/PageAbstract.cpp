@@ -2,7 +2,7 @@
 
 #include "Tools/Central.h"
 
-Page::Abstract::Abstract(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::Abstract::Abstract(QWidget* parent, Central* central, const Block::Marker& marker)
    : QWidget(parent)
    , FunctionHub()
    , central(central)
@@ -111,7 +111,7 @@ void Page::Abstract::monitor(QComboBox* comboBox, int* variable, const QString& 
    connectionMap[comboBox] = connect(comboBox, &QComboBox::currentIndexChanged, update);
 }
 
-void Page::Abstract::componentSelected(Block::Item::Marker marker, QVariant data)
+void Page::Abstract::componentSelected(Block::Marker marker, QVariant data)
 {
    if (editMarker != marker)
       return;

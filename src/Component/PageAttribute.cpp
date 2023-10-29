@@ -2,7 +2,7 @@
 
 #include "Tools/Lock.h"
 
-Page::Attribute::Attribute(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::Attribute::Attribute(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , TypeDelegate::Proxy()
    , highlighter(nullptr)
@@ -47,7 +47,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    if (updating)
       return;
 
-   Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
+   Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
    if (0 == item->column())
    {
       attribute.get = (item->checkState() == Qt::Checked);
@@ -79,7 +79,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
    }
    else if (3 == item->column())
    {
-      const Block::Structure::Type type = Block::Structure::toType(item->text());
+      const Structure::Type type = Structure::toType(item->text());
       if (type != attribute.type)
       {
          attribute.type = type;
@@ -95,7 +95,7 @@ void Page::Attribute::slotItemChanged(QStandardItem* item)
 void Page::Attribute::update(const QVariant& data)
 {
    attributeName = data.toString();
-   Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
+   Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
    keyInfo->setText("attribute " + attributeName + " @ " + central->getCurrentKey());
 
    monitor(digestEdit, &attribute.digest.text, central->getCurrentKey());
@@ -114,7 +114,7 @@ void Page::Attribute::update(const QVariant& data)
       sizeItem->setText(QString::number(attribute.size));
 
       QStandardItem* typeItem = attributeModel->invisibleRootItem()->child(0, 3);
-      typeItem->setText(Block::Structure::typeName(attribute.type));
+      typeItem->setText(Structure::typeName(attribute.type));
    }
 
    attributeView->resizeColumnToContents(0);
@@ -122,10 +122,10 @@ void Page::Attribute::update(const QVariant& data)
    attributeView->resizeColumnToContents(2);
 }
 
-Block::Structure::Type Page::Attribute::getType(const int index)
+Structure::Type Page::Attribute::getType(const int index)
 {
    Q_UNUSED(index);
 
-   const Block::Structure::Attribute& attribute = central->block().attributeMap.value(attributeName);
+   const Structure::Attribute& attribute = central->block().attributeMap.value(attributeName);
    return attribute.type;
 }

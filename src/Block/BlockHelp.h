@@ -1,24 +1,21 @@
 #ifndef BlockHelpH
 #define BlockHelpH
 
+#include "Block.h"
+
 #include <QString>
 
-namespace Block
+class Block::Help
 {
-   class Item;
+public:
+   Help(Block* block);
 
-   class Help
-   {
-   public:
-      Help(Item* item);
+public:
+   void write();
 
-   public:
-      void write();
-
-   private:
-      Item* item;
-      QString helpPath;
-   };
-} // namespace Block
+private:
+   Block* block;
+   QString helpPath;
+};
 
 #endif // NOT BlockHelpH

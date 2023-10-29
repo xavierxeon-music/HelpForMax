@@ -19,14 +19,14 @@ namespace Page
       Q_OBJECT
 
    public:
-      Attribute(QWidget* parent, Central* central, const Block::Item::Marker& marker);
+      Attribute(QWidget* parent, Central* central, const Block::Marker& marker);
 
    private slots:
       void slotItemChanged(QStandardItem* item);
 
    private:
       void update(const QVariant& data) override;
-      Block::Structure::Type getType(const int index) override;
+      Structure::Type getType(const int index) override;
 
    private:
       DescriptionHighlighter* highlighter;

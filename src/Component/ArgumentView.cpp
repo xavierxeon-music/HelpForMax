@@ -32,7 +32,7 @@ void ArgumentView::clearMonitors(const QString& patchKey)
    argumentModel->setHorizontalHeaderLabels({"O", "Name", "Type"});
 }
 
-void ArgumentView::monitor(Block::Structure::Argument* argument)
+void ArgumentView::monitor(Structure::Argument* argument)
 {
    QStandardItem* optionalItem = new QStandardItem();
    optionalItem->setCheckable(true);
@@ -41,7 +41,7 @@ void ArgumentView::monitor(Block::Structure::Argument* argument)
    QStandardItem* nameItem = new QStandardItem(argument->name);
    nameItem->setEditable(nameEditable);
 
-   QStandardItem* typeItem = new QStandardItem(Block::Structure::typeName(argument->type));
+   QStandardItem* typeItem = new QStandardItem(Structure::typeName(argument->type));
 
    argumentModel->appendRow({optionalItem, nameItem, typeItem});
    argumentList.append(argument);
@@ -53,7 +53,7 @@ void ArgumentView::monitor(Block::Structure::Argument* argument)
 void ArgumentView::slotItemChanged(QStandardItem* item)
 {
    const int index = item->row();
-   Block::Structure::Argument* argument = argumentList[index];
+   Structure::Argument* argument = argumentList[index];
 
    if (0 == item->column())
    {
@@ -71,7 +71,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
    }
    else if (2 == item->column())
    {
-      const Block::Structure::Type type = Block::Structure::toType(item->text());
+      const Structure::Type type = Structure::toType(item->text());
       if (type != argument->type)
       {
          argument->type = type;
@@ -80,7 +80,7 @@ void ArgumentView::slotItemChanged(QStandardItem* item)
    }
 }
 
-Block::Structure::Type ArgumentView::getType(const int index)
+Structure::Type ArgumentView::getType(const int index)
 {
    return argumentList.at(index)->type;
 }

@@ -7,10 +7,10 @@
 #include "ComponentModel.h"
 #include "MainWindow.h"
 
-Component::View::Clip::Clip(const Block::Item::Marker& marker)
+Component::View::Clip::Clip(const Block::Marker& marker)
    : marker(marker)
    , digest{}
-   , type(Block::Structure::Type::Anything)
+   , type(Structure::Type::Anything)
 {
 }
 
@@ -21,8 +21,9 @@ Component::View::View(QWidget* parent, Central* central, Model* model)
    , FunctionHub()
    , central(central)
    , helpPath()
-   , copyAction()
-   , pasteAction()
+   , copyAction(nullptr)
+   , pasteAction(nullptr)
+   , removeAction(nullptr)
    , clip()
 {
    setHeaderHidden(true);
@@ -38,6 +39,11 @@ Component::View::View(QWidget* parent, Central* central, Model* model)
    pasteAction->setShortcut(QKeySequence::Paste);
    connect(pasteAction, &QAction::triggered, this, &Component::View::slotPaste);
    addAction(pasteAction);
+
+   removeAction = new QAction(QIcon(), "Remove", this);
+   removeAction->setShortcut(QKeySequence::Delete);
+   connect(removeAction, &QAction::triggered, this, &Component::View::slotRemove);
+   addAction(removeAction);
 }
 
 void Component::View::slotReloadPatch()
@@ -51,51 +57,51 @@ void Component::View::slotReloadPatch()
 
 void Component::View::slotCopy()
 {
-   QStandardItem* uDocItem = actionItem();
-   if (!uDocItem)
+   QStandardItem* compItem = actionItem();
+   if (!compItem)
    {
       clip = Clip();
       return;
    }
 
-   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
-   const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
+   const QVariant markerVariant = compItem->data(Block::RoleMarker);
+   const Block::Marker marker = markerVariant.value<Block::Marker>();
    clip = Clip(marker);
 
-   const QVariant data = uDocItem->data(Block::Item::RoleData);
+   const QVariant data = compItem->data(Block::RoleData);
 
    switch (marker)
    {
-      case Block::Item::Marker::Argument:
+      case Block::Marker::Argument:
       {
          const int argumentIndex = data.toInt();
-         const Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
+         const Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
 
          clip.digest = argument.digest;
          clip.type = argument.type;
          break;
       }
-      case Block::Item::Marker::Attribute:
+      case Block::Marker::Attribute:
       {
          const QString attributeName = data.toString();
-         const Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
+         const Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
 
          clip.digest = attribute.digest;
          clip.type = attribute.type;
          break;
       }
-      case Block::Item::Marker::MessageStandard:
+      case Block::Marker::MessageStandard:
       {
-         const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
-         const Block::Structure::Message& message = central->blockRef().messageStandardMap[messageType];
+         const Structure::Type messageType = data.value<Structure::Type>();
+         const Structure::Message& message = central->blockRef().messageStandardMap[messageType];
 
          clip.digest = message.digest;
          break;
       }
-      case Block::Item::Marker::MessageUserDefined:
+      case Block::Marker::MessageUserDefined:
       {
          const QString messageName = data.toString();
-         const Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
+         const Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
 
          clip.digest = message.digest;
          break;
@@ -107,52 +113,52 @@ void Component::View::slotCopy()
 
 void Component::View::slotPaste()
 {
-   QStandardItem* uDocItem = actionItem();
-   if (!uDocItem)
+   QStandardItem* compItem = actionItem();
+   if (!compItem)
       return;
 
-   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
-   const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
+   const QVariant markerVariant = compItem->data(Block::RoleMarker);
+   const Block::Marker targetMarker = markerVariant.value<Block::Marker>();
 
-   const QVariant data = uDocItem->data(Block::Item::RoleData);
+   const QVariant data = compItem->data(Block::RoleData);
 
    switch (targetMarker)
    {
-      case Block::Item::Marker::Argument:
+      case Block::Marker::Argument:
       {
          const int argumentIndex = data.toInt();
-         Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
+         Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
 
          argument.digest = clip.digest;
-         if (Block::Structure::Type::Anything != clip.type)
+         if (Structure::Type::Anything != clip.type)
             argument.type = clip.type;
 
          break;
       }
-      case Block::Item::Marker::Attribute:
+      case Block::Marker::Attribute:
       {
          const QString attributeName = data.toString();
-         Block::Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
+         Structure::Attribute& attribute = central->blockRef().attributeMap[attributeName];
 
          attribute.digest = clip.digest;
-         if (Block::Structure::Type::Anything != clip.type)
+         if (Structure::Type::Anything != clip.type)
             attribute.type = clip.type;
 
          break;
       }
-      case Block::Item::Marker::MessageStandard:
+      case Block::Marker::MessageStandard:
       {
-         const Block::Structure::Type messageType = data.value<Block::Structure::Type>();
-         Block::Structure::Message& message = central->blockRef().messageStandardMap[messageType];
+         const Structure::Type messageType = data.value<Structure::Type>();
+         Structure::Message& message = central->blockRef().messageStandardMap[messageType];
 
          message.digest = clip.digest;
 
          break;
       }
-      case Block::Item::Marker::MessageUserDefined:
+      case Block::Marker::MessageUserDefined:
       {
          const QString messageName = data.toString();
-         Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
+         Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
 
          message.digest = clip.digest;
 
@@ -164,6 +170,32 @@ void Component::View::slotPaste()
 
    callOnOtherHubInstances(&FunctionHub::componentSelected, targetMarker, data);
    callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
+}
+
+void Component::View::slotRemove()
+{
+   QStandardItem* compItem = actionItem();
+   if (!compItem)
+   {
+      return;
+   }
+
+   const QVariant markerVariant = compItem->data(Block::RoleMarker);
+   const Block::Marker marker = markerVariant.value<Block::Marker>();
+
+   const QVariant data = compItem->data(Block::RoleData);
+
+   switch (marker)
+   {
+      case Block::Marker::Output:
+      {
+         //const Structure::Type messageType = data.value<Structure::Type>();
+         qDebug() << "delete output" << compItem->text();
+         break;
+      }
+      default:
+         return;
+   }
 }
 
 void Component::View::patchSelected(QString patchPath, QString key)
@@ -186,12 +218,12 @@ void Component::View::patchSelected(QString patchPath, QString key)
 void Component::View::clicked(ModelItem* item)
 {
    int row = item->row();
-   QStandardItem* uDocItem = getModel<Model>()->item(row); // first column item
+   QStandardItem* compItem = getModel<Model>()->item(row); // first column item
 
-   const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
-   const Block::Item::Marker marker = markerVariant.value<Block::Item::Marker>();
+   const QVariant markerVariant = compItem->data(Block::RoleMarker);
+   const Block::Marker marker = markerVariant.value<Block::Marker>();
 
-   const QVariant data = uDocItem->data(Block::Item::RoleData);
+   const QVariant data = compItem->data(Block::RoleData);
    callOnOtherHubInstances(&FunctionHub::componentSelected, marker, data);
 }
 
@@ -213,6 +245,8 @@ void Component::View::contextMenuEvent(QContextMenuEvent* event)
    QMenu menu(this);
    menu.addAction(copyAction);
    menu.addAction(pasteAction);
+   menu.addSeparator();
+   menu.addAction(removeAction);
    menu.exec(event->globalPos());
 }
 
@@ -225,10 +259,10 @@ QStandardItem* Component::View::actionItem()
       return nullptr;
 
    QModelIndex index = selectedIndexes().first();
-   QStandardItem* uDocItem = getModel<Model>()->getItem(index.row());
+   QStandardItem* compItem = getModel<Model>()->getItem(index.row());
 
-   //const QVariant markerVariant = uDocItem->data(Block::Item::RoleMarker);
-   //const Block::Item::Marker targetMarker = markerVariant.value<Block::Item::Marker>();
+   //const QVariant markerVariant = compItem->data(Block::RoleMarker);
+   //const Block::Marker targetMarker = markerVariant.value<Block::Marker>();
 
-   return uDocItem;
+   return compItem;
 }

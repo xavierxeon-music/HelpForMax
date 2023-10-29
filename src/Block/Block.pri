@@ -1,15 +1,15 @@
 HEADERS += \
+   $$PWD/Block.h \
    $$PWD/BlockHelp.h \
    $$PWD/BlockInitFile.h \
-   $$PWD/BlockItem.h \
    $$PWD/BlockPatcher.h \
    $$PWD/BlockRef.h \
-   $$PWD/BlockStructure.h
+   $$PWD/Structure.h
 
 SOURCES += \
+   $$PWD/Block.cpp \
    $$PWD/BlockHelp.cpp \
    $$PWD/BlockInitFile.cpp \
-   $$PWD/BlockItem.cpp \
    $$PWD/BlockPatcher.cpp \
    $$PWD/BlockRef.cpp \
-   $$PWD/BlockStructure.cpp
+   $$PWD/Structure.cpp

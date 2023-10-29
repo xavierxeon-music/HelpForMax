@@ -12,8 +12,9 @@ Overview::Graph::Graph(QWidget* parent, Central* central)
    : QGraphicsView(parent)
    , central(central)
    , scene(nullptr)
-   , blackPen(QColor(0, 0, 0))
-   , whiteBrush(QColor(255, 255, 255))
+   , blackPen(Qt::black)
+   , whiteBrush(Qt::white)
+   , grayBrush(QColor(230, 230, 230))
    , font()
 
 {
@@ -71,7 +72,7 @@ Overview::Graph::IdMap Overview::Graph::makeObjects(const QJsonObject patcherObj
       patchRect.setWidth(patchRectData[2].toDouble());
       patchRect.setHeight(patchRectData[3].toDouble());
 
-      QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackPen, whiteBrush);
+      QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackPen, grayBrush);
       rectItem->setPos(patchRect.x(), patchRect.y());
 
       if ("inlet" == className)

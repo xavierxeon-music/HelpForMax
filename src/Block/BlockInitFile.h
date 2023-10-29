@@ -1,24 +1,19 @@
 #ifndef BlockInitFileH
 #define BlockInitFileH
 
-#include "BlockStructure.h"
+#include "Block.h"
 
-namespace Block
+class Block::InitFile
 {
-   class Item;
+public:
+   InitFile(Block* block);
 
-   class InitFile
-   {
-   public:
-      InitFile(Item* item);
+public:
+   void write();
 
-   public:
-      void write();
-
-   private:
-      Item* item;
-      QString initPath;
-   };
-} // namespace Block
+private:
+   Block* block;
+   QString initPath;
+};
 
 #endif // NOT BlockInitFileH

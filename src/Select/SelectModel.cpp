@@ -24,9 +24,9 @@ void Select::Model::setPackagePath(QString packageDir)
 
    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
 
-   const Block::Item::Map map = central->getBlockMap();
+   const Block::Map map = central->getBlockMap();
 
-   auto folderName = [&](Block::Item::Map::ConstIterator it)
+   auto folderName = [&](Block::Map::ConstIterator it)
    {
       QString path = it.value()->getPatchPath();
       path.replace(packageDir + "/patchers/", "");
@@ -39,7 +39,7 @@ void Select::Model::setPackagePath(QString packageDir)
 
    QMap<QString, QStandardItem*> folderMap;
 
-   for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
+   for (Block::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString folder = folderName(it);
       if (folderMap.contains(folder))
@@ -52,7 +52,7 @@ void Select::Model::setPackagePath(QString packageDir)
       folderMap.insert(folder, folderItem);
    }
 
-   for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
+   for (Block::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString key = it.key();
 

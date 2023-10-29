@@ -1,6 +1,6 @@
 #include "PageArgument.h"
 
-Page::Argument::Argument(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::Argument::Argument(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , argumentIndex()
@@ -17,7 +17,7 @@ Page::Argument::Argument(QWidget* parent, Central* central, const Block::Item::M
 void Page::Argument::update(const QVariant& data)
 {
    argumentIndex = data.toInt();
-   Block::Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
+   Structure::Argument& argument = central->blockRef().argumentList[argumentIndex];
    keyInfo->setText("argument " + QString::number(argumentIndex) + " @ " + central->getCurrentKey());
 
    monitor(digestEdit, &argument.digest.text, central->getCurrentKey());

@@ -28,7 +28,7 @@ void FunctionHub::patchSelected(QString patchPath, QString key)
    Q_UNUSED(key)
 }
 
-void FunctionHub::componentSelected(Block::Item::Marker marker, QVariant data)
+void FunctionHub::componentSelected(Block::Marker marker, QVariant data)
 {
    // do nothing
    Q_UNUSED(marker)
@@ -82,20 +82,20 @@ const QString& Central::getCurrentKey() const
 
 void Central::compileBlockMap(const QString& packagePath)
 {
-   blockMap = Block::Item::compileMap(packagePath);
+   blockMap = Block::compileMap(packagePath);
 }
 
-const Block::Item::Map Central::getBlockMap() const
+const Block::Map Central::getBlockMap() const
 {
    return blockMap;
 }
 
-const Block::Item& Central::block() // must not be constant, else map iterator is not not a reference
+const Block& Central::block() // must not be constant, else map iterator is not not a reference
 {
    return *blockMap[currentKey];
 }
 
-Block::Item& Central::blockRef()
+Block& Central::blockRef()
 {
    return *blockMap[currentKey];
 }
@@ -113,9 +113,9 @@ bool Central::isBlockUndocumented(const QString& key) const
    return blockMap[key]->foundUndocumented();
 }
 
-void Central::saveBlocks(Block::Item::Component component)
+void Central::saveBlocks(Block::Component component)
 {
-   for (Block::Item* block : std::as_const(blockMap))
+   for (Block* block : std::as_const(blockMap))
    {
       block->save(component);
    }

@@ -15,9 +15,9 @@ QWidget* TypeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem&
 
    QComboBox* comboBox = new QComboBox(parent);
    comboBox->setFrame(false);
-   for (const Block::Structure::Type& type : Block::Structure::typeList())
+   for (const Structure::Type& type : Structure::typeList())
    {
-      comboBox->addItem(Block::Structure::typeName(type));
+      comboBox->addItem(Structure::typeName(type));
    }
 
    for (int index = 0; index < comboBox->count(); index++)
@@ -32,8 +32,8 @@ void TypeDelegate::setEditorData(QWidget* editor, const QModelIndex& index) cons
 {
    QComboBox* comboBox = qobject_cast<QComboBox*>(editor);
 
-   const Block::Structure::Type type = proxy->getType(index.row());
-   const int typeIndex = comboBox->findText(Block::Structure::typeName(type));
+   const Structure::Type type = proxy->getType(index.row());
+   const int typeIndex = comboBox->findText(Structure::typeName(type));
    comboBox->setCurrentIndex(typeIndex);
 }
 

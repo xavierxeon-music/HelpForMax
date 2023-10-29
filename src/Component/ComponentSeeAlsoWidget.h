@@ -24,7 +24,7 @@ namespace Component
       void slotApply();
 
    private:
-      void componentSelected(Block::Item::Marker marker, QVariant data) override;
+      void componentSelected(Block::Marker marker, QVariant data) override;
 
    private:
       Central* central;

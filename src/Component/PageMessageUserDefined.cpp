@@ -1,6 +1,6 @@
 #include "PageMessageUserDefined.h"
 
-Page::MessageUserDefined::MessageUserDefined(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::MessageUserDefined::MessageUserDefined(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , messageName()
@@ -17,13 +17,13 @@ Page::MessageUserDefined::MessageUserDefined(QWidget* parent, Central* central, 
 void Page::MessageUserDefined::update(const QVariant& data)
 {
    messageName = data.toString();
-   Block::Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
+   Structure::Message& message = central->blockRef().messageUserDefinedMap[messageName];
    keyInfo->setText("messsage " + messageName + " @ " + central->getCurrentKey());
 
    monitor(digestEdit, &message.digest.text, central->getCurrentKey());
    monitor(descrptionEdit, &message.digest.description, central->getCurrentKey());
 
    argumentView->clearMonitors(central->getCurrentKey());
-   for (Block::Structure::Argument& argument : message.arguments)
+   for (Structure::Argument& argument : message.arguments)
       argumentView->monitor(&argument);
 }

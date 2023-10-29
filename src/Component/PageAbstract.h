@@ -18,7 +18,7 @@ namespace Page
       Q_OBJECT
 
    public:
-      Abstract(QWidget* parent, Central* central, const Block::Item::Marker& marker);
+      Abstract(QWidget* parent, Central* central, const Block::Marker& marker);
       virtual ~Abstract();
 
    protected:
@@ -31,13 +31,13 @@ namespace Page
 
    protected:
       Central* central;
-      const Block::Item::Marker editMarker;
+      const Block::Marker editMarker;
 
    private:
       using ConnectionMap = QMap<QWidget*, QMetaObject::Connection>;
 
    private:
-      void componentSelected(Block::Item::Marker marker, QVariant data) override final;
+      void componentSelected(Block::Marker marker, QVariant data) override final;
 
    private:
       ConnectionMap connectionMap;

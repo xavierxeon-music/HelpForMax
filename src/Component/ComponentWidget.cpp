@@ -43,7 +43,7 @@ Component::Widget::Widget(QWidget* parent, Central* central)
 
 void Component::Widget::slotSavePatches()
 {
-   central->saveBlocks(Block::Item::Component::All);
+   central->saveBlocks(Block::Component::All);
    callOnAllHubInstances(&FunctionHub::setModified, false, QString());
 }
 
@@ -69,10 +69,10 @@ void Component::Widget::patchSelected(QString patchPath, QString key)
 
    setComponentStack(0);
 
-   editStackWidget->setCurrentWidget(editorMap.value(Block::Item::Marker::Undefined));
+   editStackWidget->setCurrentWidget(editorMap.value(Block::Marker::Undefined));
 }
 
-void Component::Widget::componentSelected(Block::Item::Marker marker, QVariant data)
+void Component::Widget::componentSelected(Block::Marker marker, QVariant data)
 {
    Q_UNUSED(data);
 
@@ -129,20 +129,20 @@ void Component::Widget::setupEdit()
 {
    editStackWidget->setContentsMargins(0, 0, 0, 0);
 
-   addEditor<Page::Blank>(Block::Item::Marker::Undefined);
-   addEditor<Page::Argument>(Block::Item::Marker::Argument);
-   addEditor<Page::Attribute>(Block::Item::Marker::Attribute);
-   addEditor<Page::MessageStandard>(Block::Item::Marker::MessageStandard);
-   addEditor<Page::MessageUserDefined>(Block::Item::Marker::MessageUserDefined);
-   addEditor<Page::Output>(Block::Item::Marker::Output);
+   addEditor<Page::Blank>(Block::Marker::Undefined);
+   addEditor<Page::Argument>(Block::Marker::Argument);
+   addEditor<Page::Attribute>(Block::Marker::Attribute);
+   addEditor<Page::MessageStandard>(Block::Marker::MessageStandard);
+   addEditor<Page::MessageUserDefined>(Block::Marker::MessageUserDefined);
+   addEditor<Page::Output>(Block::Marker::Output);
 
-   Page::Patch* pagePatch = addEditor<Page::Patch>(Block::Item::Marker::Patch);
+   Page::Patch* pagePatch = addEditor<Page::Patch>(Block::Marker::Patch);
    connect(pagePatch, &Page::Patch::signalShowMetaTags, this, &Widget::slotShowMetaTags);
    connect(pagePatch, &Page::Patch::signalShowSeeAlso, this, &Widget::slotShowSeeAlso);
 }
 
 template <typename EditorType>
-EditorType* Component::Widget::addEditor(const Block::Item::Marker& marker)
+EditorType* Component::Widget::addEditor(const Block::Marker& marker)
 {
    EditorType* abstract = new EditorType(this, central, marker);
    editStackWidget->addWidget(abstract);

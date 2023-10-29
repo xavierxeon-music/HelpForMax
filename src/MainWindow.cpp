@@ -53,7 +53,7 @@ MainWindow::MainWindow()
 
 void MainWindow::slotWriteAllInit()
 {
-   central.saveBlocks(Block::Item::Component::InitFile);
+   central.saveBlocks(Block::Component::InitFile);
 }
 
 void MainWindow::setPackagePath(QString packageDir)

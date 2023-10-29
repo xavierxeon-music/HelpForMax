@@ -2,7 +2,7 @@
 #define CentralH
 
 #include "AbstractFunctionHub.h"
-#include "Block/BlockItem.h"
+#include "Block/Block.h"
 
 class MainWindow;
 
@@ -13,7 +13,7 @@ struct FunctionHub : public Abstract::FunctionHub<Central>
    virtual void setPackagePath(QString packageDir);
    virtual void setModified(bool enabled, QString key);
    virtual void patchSelected(QString patchPath, QString key);
-   virtual void componentSelected(Block::Item::Marker marker, QVariant data);
+   virtual void componentSelected(Block::Marker marker, QVariant data);
    virtual void restoreState();
    virtual void saveState();
 };
@@ -29,16 +29,16 @@ public:
    static QString getPackageName();
 
    void compileBlockMap(const QString& packagePath);
-   const Block::Item::Map getBlockMap() const;
+   const Block::Map getBlockMap() const;
 
    const QString& getCurrentKey() const;
-   const Block::Item& block();
-   Block::Item& blockRef();
+   const Block& block();
+   Block& blockRef();
 
    void selectBlock(const QString& key);
    bool isBlockUndocumented(const QString& key) const;
 
-   void saveBlocks(Block::Item::Component component);
+   void saveBlocks(Block::Component component);
 
    void readPackageInfo(QString packagePath);
 
@@ -52,7 +52,7 @@ private:
    static QString packageName;
 
    QString currentKey;
-   Block::Item::Map blockMap;
+   Block::Map blockMap;
 };
 
 #endif // NOT CentralH

@@ -1,28 +1,43 @@
-#include "BlockItem.h"
+#include "Block.h"
 
 #include <QApplication>
 #include <QDir>
 #include <QFileInfo>
 
-const QList<QByteArray> Block::Item::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
+#include "BlockHelp.h"
+#include "BlockInitFile.h"
+#include "BlockPatcher.h"
+#include "BlockRef.h"
 
-Block::Item::Item(const QString& key, const QString& patchPath)
+const QList<QByteArray> Block::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
+
+Block::Block(const QString& key, const QString& patchPath)
    : Structure()
    , key(key)
    , isUndocumented(false)
    , isModified(false)
-   , patcher(this, patchPath)
-   , ref(this)
-   , help(this)
-   , init(this)
+   , patcher(nullptr)
+   , ref(nullptr)
+   , help(nullptr)
+   , init(nullptr)
 {
+   patcher = new Patcher(this, patchPath);
+   ref = new Ref(this);
+   help = new Help(this);
+   init = new InitFile(this);
 }
 
-Block::Item::~Item()
+Block::~Block()
 {
+   /*
+   delete patcher;
+   delete ref;
+   delete help;
+   delete init;
+   */
 }
 
-Block::Item::Map Block::Item::compileMap(const QString& packagePath)
+Block::Map Block::compileMap(const QString& packagePath)
 {
    QDir().mkpath(packagePath + "/docs");
    QDir().mkpath(packagePath + "/help");
@@ -65,10 +80,10 @@ Block::Item::Map Block::Item::compileMap(const QString& packagePath)
       const QString key = it.key();
       const QString patchPath = it.value().absoluteFilePath();
 
-      Item* item = new Item(key, patchPath);
-      item->load();
+      Block* block = new Block(key, patchPath);
+      block->load();
 
-      map[key] = item;
+      map[key] = block;
    }
 
    QApplication::restoreOverrideCursor();
@@ -76,59 +91,59 @@ Block::Item::Map Block::Item::compileMap(const QString& packagePath)
    return map;
 }
 
-void Block::Item::clear()
+void Block::clear()
 {
    Structure::clear();
    isUndocumented = false;
 }
 
-bool Block::Item::foundUndocumented() const
+bool Block::foundUndocumented() const
 {
    return isUndocumented;
 }
 
-void Block::Item::markModified()
+void Block::markModified()
 {
    isModified = true;
 }
 
-const QString& Block::Item::getPatchPath() const
+const QString& Block::getPatchPath() const
 {
-   return patcher.getPath();
+   return patcher->getPath();
 }
 
-const QString& Block::Item::getRefPath() const
+const QString& Block::getRefPath() const
 {
-   return ref.getPath();
+   return ref->getPath();
 }
 
-QString Block::Item::getRefContent()
+QString Block::getRefContent()
 {
-   return ref.writeContent();
+   return ref->writeContent();
 }
 
-void Block::Item::setRefContent(const QString& content)
+void Block::setRefContent(const QString& content)
 {
-   ref.readContent(content);
+   ref->readContent(content);
 }
 
-void Block::Item::load()
+void Block::load()
 {
-   ref.read();
-   patcher.read();
+   ref->read();
+   patcher->read();
 
    if (patch.digest.text.isEmpty())
       patch.digest.text = "Hello World";
 
-   if (!QFile::exists(ref.getPath()))
+   if (!QFile::exists(ref->getPath()))
    {
       isModified = true;
-      ref.write();
-      help.write();
+      ref->write();
+      help->write();
    }
 }
 
-void Block::Item::save(Component component)
+void Block::save(Component component)
 {
    if (Component::All == component)
    {
@@ -137,20 +152,20 @@ void Block::Item::save(Component component)
 
       isModified = false;
 
-      ref.write();
-      help.write();
-      init.write();
+      ref->write();
+      help->write();
+      init->write();
 
       clear();
       load();
    }
    else if (Component::InitFile == component)
    {
-      init.write();
+      init->write();
    }
 }
 
-void Block::Item::markUndocumented(Base& base)
+void Block::markUndocumented(Base& base)
 {
    base.undocumented = true;
    isUndocumented = true;

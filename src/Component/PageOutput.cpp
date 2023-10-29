@@ -1,6 +1,6 @@
 #include "PageOutput.h"
 
-Page::Output::Output(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::Output::Output(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , outputIndex()
@@ -16,7 +16,7 @@ Page::Output::Output(QWidget* parent, Central* central, const Block::Item::Marke
 void Page::Output::update(const QVariant& data)
 {
    outputIndex = data.toInt();
-   Block::Structure::Output& output = central->blockRef().outputMap[outputIndex];
+   Structure::Output& output = central->blockRef().outputMap[outputIndex];
    keyInfo->setText("output " + QString::number(outputIndex) + " @ " + central->getCurrentKey());
 
    monitor(descrptionEdit, &output.digest.description, central->getCurrentKey());

@@ -14,14 +14,14 @@ namespace Page
       Q_OBJECT
 
    public:
-      MessageStandard(QWidget* parent, Central* central, const Block::Item::Marker& marker);
+      MessageStandard(QWidget* parent, Central* central, const Block::Marker& marker);
 
    private:
       void update(const QVariant& data) override;
 
    private:
       DescriptionHighlighter* highlighter;
-      Block::Structure::Type messageType;
+      Structure::Type messageType;
    };
 } // namespace Page
 

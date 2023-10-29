@@ -5,12 +5,12 @@
 
 #include "Tools/Central.h"
 
-Block::Ref::Ref(Item* item)
-   : item(item)
+Block::Ref::Ref(Block* block)
+   : block(block)
    , refPath()
 {
    const QString packagePath = Central::getPackagePath();
-   refPath = packagePath + "/docs/" + item->key + ".maxref.xml";
+   refPath = packagePath + "/docs/" + block->key + ".maxref.xml";
 }
 
 const QString& Block::Ref::getPath() const
@@ -41,11 +41,11 @@ void Block::Ref::readContent(const QString& content)
    }
 
    const QDomElement rootElement = doc.documentElement();
-   readDigest(rootElement, item->patch.digest);
-   if (item->patch.digest.description.isEmpty())
-      item->markUndocumented(item->patch.digest);
+   readDigest(rootElement, block->patch.digest);
+   if (block->patch.digest.description.isEmpty())
+      block->markUndocumented(block->patch.digest);
 
-   item->patch.patcherType = (Block::Structure::PatcherType)rootElement.attribute("patcher_type", "0").toInt();
+   block->patch.patcherType = (Structure::PatcherType)rootElement.attribute("patcher_type", "0").toInt();
 
    {
       const QDomElement metaDataElement = rootElement.firstChildElement("metadatalist");
@@ -60,7 +60,7 @@ void Block::Ref::readContent(const QString& content)
 
             const QString text = readText(element);
             if (packageName != text)
-               item->patch.metaTagList.append(text);
+               block->patch.metaTagList.append(text);
          }
       }
    }
@@ -78,9 +78,9 @@ void Block::Ref::readContent(const QString& content)
 
             readDigest(outletElement, output.digest);
             if (output.digest.description.isEmpty())
-               item->markUndocumented(output.digest);
+               block->markUndocumented(output.digest);
 
-            item->outputMap[id] = output;
+            block->outputMap[id] = output;
          }
       }
    }
@@ -98,9 +98,9 @@ void Block::Ref::readContent(const QString& content)
 
             readDigest(arguemntElement, argument.digest);
             if (argument.digest.text.isEmpty())
-               item->markUndocumented(argument.digest);
+               block->markUndocumented(argument.digest);
 
-            item->argumentList.append(argument);
+            block->argumentList.append(argument);
          }
       }
    }
@@ -121,9 +121,9 @@ void Block::Ref::readContent(const QString& content)
 
             readDigest(attributeElement, attribute.digest);
             if (attribute.digest.text.isEmpty())
-               item->markUndocumented(attribute.digest);
+               block->markUndocumented(attribute.digest);
 
-            item->attributeMap[name] = attribute;
+            block->attributeMap[name] = attribute;
          }
       }
    }
@@ -153,18 +153,18 @@ void Block::Ref::readContent(const QString& content)
             }
 
             readDigest(messageElement, message.digest);
-            if (item->patch.digest.description.isEmpty())
-               item->markUndocumented(item->patch.digest);
+            if (block->patch.digest.description.isEmpty())
+               block->markUndocumented(block->patch.digest);
 
             const bool isStandard = ("1" == messageElement.attribute("standard"));
             if (isStandard)
             {
                const Structure::Type type = Structure::toType(name);
-               item->messageStandardMap[type] = message;
+               block->messageStandardMap[type] = message;
             }
             else
             {
-               item->messageUserDefinedMap[name] = message;
+               block->messageUserDefinedMap[name] = message;
             }
          }
       }
@@ -177,7 +177,7 @@ void Block::Ref::readContent(const QString& content)
          for (QDomElement element = seeAlsoListElement.firstChildElement("seealso"); !element.isNull(); element = element.nextSiblingElement("seealso"))
          {
             const QString& name = element.attribute("name");
-            item->patch.seeAlsoList.append(name);
+            block->patch.seeAlsoList.append(name);
          }
       }
    }
@@ -202,28 +202,28 @@ QString Block::Ref::writeContent()
 
    QDomElement rootElement = doc.createElement("c74object");
    doc.appendChild(rootElement);
-   rootElement.setAttribute("name", item->key);
+   rootElement.setAttribute("name", block->key);
 
-   rootElement.setAttribute("patcher_type", item->patch.patcherType);
-   addDigest(rootElement, item->patch.digest);
+   rootElement.setAttribute("patcher_type", block->patch.patcherType);
+   addDigest(rootElement, block->patch.digest);
 
    {
       QDomElement metaDataElement = createSubElement(rootElement, "metadatalist");
       createSubElement(metaDataElement, "metadata", Central::getAuthor(), {{"name", "author"}});
       createSubElement(metaDataElement, "metadata", Central::getPackageName(), {{"name", "tag"}});
-      for (const QString& tag : item->patch.metaTagList)
+      for (const QString& tag : block->patch.metaTagList)
          createSubElement(metaDataElement, "metadata", tag, {{"name", "tag"}});
    }
 
    {
       QDomElement parserElement = createSubElement(rootElement, "parser");
-      parserElement.setAttribute("inlet_count", item->patch.inletCount);
+      parserElement.setAttribute("inlet_count", block->patch.inletCount);
    }
 
    {
       QDomElement outputListElement = createSubElement(rootElement, "misc");
       outputListElement.setAttribute("name", "Outputs");
-      for (Structure::Output::Map::ConstIterator it = item->outputMap.constBegin(); it != item->outputMap.constEnd(); it++)
+      for (Structure::Output::Map::ConstIterator it = block->outputMap.constBegin(); it != block->outputMap.constEnd(); it++)
       {
          QDomElement outputElement = createSubElement(outputListElement, "entry");
          outputElement.setAttribute("name", it.value().name);
@@ -235,7 +235,7 @@ QString Block::Ref::writeContent()
 
    {
       QDomElement objArgListElement = createSubElement(rootElement, "objarglist");
-      for (const Structure::Argument& argument : item->argumentList)
+      for (const Structure::Argument& argument : block->argumentList)
       {
          QDomElement arguemntElement = createSubElement(objArgListElement, "objarg");
          arguemntElement.setAttribute("name", argument.name);
@@ -248,7 +248,7 @@ QString Block::Ref::writeContent()
 
    {
       QDomElement attributeListElement = createSubElement(rootElement, "attributelist");
-      for (Structure::Attribute::Map::ConstIterator it = item->attributeMap.constBegin(); it != item->attributeMap.constEnd(); it++)
+      for (Structure::Attribute::Map::ConstIterator it = block->attributeMap.constBegin(); it != block->attributeMap.constEnd(); it++)
       {
          const Structure::Attribute& attribute = it.value();
 
@@ -287,14 +287,14 @@ QString Block::Ref::writeContent()
          addDigest(messageElement, message.digest);
       };
 
-      for (Structure::Message::StandardMap::ConstIterator it = item->messageStandardMap.constBegin(); it != item->messageStandardMap.constEnd(); it++)
+      for (Structure::Message::StandardMap::ConstIterator it = block->messageStandardMap.constBegin(); it != block->messageStandardMap.constEnd(); it++)
       {
          const Structure::Message& message = it.value();
          const QString& name = Structure::typeName(it.key());
          addMessage(message, name, true);
       }
 
-      for (Structure::Message::FreeMap::ConstIterator it = item->messageUserDefinedMap.constBegin(); it != item->messageUserDefinedMap.constEnd(); it++)
+      for (Structure::Message::FreeMap::ConstIterator it = block->messageUserDefinedMap.constBegin(); it != block->messageUserDefinedMap.constEnd(); it++)
       {
          const Structure::Message& message = it.value();
          const QString& name = it.key();
@@ -304,7 +304,7 @@ QString Block::Ref::writeContent()
 
    {
       QDomElement seeAlsoListElement = createSubElement(rootElement, "seealsolist");
-      for (const QString& seeAlso : item->patch.seeAlsoList)
+      for (const QString& seeAlso : block->patch.seeAlsoList)
       {
          createSubElement(seeAlsoListElement, "seealso", QString(), {{"name", seeAlso}});
       }
@@ -438,7 +438,7 @@ QString Block::Ref::domToMaxFile(QString domXML) const
 
 QString Block::Ref::maxFileToDom(QString maxXML) const
 {
-   for (const QByteArray& tag : Item::descriptionMaxTags)
+   for (const QByteArray& tag : Block::descriptionMaxTags)
    {
       maxXML.replace("<" + tag + ">", "&lt;" + tag + "&gt;");
       maxXML.replace("</" + tag + ">", "&lt;/" + tag + "&gt;");

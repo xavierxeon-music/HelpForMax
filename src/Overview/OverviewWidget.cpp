@@ -19,7 +19,7 @@ void Overview::Widget::slotOpenInMax()
    if (central->getCurrentKey().isEmpty())
       return;
 
-   const Block::Item block = central->block();
+   const Block block = central->block();
    const QString patchPath = block.getPatchPath();
 
    QDesktopServices::openUrl(QUrl::fromLocalFile(patchPath));

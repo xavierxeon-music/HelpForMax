@@ -5,19 +5,19 @@
 
 #include "Tools/Central.h"
 
-Block::InitFile::InitFile(Item* item)
-   : item(item)
+Block::InitFile::InitFile(Block* block)
+   : block(block)
    , initPath()
 {
    const QString packagePath = Central::getPackagePath();
-   initPath = packagePath + "/init/" + item->key + ".txt";
+   initPath = packagePath + "/init/" + block->key + ".txt";
 }
 
 void Block::InitFile::write()
 {
    QFile file(initPath);
 
-   if (item->patch.patcherType == Block::Structure::PatcherStandard) // delete file
+   if (block->patch.patcherType == Structure::PatcherStandard) // delete file
    {
       if (!file.exists()) // nothing to delete
          return;
@@ -31,15 +31,15 @@ void Block::InitFile::write()
 
       QTextStream stream(&file);
 
-      if (item->patch.patcherType == Block::Structure::PatcherGui)
+      if (block->patch.patcherType == Structure::PatcherGui)
       {
-         stream << "max objectfile " << item->key << " " << item->key << ";\n";
-         stream << "max definesubstitution " << item->key << " bpatcher @name " << item->key << ".maxpat;\n";
+         stream << "max objectfile " << block->key << " " << block->key << ";\n";
+         stream << "max definesubstitution " << block->key << " bpatcher @name " << block->key << ".maxpat;\n";
       }
-      else if (item->patch.patcherType == Block::Structure::PatcherPoly)
+      else if (block->patch.patcherType == Structure::PatcherPoly)
       {
-         stream << "max objectfile " << item->key << " " << item->key << ";\n";
-         stream << "max definesubstitution " << item->key << " poly~ " << item->key << " 16;\n";
+         stream << "max objectfile " << block->key << " " << block->key << ";\n";
+         stream << "max definesubstitution " << block->key << " poly~ " << block->key << " 16;\n";
       }
       file.close();
    }

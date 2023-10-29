@@ -1,29 +1,24 @@
 #ifndef BlockPatcherH
 #define BlockPatcherH
 
-#include "BlockStructure.h"
+#include "Block.h"
 
-namespace Block
+class Block::Patcher
 {
-   class Item;
+public:
+   Patcher(Block* block, const QString& patchPath);
 
-   class Patcher
-   {
-   public:
-      Patcher(Item* item, const QString& patchPath);
+public:
+   const QString& getPath() const;
+   void read();
 
-   public:
-      const QString& getPath() const;
-      void read();
+private:
+   Structure::Output& findOrCreateOutput(const int id);
+   void readPatcherargs(QString text);
 
-   private:
-      Structure::Output& findOrCreateOutput(const int id);
-      void readPatcherargs(QString text);
-
-   private:
-      Item* item;
-      QString patchPath;
-   };
-} // namespace Block
+private:
+   Block* block;
+   QString patchPath;
+};
 
 #endif // NOT BlockPatcherH

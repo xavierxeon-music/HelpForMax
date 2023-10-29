@@ -40,6 +40,7 @@ namespace Overview
 
       QPen blackPen;
       QBrush whiteBrush;
+      QBrush grayBrush;
       QFont font;
    };
 } // namespace Overview

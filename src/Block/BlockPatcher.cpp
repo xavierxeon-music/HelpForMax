@@ -4,11 +4,11 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
-#include "BlockItem.h"
+#include "Block.h"
 #include "Tools/JSONModel.h"
 
-Block::Patcher::Patcher(Item* item, const QString& patchPath)
-   : item(item)
+Block::Patcher::Patcher(Block* block, const QString& patchPath)
+   : block(block)
    , patchPath(patchPath)
 {
 }
@@ -55,13 +55,16 @@ void Block::Patcher::read()
       }
       else if ("outlet" == className)
       {
+         if (patchPath.contains("prepoly"))
+            qDebug();
+
          const int index = boxObject["index"].toInt();
          Structure::Output& output = findOrCreateOutput(index);
 
          const QString comment = boxObject["comment"].toString();
          if (output.name.isEmpty())
          {
-            item->markUndocumented(output);
+            block->markUndocumented(output);
             output.name = comment;
          }
       }
@@ -73,15 +76,15 @@ void Block::Patcher::read()
          if (text.startsWith("patcherargs"))
             readPatcherargs(text);
          else if (text.startsWith("wa.setup.bpatcher"))
-            item->patch.patcherType = Block::Structure::PatcherGui;
+            block->patch.patcherType = Structure::PatcherGui;
          else if (text.startsWith("wa.setup.poly"))
-            item->patch.patcherType = Block::Structure::PatcherPoly;
+            block->patch.patcherType = Structure::PatcherPoly;
          else if (text.startsWith("wa.setup.pfft"))
-            item->patch.patcherType = Block::Structure::PatcherFourier;
+            block->patch.patcherType = Structure::PatcherFourier;
       }
    }
 
-   item->patch.inletCount = inletConnectionMap.count();
+   block->patch.inletCount = inletConnectionMap.count();
 
    // find objects connected to inlets
    for (int index = 0; index < lineArray.size(); index++)
@@ -142,13 +145,13 @@ void Block::Patcher::read()
             const Structure::Type type = Structure::toType(messageText);
             if (Structure::Type::Anything == type)
             {
-               if (!item->messageUserDefinedMap.contains(messageText))
+               if (!block->messageUserDefinedMap.contains(messageText))
                {
-                  item->messageUserDefinedMap[messageText] = Structure::Message();
-                  item->markUndocumented(item->messageUserDefinedMap[messageText]);
+                  block->messageUserDefinedMap[messageText] = Structure::Message();
+                  block->markUndocumented(block->messageUserDefinedMap[messageText]);
                }
 
-               Structure::Message& message = item->messageUserDefinedMap[messageText];
+               Structure::Message& message = block->messageUserDefinedMap[messageText];
                if (message.arguments.empty())
                {
                   message.arguments.append(Structure::Argument());
@@ -156,13 +159,13 @@ void Block::Patcher::read()
             }
             else
             {
-               if (!item->messageStandardMap.contains(type))
+               if (!block->messageStandardMap.contains(type))
                {
-                  item->messageStandardMap[type] = Structure::Message();
-                  item->markUndocumented(item->messageStandardMap[type]);
+                  block->messageStandardMap[type] = Structure::Message();
+                  block->markUndocumented(block->messageStandardMap[type]);
                }
 
-               Structure::Message& message = item->messageStandardMap[type];
+               Structure::Message& message = block->messageStandardMap[type];
                if (message.arguments.empty())
                {
                   message.arguments.append(Structure::Argument());
@@ -173,15 +176,15 @@ void Block::Patcher::read()
    }
 }
 
-Block::Structure::Output& Block::Patcher::findOrCreateOutput(const int id)
+Structure::Output& Block::Patcher::findOrCreateOutput(const int id)
 {
-   if (!item->outputMap.contains(id))
+   if (!block->outputMap.contains(id))
    {
-      item->outputMap[id] = Structure::Output{};
-      item->markUndocumented(item->outputMap[id]);
+      block->outputMap[id] = Structure::Output{};
+      block->markUndocumented(block->outputMap[id]);
    }
 
-   return item->outputMap[id];
+   return block->outputMap[id];
 }
 
 void Block::Patcher::readPatcherargs(QString text)
@@ -227,20 +230,20 @@ void Block::Patcher::readPatcherargs(QString text)
          argument.name = QString::number(i);
          argument.optional = true;
 
-         if (i > item->argumentList.count())
+         if (i > block->argumentList.count())
          {
-            item->markUndocumented(argument);
-            item->argumentList.append(argument);
+            block->markUndocumented(argument);
+            block->argumentList.append(argument);
          }
       }
       else if (State::AttributeName == state)
       {
          Structure::Attribute attribute;
          const QString& name = arg.mid(1);
-         if (!item->attributeMap.contains(name))
+         if (!block->attributeMap.contains(name))
          {
-            item->markUndocumented(attribute);
-            item->attributeMap[name] = attribute;
+            block->markUndocumented(attribute);
+            block->attributeMap[name] = attribute;
          }
       }
       else if (State::AttributeArg == state)

@@ -6,18 +6,16 @@
 #include "Tools/Central.h"
 #include "Tools/JSONModel.h"
 
-Block::Help::Help(Item* item)
-   : item(item)
+Block::Help::Help(Block* block)
+   : block(block)
    , helpPath()
 {
    const QString packagePath = Central::getPackagePath();
-   helpPath = packagePath + "/help/" + item->key + ".maxhelp";
+   helpPath = packagePath + "/help/" + block->key + ".maxhelp";
 }
 
 void Block::Help::write()
 {
-   Q_UNUSED(item)
-
    if (QFile::exists(helpPath))
       return;
 

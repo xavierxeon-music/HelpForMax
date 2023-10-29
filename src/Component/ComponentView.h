@@ -22,17 +22,18 @@ namespace Component
    private:
       struct Clip
       {
-         Block::Item::Marker marker; // what are we copying?
+         Block::Marker marker; // what are we copying?
 
-         Block::Structure::Digest digest;
-         Block::Structure::Type type;
+         Structure::Digest digest;
+         Structure::Type type;
 
-         Clip(const Block::Item::Marker& marker = Block::Item::Marker::Undefined);
+         Clip(const Block::Marker& marker = Block::Marker::Undefined);
       };
 
    private slots:
       void slotCopy();
       void slotPaste();
+      void slotRemove();
 
    private:
       void patchSelected(QString patchPath, QString key) override;
@@ -46,6 +47,7 @@ namespace Component
       QString helpPath;
       QAction* copyAction;
       QAction* pasteAction;
+      QAction* removeAction;
       Clip clip;
    };
 } // namespace Component

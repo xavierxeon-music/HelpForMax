@@ -2,7 +2,7 @@
 
 #include <QButtonGroup>
 
-Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker& marker)
+Page::Patch::Patch(QWidget* parent, Central* central, const Block::Marker& marker)
    : Abstract(parent, central, marker)
    , highlighter(nullptr)
    , standardMethodGroup(nullptr)
@@ -15,15 +15,15 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
    keyInfo->setText("PATCH");
 
    standardMethodGroup = new QButtonGroup(this);
-   standardMethodGroup->addButton(messageBangButton, static_cast<int>(Block::Structure::Type::Bang));
-   standardMethodGroup->addButton(messageIntButton, static_cast<int>(Block::Structure::Type::Integer));
-   standardMethodGroup->addButton(messageFloatButton, static_cast<int>(Block::Structure::Type::Float));
-   standardMethodGroup->addButton(messageListButton, static_cast<int>(Block::Structure::Type::List));
-   standardMethodGroup->addButton(messageSignalButton, static_cast<int>(Block::Structure::Type::Signal));
-   standardMethodGroup->addButton(messageMultiSignalButton, static_cast<int>(Block::Structure::Type::MultiSignal));
-   standardMethodGroup->addButton(messageAnythingButton, static_cast<int>(Block::Structure::Type::Anything));
-   standardMethodGroup->addButton(messageMatrixButton, static_cast<int>(Block::Structure::Type::Matrix));
-   standardMethodGroup->addButton(messageDictButton, static_cast<int>(Block::Structure::Type::Dictionary));
+   standardMethodGroup->addButton(messageBangButton, static_cast<int>(Structure::Type::Bang));
+   standardMethodGroup->addButton(messageIntButton, static_cast<int>(Structure::Type::Integer));
+   standardMethodGroup->addButton(messageFloatButton, static_cast<int>(Structure::Type::Float));
+   standardMethodGroup->addButton(messageListButton, static_cast<int>(Structure::Type::List));
+   standardMethodGroup->addButton(messageSignalButton, static_cast<int>(Structure::Type::Signal));
+   standardMethodGroup->addButton(messageMultiSignalButton, static_cast<int>(Structure::Type::MultiSignal));
+   standardMethodGroup->addButton(messageAnythingButton, static_cast<int>(Structure::Type::Anything));
+   standardMethodGroup->addButton(messageMatrixButton, static_cast<int>(Structure::Type::Matrix));
+   standardMethodGroup->addButton(messageDictButton, static_cast<int>(Structure::Type::Dictionary));
 
    connect(standardMethodGroup, &QButtonGroup::idClicked, this, &Patch::slotAddStandardMethond);
 
@@ -38,14 +38,14 @@ Page::Patch::Patch(QWidget* parent, Central* central, const Block::Item::Marker&
 
 void Page::Patch::slotAddStandardMethond(int typeId)
 {
-   const Block::Structure::Type type = static_cast<Block::Structure::Type>(typeId);
+   const Structure::Type type = static_cast<Structure::Type>(typeId);
    if (central->block().messageStandardMap.contains(type))
       return;
 
-   Block::Structure::Argument argument;
+   Structure::Argument argument;
    argument.type = type;
 
-   Block::Structure::Message message;
+   Structure::Message message;
    message.arguments.append(argument);
 
    central->blockRef().messageStandardMap[type] = message;

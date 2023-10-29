@@ -50,25 +50,25 @@ void Component::SeeAlsoWidget::slotApply()
 
    central->blockRef().patch.seeAlsoList = seeAlsoList;
 
-   callOnOtherHubInstances(&FunctionHub::componentSelected, Block::Item::Marker::Patch, QVariant(true));
+   callOnOtherHubInstances(&FunctionHub::componentSelected, Block::Marker::Patch, QVariant(true));
    callOnOtherHubInstances(&FunctionHub::setModified, true, central->getCurrentKey());
 
    emit signalShowComponents();
 }
 
-void Component::SeeAlsoWidget::componentSelected(Block::Item::Marker marker, QVariant data)
+void Component::SeeAlsoWidget::componentSelected(Block::Marker marker, QVariant data)
 {
    Q_UNUSED(data)
 
-   if (Block::Item::Marker::Patch != marker)
+   if (Block::Marker::Patch != marker)
       return;
 
    model->clear();
 
    const QStringList& seeAlsoList = central->blockRef().patch.seeAlsoList;
 
-   const Block::Item::Map map = central->getBlockMap();
-   for (Block::Item::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
+   const Block::Map map = central->getBlockMap();
+   for (Block::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
       const QString key = it.key();
 
