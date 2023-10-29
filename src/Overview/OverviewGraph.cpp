@@ -62,9 +62,6 @@ Overview::Graph::IdMap Overview::Graph::makeObjects(const QJsonObject patcherObj
       if (skipList.contains(className))
          continue;
 
-      QString text = boxObject["text"].toString().simplified();
-      const QString id = boxObject["id"].toString();
-
       QJsonArray patchRectData = boxObject["patching_rect"].toArray();
       QRectF patchRect;
       patchRect.setX(patchRectData[0].toDouble());
@@ -75,10 +72,25 @@ Overview::Graph::IdMap Overview::Graph::makeObjects(const QJsonObject patcherObj
       QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackPen, grayBrush);
       rectItem->setPos(patchRect.x(), patchRect.y());
 
+      QString text = boxObject["text"].toString().simplified();
       if ("inlet" == className)
-         text = "IN";
+      {
+         const int index = boxObject["index"].toInt();
+         text = "IN\n" + QString::number(index);
+
+         const QString toolTip = boxObject["comment"].toString();
+         rectItem->setToolTip(toolTip);
+      }
       else if ("outlet" == className)
-         text = "OUT";
+      {
+         const int index = boxObject["index"].toInt();
+         text = "OUT\n" + QString::number(index);
+
+         const QString toolTip = boxObject["comment"].toString();
+         rectItem->setToolTip(toolTip);
+      }
+      if (text.isEmpty())
+         text = className;
 
       QGraphicsSimpleTextItem* textItem = scene->addSimpleText(text, font);
       textItem->setPos(patchRect.x() + 5, patchRect.y() + 5);
@@ -86,6 +98,7 @@ Overview::Graph::IdMap Overview::Graph::makeObjects(const QJsonObject patcherObj
       const int inletCount = boxObject["numinlets"].toInt();
       const int outletCount = boxObject["numoutlets"].toInt();
 
+      const QString id = boxObject["id"].toString();
       idMap[id] = {rectItem, textItem, inletCount, outletCount};
    }
 
