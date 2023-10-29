@@ -55,9 +55,6 @@ void Block::Patcher::read()
       }
       else if ("outlet" == className)
       {
-         if (patchPath.contains("prepoly"))
-            qDebug();
-
          const int index = boxObject["index"].toInt();
          Structure::Output& output = findOrCreateOutput(index);
 
