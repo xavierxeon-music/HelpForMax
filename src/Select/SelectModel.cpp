@@ -26,47 +26,49 @@ void Select::Model::setPackagePath(QString packageDir)
 
    const Block::Map map = central->getBlockMap();
 
-   auto folderName = [&](Block::Map::ConstIterator it)
-   {
-      QString path = it.value()->getPatchPath();
-      path.replace(packageDir + "/patchers/", "");
-      int index = path.indexOf("/");
-
-      path = path.mid(0, index);
-
-      return path;
-   };
-
-   QMap<QString, QStandardItem*> folderMap;
+   using FolderMap = QMap<QString, QStringList>;
+   FolderMap folderMap;
 
    for (Block::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
    {
-      const QString folder = folderName(it);
-      if (folderMap.contains(folder))
-         continue;
+      QString folderName = it.value()->getPatchPath();
+      folderName.replace(packageDir + "/patchers/", "");
+      int index = folderName.indexOf("/");
 
-      QStandardItem* folderItem = new QStandardItem(folder);
+      folderName = folderName.mid(0, index);
+
+      if (!folderMap.contains(folderName))
+         folderMap[folderName] = QStringList();
+
+      folderMap[folderName].append(it.key());
+   }
+
+   for (FolderMap::const_iterator it = folderMap.constBegin(); it != folderMap.constEnd(); it++)
+   {
+      const QString folderName = it.key();
+
+      QStandardItem* folderItem = new QStandardItem(folderName);
       folderItem->setEditable(false);
       invisibleRootItem()->appendRow(folderItem);
 
-      folderMap.insert(folder, folderItem);
-   }
+      QStringList patchNameList = it.value();
+      patchNameList.sort();
 
-   for (Block::Map::ConstIterator it = map.constBegin(); it != map.constEnd(); it++)
-   {
-      const QString key = it.key();
+      for (const QString& patchName : patchNameList)
+      {
+         const Block* block = map[patchName];
 
-      ModelItem* patchItem = new ModelItem(key);
-      patchItem->setData(it.value()->getPatchPath(), RolePatchPath);
-      patchItem->setData(key, RoleKey);
+         ModelItem* patchItem = new ModelItem(patchName);
+         patchItem->setData(block->getPatchPath(), RolePatchPath);
+         patchItem->setData(patchName, RoleKey);
 
-      const QString folder = folderName(it);
-      folderMap.value(folder)->appendRow(patchItem);
+         folderItem->appendRow(patchItem);
 
-      if (central->isBlockUndocumented(key))
-         patchItem->setBackground(Central::udocBrush);
-      else
-         patchItem->setBackground(Central::docBrush);
+         if (central->isBlockUndocumented(patchName))
+            patchItem->setBackground(Central::udocBrush);
+         else
+            patchItem->setBackground(Central::docBrush);
+      }
    }
 
    QApplication::restoreOverrideCursor();
