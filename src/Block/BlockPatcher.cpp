@@ -9,11 +9,13 @@
 
 // max class
 
-Block::Patcher::MaxClass::MaxClass(const QJsonObject& boxObject, int index)
+Block::Patcher::MaxClass::MaxClass(const QJsonObject& boxObject)
    : boxType()
    , arguments()
-   , index(index)
+   , id()
 {
+   id = boxObject["id"].toString();
+
    QString text = boxObject["text"].toString();
 
    // remove whitespace in quotes
@@ -57,48 +59,14 @@ void Block::Patcher::read()
       return;
 
    const QJsonObject patcherObject = object["patcher"].toObject();
-   MessageMap messageMap = compileInletMessageMap(patcherObject, {"route", "routepass", "typeroute"});
-
-   auto processRoute = [&](const MaxClass& maxClass)
-   {
-      for (const QString& messageText : maxClass.arguments)
-      {
-         const Structure::Type type = Structure::toType(messageText);
-         if (Structure::Type::Anything == type)
-         {
-            if (!block->messageUserDefinedMap.contains(messageText))
-            {
-               block->messageUserDefinedMap[messageText] = Structure::Message();
-               block->markUndocumented(block->messageUserDefinedMap[messageText]);
-            }
-
-            Structure::Message& message = block->messageUserDefinedMap[messageText];
-            if (message.arguments.empty())
-            {
-               message.arguments.append(Structure::Argument());
-            }
-         }
-         else
-         {
-            if (!block->messageStandardMap.contains(type))
-            {
-               block->messageStandardMap[type] = Structure::Message();
-               block->markUndocumented(block->messageStandardMap[type]);
-            }
-
-            Structure::Message& message = block->messageStandardMap[type];
-            if (message.arguments.empty())
-            {
-               message.arguments.append(Structure::Argument());
-            }
-         }
-      }
-   };
+   MessageMap messageMap = compileInletMessageMap(patcherObject, {"route", "routepass", "typeroute~"});
 
    for (const MaxClass& maxClass : messageMap["route"])
-      processRoute(maxClass);
+      addRouteMessage(maxClass);
    for (const MaxClass& maxClass : messageMap["routepass"])
-      processRoute(maxClass);
+      addRouteMessage(maxClass);
+   for (const MaxClass& maxClass : messageMap["typeroute~"])
+      addTypeRouteMessage(maxClass, patcherObject);
 }
 
 Block::Patcher::Inlet::ConnectionMap Block::Patcher::compileInletConnectionMap(const QJsonObject patcherObject)
@@ -136,7 +104,7 @@ Block::Patcher::Inlet::ConnectionMap Block::Patcher::compileInletConnectionMap(c
       }
       else if ("newobj" == className)
       {
-         MaxClass maxClass(boxObject, index);
+         MaxClass maxClass(boxObject);
 
          if ("patcherargs" == maxClass.boxType)
             readPatcherargs(maxClass.arguments);
@@ -220,12 +188,85 @@ Block::Patcher::MessageMap Block::Patcher::compileInletMessageMap(const QJsonObj
          if (!connectedToInlet(boxObject))
             continue;
 
-         MaxClass maxClass(boxObject, index);
+         MaxClass maxClass(boxObject);
          messageMap[className].append(maxClass);
       }
    }
 
    return messageMap;
+}
+
+void Block::Patcher::addRouteMessage(const MaxClass& maxClass)
+{
+   for (const QString& messageText : maxClass.arguments)
+   {
+      const Structure::Type type = Structure::toType(messageText);
+      if (Structure::Type::Anything == type)
+      {
+         if (!block->messageUserDefinedMap.contains(messageText))
+         {
+            block->messageUserDefinedMap[messageText] = Structure::Message();
+            block->markUndocumented(block->messageUserDefinedMap[messageText]);
+         }
+
+         Structure::Message& message = block->messageUserDefinedMap[messageText];
+         if (message.arguments.empty())
+         {
+            message.arguments.append(Structure::Argument());
+         }
+      }
+      else
+      {
+         if (!block->messageStandardMap.contains(type))
+         {
+            block->messageStandardMap[type] = Structure::Message();
+            block->markUndocumented(block->messageStandardMap[type]);
+         }
+
+         Structure::Message& message = block->messageStandardMap[type];
+         if (message.arguments.empty())
+         {
+            message.arguments.append(Structure::Argument());
+         }
+      }
+   }
+}
+
+void Block::Patcher::addTypeRouteMessage(const MaxClass& maxClass, const QJsonObject patcherObject)
+{
+   static const QList<Structure::Type> portTypeList = {Structure::Type::Signal,
+                                                       Structure::Type::Bang,
+                                                       Structure::Type::Integer,
+                                                       Structure::Type::Float,
+                                                       Structure::Type::Symbol,
+                                                       Structure::Type::List};
+
+   const QJsonArray lineArray = patcherObject["lines"].toArray();
+   for (int index = 0; index < lineArray.size(); index++)
+   {
+      QJsonObject lineObject = lineArray.at(index).toObject();
+      lineObject = lineObject["patchline"].toObject();
+
+      const QJsonArray sourceArray = lineObject["source"].toArray();
+      const QString sourceId = sourceArray.at(0).toString();
+      if (maxClass.id != sourceId)
+         continue;
+
+      int port = sourceArray.at(1).toInt();
+      const Structure::Type type = portTypeList.at(port);
+
+      if (!block->messageStandardMap.contains(type))
+      {
+         block->messageStandardMap[type] = Structure::Message();
+         block->markUndocumented(block->messageStandardMap[type]);
+      }
+
+      Structure::Message& message = block->messageStandardMap[type];
+      if (message.arguments.empty())
+      {
+         message.arguments.append(Structure::Argument());
+      }
+   }
 }
 
 Structure::Output& Block::Patcher::findOrCreateOutput(const int id, const QString& name)

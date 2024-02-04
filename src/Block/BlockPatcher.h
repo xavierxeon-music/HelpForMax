@@ -25,11 +25,11 @@ private:
    {
       QString boxType;       // first text entry
       QStringList arguments; // the rest
-      int index;             // position in boxesArray of patcher object
+      QString id;            // box id
 
       using List = QList<MaxClass>;
 
-      MaxClass(const QJsonObject& boxObject, int index = 0);
+      MaxClass(const QJsonObject& boxObject);
    };
 
    using MessageMap = QMap<QString, MaxClass::List>;
@@ -37,6 +37,8 @@ private:
 private:
    Inlet::ConnectionMap compileInletConnectionMap(const QJsonObject patcherObject);
    MessageMap compileInletMessageMap(const QJsonObject patcherObject, const QStringList& boxTypeList);
+   void addRouteMessage(const MaxClass& maxClass);
+   void addTypeRouteMessage(const MaxClass& maxClass, const QJsonObject patcherObject);
    Structure::Output& findOrCreateOutput(const int id, const QString& name);
    void readPatcherargs(const QStringList& arguments);
 
