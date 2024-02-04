@@ -7,6 +7,38 @@
 #include "Block.h"
 #include "Tools/JSONModel.h"
 
+// max class
+
+Block::Patcher::MaxClass::MaxClass(const QJsonObject& boxObject, int index)
+   : boxType()
+   , arguments()
+   , index(index)
+{
+   QString text = boxObject["text"].toString();
+
+   // remove whitespace in quotes
+   bool inQuote = false;
+   for (int index = 0; index < text.size(); index++)
+   {
+      if ("\"" == text.mid(index, 1))
+      {
+         inQuote ^= true;
+         continue;
+      }
+      else if (inQuote && " " == text.mid(index, 1))
+      {
+         text.replace(index, 1, "_");
+      }
+   }
+
+   const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
+
+   boxType = contentList.first();
+   arguments = contentList.mid(1);
+}
+
+// patcher
+
 Block::Patcher::Patcher(Block* block, const QString& patchPath)
    : block(block)
    , patchPath(patchPath)
@@ -25,19 +57,56 @@ void Block::Patcher::read()
       return;
 
    const QJsonObject patcherObject = object["patcher"].toObject();
-   const QJsonArray boxArray = patcherObject["boxes"].toArray();
-   const QJsonArray lineArray = patcherObject["lines"].toArray();
+   MessageMap messageMap = compileInletMessageMap(patcherObject, {"route", "routepass", "typeroute"});
 
-   struct Inlet
+   auto processRoute = [&](const MaxClass& maxClass)
    {
-      int index;
-      QStringList connectedIdList;
+      for (const QString& messageText : maxClass.arguments)
+      {
+         const Structure::Type type = Structure::toType(messageText);
+         if (Structure::Type::Anything == type)
+         {
+            if (!block->messageUserDefinedMap.contains(messageText))
+            {
+               block->messageUserDefinedMap[messageText] = Structure::Message();
+               block->markUndocumented(block->messageUserDefinedMap[messageText]);
+            }
+
+            Structure::Message& message = block->messageUserDefinedMap[messageText];
+            if (message.arguments.empty())
+            {
+               message.arguments.append(Structure::Argument());
+            }
+         }
+         else
+         {
+            if (!block->messageStandardMap.contains(type))
+            {
+               block->messageStandardMap[type] = Structure::Message();
+               block->markUndocumented(block->messageStandardMap[type]);
+            }
+
+            Structure::Message& message = block->messageStandardMap[type];
+            if (message.arguments.empty())
+            {
+               message.arguments.append(Structure::Argument());
+            }
+         }
+      }
    };
 
-   using InletConnectionMap = QMap<QString, Inlet>;
-   InletConnectionMap inletConnectionMap;
+   for (const MaxClass& maxClass : messageMap["route"])
+      processRoute(maxClass);
+   for (const MaxClass& maxClass : messageMap["routepass"])
+      processRoute(maxClass);
+}
+
+Block::Patcher::Inlet::ConnectionMap Block::Patcher::compileInletConnectionMap(const QJsonObject patcherObject)
+{
+   Inlet::ConnectionMap inletConnectionMap;
 
    // parse inlets, outlets and patcherargs
+   const QJsonArray boxArray = patcherObject["boxes"].toArray();
    for (int index = 0; index < boxArray.size(); index++)
    {
       QJsonObject boxObject = boxArray.at(index).toObject();
@@ -56,9 +125,9 @@ void Block::Patcher::read()
       else if ("outlet" == className)
       {
          const int index = boxObject["index"].toInt();
-         Structure::Output& output = findOrCreateOutput(index);
-
          const QString comment = boxObject["comment"].toString();
+         Structure::Output& output = findOrCreateOutput(index, comment);
+
          if (output.name.isEmpty())
          {
             block->markUndocumented(output);
@@ -67,23 +136,21 @@ void Block::Patcher::read()
       }
       else if ("newobj" == className)
       {
-         QString text = boxObject["text"].toString();
-         //
+         MaxClass maxClass(boxObject, index);
 
-         if (text.startsWith("patcherargs"))
-            readPatcherargs(text);
-         else if (text.startsWith("wa.setup.bpatcher"))
+         if ("patcherargs" == maxClass.boxType)
+            readPatcherargs(maxClass.arguments);
+         else if ("wa.setup.bpatcher" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherGui;
-         else if (text.startsWith("wa.setup.poly"))
+         else if ("wa.setup.poly" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherPoly;
-         else if (text.startsWith("wa.setup.pfft"))
+         else if ("wa.setup.pfft" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherFourier;
       }
    }
 
-   block->patch.inletCount = inletConnectionMap.count();
-
    // find objects connected to inlets
+   const QJsonArray lineArray = patcherObject["lines"].toArray();
    for (int index = 0; index < lineArray.size(); index++)
    {
       QJsonObject lineObject = lineArray.at(index).toObject();
@@ -101,7 +168,35 @@ void Block::Patcher::read()
          inletConnectionMap[sourceId].connectedIdList.append(destId);
    }
 
+   return inletConnectionMap;
+}
+
+Block::Patcher::MessageMap Block::Patcher::compileInletMessageMap(const QJsonObject patcherObject, const QStringList& boxTypeList)
+{
+   Inlet::ConnectionMap inletConnectionMap = compileInletConnectionMap(patcherObject);
+   block->patch.inletCount = inletConnectionMap.count();
+
+   auto connectedToInlet = [&](const QJsonObject& boxObject) -> bool
+   {
+      const QString routeId = boxObject["id"].toString();
+      for (Inlet::ConnectionMap::ConstIterator it = inletConnectionMap.constBegin(); it != inletConnectionMap.constEnd(); it++)
+      {
+         for (const QString& id : it.value().connectedIdList)
+         {
+            if (id == routeId)
+               return true;
+         }
+      }
+
+      return false;
+   };
+
+   MessageMap messageMap;
+   for (const QString& boxType : boxTypeList)
+      messageMap[boxType] = MaxClass::List();
+
    // parse routes connected to inlets for  messages
+   const QJsonArray boxArray = patcherObject["boxes"].toArray();
    for (int index = 0; index < boxArray.size(); index++)
    {
       QJsonObject boxObject = boxArray.at(index).toObject();
@@ -114,94 +209,54 @@ void Block::Patcher::read()
       if ("newobj" == className)
       {
          const QString text = boxObject["text"].toString();
-         if (!text.startsWith("route"))
+         const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
+
+         // box type we are interested in
+         const QString className = contentList.first();
+         if (!messageMap.contains(className))
             continue;
 
          // check if connected to inlet
-         int connectedIndex = [&]() -> int
-         {
-            const QString routeId = boxObject["id"].toString();
-            for (InletConnectionMap::ConstIterator it = inletConnectionMap.constBegin(); it != inletConnectionMap.constEnd(); it++)
-            {
-               for (const QString& id : it.value().connectedIdList)
-               {
-                  if (id == routeId)
-                     return it.value().index;
-               }
-            }
-            return -1;
-         }();
-
-         if (-1 == connectedIndex)
+         if (!connectedToInlet(boxObject))
             continue;
 
-         const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
-         for (int i = 1; i < contentList.size(); i++)
-         {
-            const QString& messageText = contentList.at(i);
-            const Structure::Type type = Structure::toType(messageText);
-            if (Structure::Type::Anything == type)
-            {
-               if (!block->messageUserDefinedMap.contains(messageText))
-               {
-                  block->messageUserDefinedMap[messageText] = Structure::Message();
-                  block->markUndocumented(block->messageUserDefinedMap[messageText]);
-               }
-
-               Structure::Message& message = block->messageUserDefinedMap[messageText];
-               if (message.arguments.empty())
-               {
-                  message.arguments.append(Structure::Argument());
-               }
-            }
-            else
-            {
-               if (!block->messageStandardMap.contains(type))
-               {
-                  block->messageStandardMap[type] = Structure::Message();
-                  block->markUndocumented(block->messageStandardMap[type]);
-               }
-
-               Structure::Message& message = block->messageStandardMap[type];
-               if (message.arguments.empty())
-               {
-                  message.arguments.append(Structure::Argument());
-               }
-            }
-         }
+         MaxClass maxClass(boxObject, index);
+         messageMap[className].append(maxClass);
       }
    }
+
+   return messageMap;
 }
 
-Structure::Output& Block::Patcher::findOrCreateOutput(const int id)
+Structure::Output& Block::Patcher::findOrCreateOutput(const int id, const QString& name)
 {
-   if (!block->outputMap.contains(id))
+   Output::Map& blockMap = block->outputMap;
+
+   // first pass: by name
+   for (Output::Map::iterator it = blockMap.begin(); it != blockMap.end(); it++)
    {
-      block->outputMap[id] = Structure::Output{};
-      block->markUndocumented(block->outputMap[id]);
+      Structure::Output& output = it.value();
+      if (output.name == name)
+         return output;
    }
 
-   return block->outputMap[id];
+   // second pass by matching input
+   for (Output::Map::iterator it = blockMap.begin(); it != blockMap.end(); it++)
+   {
+      if (id == it.key())
+         return it.value();
+   }
+
+   // create new
+   Structure::Output output{};
+   block->markUndocumented(output);
+
+   blockMap[id] = output;
+   return blockMap[id];
 }
 
-void Block::Patcher::readPatcherargs(QString text)
+void Block::Patcher::readPatcherargs(const QStringList& arguments)
 {
-   // remove whitespace in quotes
-   bool inQuote = false;
-   for (int index = 0; index < text.size(); index++)
-   {
-      if ("\"" == text.mid(index, 1))
-      {
-         inQuote ^= true;
-         continue;
-      }
-      else if (inQuote && " " == text.mid(index, 1))
-      {
-         text.replace(index, 1, "_");
-      }
-   }
-
-   const QStringList contentList = text.split(" ", Qt::SkipEmptyParts);
    enum class State
    {
       Argument,
@@ -210,10 +265,9 @@ void Block::Patcher::readPatcherargs(QString text)
    };
 
    State state = State::Argument;
-
-   for (int i = 1; i < contentList.size(); i++)
+   for (int i = 0; i < arguments.size(); i++)
    {
-      const QString& arg = contentList.at(i);
+      const QString& arg = arguments.at(i);
 
       // maybe advance state
       if (arg.startsWith("@"))
