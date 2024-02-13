@@ -108,11 +108,11 @@ Block::Patcher::Inlet::ConnectionMap Block::Patcher::compileInletConnectionMap(c
 
          if ("patcherargs" == maxClass.boxType)
             readPatcherargs(maxClass.arguments);
-         else if ("wa.setup.bpatcher" == maxClass.boxType)
+         else if ("wa.patch.bpatcher" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherGui;
-         else if ("wa.setup.poly" == maxClass.boxType)
+         else if ("wa.patch.poly" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherPoly;
-         else if ("wa.setup.pfft" == maxClass.boxType)
+         else if ("wa.patch.pfft" == maxClass.boxType)
             block->patch.patcherType = Structure::PatcherFourier;
       }
    }
