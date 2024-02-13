@@ -281,10 +281,11 @@ Structure::Output& Block::Patcher::findOrCreateOutput(const int id, const QStrin
          return output;
    }
 
-   // second pass by matching input
+   // second pass by matching id
    for (Output::Map::iterator it = blockMap.begin(); it != blockMap.end(); it++)
    {
-      if (id == it.key())
+      Structure::Output& output = it.value();
+      if (id == it.key() && output.name.isEmpty())
          return it.value();
    }
 
@@ -292,8 +293,12 @@ Structure::Output& Block::Patcher::findOrCreateOutput(const int id, const QStrin
    Structure::Output output{};
    block->markUndocumented(output);
 
-   blockMap[id] = output;
-   return blockMap[id];
+   int blockId = id;
+   while (blockMap.contains(blockId))
+      blockId++;
+
+   blockMap[blockId] = output;
+   return blockMap[blockId];
 }
 
 void Block::Patcher::readPatcherargs(const QStringList& arguments)
