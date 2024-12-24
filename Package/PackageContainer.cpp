@@ -1,4 +1,4 @@
-#include "PackageTabWidget.h"
+#include "PackageContainer.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -14,9 +14,9 @@
 
 using HelpForMax = Shared<"HelpForMax">;
 
-Package::TabWidget* Package::TabWidget::me = nullptr;
+Package::Container* Package::Container::me = nullptr;
 
-Package::TabWidget::TabWidget(QWidget* parent)
+Package::Container::Container(QWidget* parent)
    : RecentTabWidget(parent, "Package")
    , packageInfoBuffer()
    , server(nullptr)
@@ -31,17 +31,17 @@ Package::TabWidget::TabWidget(QWidget* parent)
    linkMap[false] = QIcon(":/MaxLinkInactive.svg");
 
    server = new QLocalServer(this);
-   connect(server, &QLocalServer::newConnection, this, &TabWidget::slotNewConnection);
+   connect(server, &QLocalServer::newConnection, this, &Container::slotNewConnection);
    qDebug() << "Server @" << HelpForMax::socketName();
    server->listen(HelpForMax::socketName());
 }
 
-Package::TabWidget::~TabWidget()
+Package::Container::~Container()
 {
    me = nullptr;
 }
 
-void Package::TabWidget::slotRefWritten(const QString& patchPath)
+void Package::Container::slotRefWritten(const QString& patchPath)
 {
    if (socket.isNull())
       return;
@@ -54,7 +54,7 @@ void Package::TabWidget::slotRefWritten(const QString& patchPath)
    socket->write(doc.toJson(QJsonDocument::Compact));
 }
 
-void Package::TabWidget::slotCheckDirty()
+void Package::Container::slotCheckDirty()
 {
    for (int index = 0; index < tabBar()->count(); index++)
    {
@@ -66,7 +66,7 @@ void Package::TabWidget::slotCheckDirty()
    }
 }
 
-Package::Info* Package::TabWidget::findOrCreate(const QString& someFileInPackage)
+Package::Info* Package::Container::findOrCreate(const QString& someFileInPackage)
 {
    if (!me)
       return nullptr;
@@ -99,7 +99,7 @@ Package::Info* Package::TabWidget::findOrCreate(const QString& someFileInPackage
    return me->get(path);
 }
 
-void Package::TabWidget::createActions()
+void Package::Container::createActions()
 {
    auto addAction = [&](QIcon icon, QString text, QString objectName, auto slotFunction)
    {
@@ -111,19 +111,19 @@ void Package::TabWidget::createActions()
    };
 
    //
-   addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", &TabWidget::slotLoadPackage);
+   addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", &Container::slotLoadPackage);
 
-   linkAction = addAction(linkMap.value(false), "Link", "Package.Link", &TabWidget::slotLinkToMax);
+   linkAction = addAction(linkMap.value(false), "Link", "Package.Link", &Container::slotLinkToMax);
    linkAction->setCheckable(true);
 
    QSettings settings;
    linkEnabled = settings.value("Package/Link").toBool();
    linkAction->setChecked(linkEnabled);
 
-   addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &TabWidget::slotClosePackage);
+   addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
 }
 
-void Package::TabWidget::init()
+void Package::Container::init()
 {
    for (const QString& packagePath : getCurrrentFiles())
    {
@@ -131,7 +131,7 @@ void Package::TabWidget::init()
    }
 }
 
-Package::Info* Package::TabWidget::get(const QString& packagePath)
+Package::Info* Package::Container::get(const QString& packagePath)
 {
    if (packageInfoBuffer.contains(packagePath))
       return packageInfoBuffer.value(packagePath);
@@ -156,7 +156,7 @@ Package::Info* Package::TabWidget::get(const QString& packagePath)
    }
 
    Widget* view = new Widget(this, info);
-   connect(view, &Widget::signalPatchSeleted, this, &TabWidget::signalPatchSeleted);
+   connect(view, &Widget::signalPatchSeleted, this, &Container::signalPatchSeleted);
 
    addTab(view, info->name);
    addRecentFile(info->path);
@@ -165,7 +165,7 @@ Package::Info* Package::TabWidget::get(const QString& packagePath)
    return info;
 }
 
-void Package::TabWidget::slotLoadPackage()
+void Package::Container::slotLoadPackage()
 {
    const QString packageFileName = QFileDialog::getOpenFileName(this, "MAX PACKAGE", QString(), "package-info.json");
    if (packageFileName.isEmpty())
@@ -174,7 +174,7 @@ void Package::TabWidget::slotLoadPackage()
    findOrCreate(packageFileName);
 }
 
-void Package::TabWidget::slotClosePackage()
+void Package::Container::slotClosePackage()
 {
    Widget* view = qobject_cast<Widget*>(currentWidget());
    const Info* info = view->getPackageInfo();
@@ -184,7 +184,7 @@ void Package::TabWidget::slotClosePackage()
    emit signalCloseAllPatches(info);
 }
 
-void Package::TabWidget::slotNewConnection()
+void Package::Container::slotNewConnection()
 {
    socket = server->nextPendingConnection();
 
@@ -197,12 +197,12 @@ void Package::TabWidget::slotNewConnection()
    auto inactiveFunction = std::bind(setLinkActive, false);
    connect(socket, &QLocalSocket::disconnected, inactiveFunction);
 
-   connect(socket, &QIODevice::readyRead, this, &TabWidget::slotReceiveSocket);
+   connect(socket, &QIODevice::readyRead, this, &Container::slotReceiveSocket);
 
    setLinkActive(true);
 }
 
-void Package::TabWidget::slotReceiveSocket()
+void Package::Container::slotReceiveSocket()
 {
    if (!linkEnabled)
       return;
@@ -227,7 +227,7 @@ void Package::TabWidget::slotReceiveSocket()
    }
 }
 
-void Package::TabWidget::slotLinkToMax(bool enabled)
+void Package::Container::slotLinkToMax(bool enabled)
 {
    linkEnabled = enabled;
 
@@ -235,7 +235,7 @@ void Package::TabWidget::slotLinkToMax(bool enabled)
    settings.setValue("Package/Link", linkEnabled);
 }
 
-RecentTabWidget::Entry Package::TabWidget::creatreEntry(const QFileInfo& fileInfo)
+RecentTabWidget::Entry Package::Container::creatreEntry(const QFileInfo& fileInfo)
 {
    const QString name = fileInfo.baseName();
    auto openFunction = [this, fileInfo]()

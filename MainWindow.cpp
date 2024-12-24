@@ -26,7 +26,7 @@ MainWindow::MainWindow()
    setWindowTitle("Help For Max [*]");
    setWindowIcon(QIcon(":/HelpForMax.svg"));
 
-   patchWidget = new Patch::TabWidget(this);
+   patchWidget = new Patch::Container(this);
    setCentralWidget(patchWidget);
 
    Message::Bar* messageBar = new Message::Bar(this);
@@ -43,15 +43,15 @@ MainWindow::MainWindow()
       addDockWidget(area, dockWidget);
    };
 
-   packageWidget = new Package::TabWidget(this);
+   packageWidget = new Package::Container(this);
    addDock(packageWidget, Qt::LeftDockWidgetArea, "Package");
 
-   connect(patchWidget, &Patch::TabWidget::signalCheckDirty, this, &MainWindow::slotCheckDirty);
-   connect(patchWidget, &Patch::TabWidget::signalCheckDirty, packageWidget, &Package::TabWidget::slotCheckDirty);
+   connect(patchWidget, &Patch::Container::signalCheckDirty, this, &MainWindow::slotCheckDirty);
+   connect(patchWidget, &Patch::Container::signalCheckDirty, packageWidget, &Package::Container::slotCheckDirty);
 
-   connect(patchWidget, &Patch::TabWidget::signalRefWritten, packageWidget, &Package::TabWidget::slotRefWritten);
-   connect(packageWidget, &Package::TabWidget::signalCloseAllPatches, patchWidget, &Patch::TabWidget::slotCloseAllPatches);
-   connect(packageWidget, &Package::TabWidget::signalPatchSeleted, patchWidget, &Patch::TabWidget::slotShowPatch);
+   connect(patchWidget, &Patch::Container::signalRefWritten, packageWidget, &Package::Container::slotRefWritten);
+   connect(packageWidget, &Package::Container::signalCloseAllPatches, patchWidget, &Patch::Container::slotCloseAllPatches);
+   connect(packageWidget, &Package::Container::signalPatchSeleted, patchWidget, &Patch::Container::slotShowPatch);
 
 #ifdef TEST_CLIENT_AVAILABLE
    testClient = new TestClient;

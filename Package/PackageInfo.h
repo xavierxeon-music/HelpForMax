@@ -19,7 +19,7 @@ namespace Package
       const QString& getAuthor() const;
 
    private:
-      friend class TabWidget;
+      friend class Container;
 
    private:
       Info(const QString& path);

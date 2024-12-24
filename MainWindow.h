@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 
-#include "Package/PackageTabWidget.h"
-#include "Patch/PatchTabWidget.h"
+#include "PackageContainer.h"
+#include "PatchContainer.h"
+
+#ifdef TEST_CLIENT_AVAILABLE
 #include "TestClient.h"
+#endif // TEST_CLIENT_AVAILABLE
 
 class MainWindow : public QMainWindow
 {
@@ -24,8 +27,8 @@ private:
    void toogleDock(QWidget* widget, const QString& name, bool enabled);
 
 private:
-   Package::TabWidget* packageWidget;
-   Patch::TabWidget* patchWidget;
+   Package::Container* packageWidget;
+   Patch::Container* patchWidget;
 #ifdef TEST_CLIENT_AVAILABLE
    TestClient* testClient;
 #endif // TEST_CLIENT_AVAILABLE

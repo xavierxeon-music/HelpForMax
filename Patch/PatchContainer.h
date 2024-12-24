@@ -1,5 +1,5 @@
-#ifndef PatchTabWidgetH
-#define PatchTabWidgetH
+#ifndef PatchContainerH
+#define PatchContainerH
 
 #include "RecentTabWidget.h"
 
@@ -18,7 +18,7 @@ namespace Patch
 {
    class Widget;
 
-   class TabWidget : public RecentTabWidget
+   class Container : public RecentTabWidget
    {
       Q_OBJECT
 
@@ -35,7 +35,7 @@ namespace Patch
       using SplitterLocker = Locker<"Splitter">;
 
    public:
-      TabWidget(QWidget* parent);
+      Container(QWidget* parent);
 
    signals:
       void signalCheckDirty();
@@ -76,6 +76,6 @@ namespace Patch
    };
 } // namespace Patch
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Patch::TabWidget::ToolsVisible)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Patch::Container::ToolsVisible)
 
-#endif // NOT PatchTabWidgetH
+#endif // NOT PatchContainerH

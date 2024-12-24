@@ -1,16 +1,17 @@
-#include "PatchTabWidget.h"
+#include "PatchContainer.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QSettings>
+#include <QTabBar>
 #include <QTimer>
 
 #include "MessageBar.h"
+#include "PackageContainer.h"
 #include "PackageInfo.h"
-#include "PackageTabWidget.h"
-#include "PatchRefWidget.h"
+#include "PatchWidget.h"
 
-Patch::TabWidget::TabWidget(QWidget* parent)
+Patch::Container::Container(QWidget* parent)
    : RecentTabWidget(parent, "Patch")
    , toolsVisible(ToolVisibility::None)
    , splitterSizes()
@@ -31,7 +32,7 @@ Patch::TabWidget::TabWidget(QWidget* parent)
    }
 }
 
-void Patch::TabWidget::createActions()
+void Patch::Container::createActions()
 {
    auto addAction = [&](QIcon icon, QString text, QString objectName, auto slotFunction)
    {
@@ -43,35 +44,35 @@ void Patch::TabWidget::createActions()
    };
 
    //
-   addAction(QIcon(":/PatchLoad.svg"), "Load", "Patch.Load", &TabWidget::slotPromptLoadPatch);
+   addAction(QIcon(":/PatchLoad.svg"), "Load", "Patch.Load", &Container::slotPromptLoadPatch);
 
-   QAction* saveAction = addAction(QIcon(":/PatchSave.svg"), "Save", "Patch.Save", &TabWidget::slotWriteRef);
+   QAction* saveAction = addAction(QIcon(":/PatchSave.svg"), "Save", "Patch.Save", &Container::slotWriteRef);
    saveAction->setShortcut(QKeySequence::Save);
 
-   QAction* saveAllAction = addAction(QIcon(":/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", &TabWidget::slotWriteAllRefs);
+   QAction* saveAllAction = addAction(QIcon(":/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", &Container::slotWriteAllRefs);
    saveAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_S);
 
-   QAction* closeAction = addAction(QIcon(":/PatchClose.svg"), "Close", "Patch.Close", &TabWidget::slotClosePatch);
+   QAction* closeAction = addAction(QIcon(":/PatchClose.svg"), "Close", "Patch.Close", &Container::slotClosePatch);
    closeAction->setShortcut(QKeySequence::Close);
 
    //
-   QAction* suggestAction = addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", &TabWidget::slotShowSuggestions);
+   QAction* suggestAction = addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", &Container::slotShowSuggestions);
    suggestAction->setCheckable(true);
    suggestAction->setChecked(toolsVisible & ToolVisibility::Suggestions);
 
-   QAction* structureAction = addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", &TabWidget::slotShowStructure);
+   QAction* structureAction = addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", &Container::slotShowStructure);
    structureAction->setCheckable(true);
    structureAction->setChecked(toolsVisible & ToolVisibility::Structure);
    structureAction->setShortcut(QKeySequence::Print);
 
-   QAction* openInMaxAction = addAction(QIcon(":/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", &TabWidget::slotOpenInMax);
+   QAction* openInMaxAction = addAction(QIcon(":/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", &Container::slotOpenInMax);
    openInMaxAction->setShortcuts(QKeySequence::Italic);
 
-   QAction* showXMLAction = addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", &TabWidget::slotOpenXML);
+   QAction* showXMLAction = addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", &Container::slotOpenXML);
    showXMLAction->setShortcut(QKeySequence::Open);
 }
 
-void Patch::TabWidget::init()
+void Patch::Container::init()
 {
    for (const QString& patchPath : getCurrrentFiles())
    {
@@ -79,12 +80,12 @@ void Patch::TabWidget::init()
    }
 }
 
-void Patch::TabWidget::emitSignalCheckDirty()
+void Patch::Container::emitSignalCheckDirty()
 {
-   QTimer::singleShot(200, this, &TabWidget::updateTabNames);
+   QTimer::singleShot(200, this, &Container::updateTabNames);
 }
 
-void Patch::TabWidget::slotPromptLoadPatch()
+void Patch::Container::slotPromptLoadPatch()
 {
    const QString patchFileName = QFileDialog::getOpenFileName(this, "MAX PATCH", QString(), "*.maxpat");
    if (patchFileName.isEmpty())
@@ -93,9 +94,9 @@ void Patch::TabWidget::slotPromptLoadPatch()
    slotShowPatch(patchFileName);
 }
 
-void Patch::TabWidget::slotShowPatch(const QString& patchFileName)
+void Patch::Container::slotShowPatch(const QString& patchFileName)
 {
-   Package::Info* info = Package::TabWidget::findOrCreate(patchFileName);
+   Package::Info* info = Package::Container::findOrCreate(patchFileName);
    if (!info)
    {
       Message::Bar::warning() << "PATCH does not belong to a package" << patchFileName;
@@ -119,7 +120,7 @@ void Patch::TabWidget::slotShowPatch(const QString& patchFileName)
 
    patchWidget->setToolsVisible(toolsVisible);
 
-   connect(patchWidget, &QSplitter::splitterMoved, this, &TabWidget::slotTabSplitterChanged);
+   connect(patchWidget, &QSplitter::splitterMoved, this, &Container::slotTabSplitterChanged);
 
    const int index = addTab(patchWidget, patchInfo.name);
    setCurrentIndex(index);
@@ -128,7 +129,7 @@ void Patch::TabWidget::slotShowPatch(const QString& patchFileName)
    addCurrentFile(patchFileName);
 }
 
-void Patch::TabWidget::slotWriteRef()
+void Patch::Container::slotWriteRef()
 {
    Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
    if (!patchWidget)
@@ -138,7 +139,7 @@ void Patch::TabWidget::slotWriteRef()
    patchWidget->writeRef();
 }
 
-void Patch::TabWidget::slotWriteAllRefs()
+void Patch::Container::slotWriteAllRefs()
 {
    for (int index = 0; index < tabBar()->count(); index++)
    {
@@ -151,7 +152,7 @@ void Patch::TabWidget::slotWriteAllRefs()
    }
 }
 
-void Patch::TabWidget::slotClosePatch()
+void Patch::Container::slotClosePatch()
 {
    Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
    if (!patchWidget)
@@ -161,7 +162,7 @@ void Patch::TabWidget::slotClosePatch()
    patchWidget->deleteLater();
 }
 
-void Patch::TabWidget::slotCloseAllPatches(const Package::Info* packageInfo)
+void Patch::Container::slotCloseAllPatches(const Package::Info* packageInfo)
 {
    QList<Widget*> deleteList;
    for (int index = 0; index < tabBar()->count(); index++)
@@ -180,33 +181,33 @@ void Patch::TabWidget::slotCloseAllPatches(const Package::Info* packageInfo)
    }
 }
 
-void Patch::TabWidget::slotOpenInMax()
+void Patch::Container::slotOpenInMax()
 {
    Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
    if (patchWidget)
       patchWidget->openInMax();
 }
 
-void Patch::TabWidget::slotOpenXML()
+void Patch::Container::slotOpenXML()
 {
    Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
    if (patchWidget)
       patchWidget->openXML();
 }
 
-void Patch::TabWidget::slotShowSuggestions(bool enabled)
+void Patch::Container::slotShowSuggestions(bool enabled)
 {
    toggleVisibility(enabled, ToolVisibility::Suggestions);
    writeSettings();
 }
 
-void Patch::TabWidget::slotShowStructure(bool enabled)
+void Patch::Container::slotShowStructure(bool enabled)
 {
    toggleVisibility(enabled, ToolVisibility::Structure);
    writeSettings();
 }
 
-void Patch::TabWidget::slotTabSplitterChanged()
+void Patch::Container::slotTabSplitterChanged()
 {
    if (SplitterLocker::engaged())
       return;
@@ -233,16 +234,16 @@ void Patch::TabWidget::slotTabSplitterChanged()
    }
 }
 
-RecentTabWidget::Entry Patch::TabWidget::creatreEntry(const QFileInfo& fileInfo)
+RecentTabWidget::Entry Patch::Container::creatreEntry(const QFileInfo& fileInfo)
 {
    const QString patchName = fileInfo.completeBaseName();
-   auto openFunction = std::bind(&TabWidget::slotShowPatch, this, fileInfo.absoluteFilePath());
+   auto openFunction = std::bind(&Container::slotShowPatch, this, fileInfo.absoluteFilePath());
 
    Entry entry{patchName, openFunction};
    return entry;
 }
 
-void Patch::TabWidget::updateTabNames()
+void Patch::Container::updateTabNames()
 {
    static const QString bullet = QString::fromUtf8("\u25cf") + QString(" ");
 
@@ -263,7 +264,7 @@ void Patch::TabWidget::updateTabNames()
    emit signalCheckDirty();
 }
 
-void Patch::TabWidget::toggleVisibility(bool enabled, const ToolVisibility& value)
+void Patch::Container::toggleVisibility(bool enabled, const ToolVisibility& value)
 {
    if (enabled)
       toolsVisible |= value;
@@ -282,7 +283,7 @@ void Patch::TabWidget::toggleVisibility(bool enabled, const ToolVisibility& valu
    }
 }
 
-void Patch::TabWidget::writeSettings()
+void Patch::Container::writeSettings()
 {
    QSettings settings;
 

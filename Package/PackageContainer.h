@@ -1,8 +1,7 @@
-#ifndef PackageTabWidgetH
-#define PackageTabWidgetH
+#ifndef PackageContainerH
+#define PackageContainerH
 
 #include "RecentTabWidget.h"
-#include <QTabWidget>
 
 #include <QLocalServer>
 #include <QLocalSocket>
@@ -14,13 +13,13 @@ namespace Package
 {
    class Info;
 
-   class TabWidget : public RecentTabWidget
+   class Container : public RecentTabWidget
    {
       Q_OBJECT
 
    public:
-      TabWidget(QWidget* parent);
-      ~TabWidget();
+      Container(QWidget* parent);
+      ~Container();
 
    signals:
       void signalCloseAllPatches(const Info* info);
@@ -48,7 +47,7 @@ namespace Package
       void updateCurrentList();
 
    private:
-      static TabWidget* me;
+      static Container* me;
       QMap<QString, Info*> packageInfoBuffer;
       QLocalServer* server;
       QPointer<QLocalSocket> socket;
@@ -59,4 +58,4 @@ namespace Package
    };
 } // namespace Package
 
-#endif // NOT PackageTabWidgetH
+#endif // NOT PackageContainerH
