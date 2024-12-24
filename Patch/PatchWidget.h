@@ -8,7 +8,15 @@
 #include "MaxWidget.h"
 #include "PatchContainer.h"
 #include "PatchInfo.h"
+#include "PatchRefModelArgument.h"
+#include "PatchRefModelHeader.h"
+#include "PatchRefModelNamedMessage.h"
+#include "PatchRefModelOutput.h"
+#include "PatchRefModelTypedMessage.h"
 #include "PatchRefWidget.h"
+#include "SuggestModelArgument.h"
+#include "SuggestModelNamedMessage.h"
+#include "SuggestModelTypedMessage.h"
 #include "SuggestWidget.h"
 
 namespace Patch
@@ -48,6 +56,16 @@ namespace Patch
 
       Ref::Structure maxRef;
       Max::Patcher maxPatch;
+
+      PatchRef::Model::Header* headerPatchModel;
+      PatchRef::Model::Argument* argumentPatchModel;
+      PatchRef::Model::TypedMessage* typedMessagPatcheModel;
+      PatchRef::Model::NamedMessage* namedMessagePatchModel;
+      PatchRef::Model::Output* outputPatchModel;
+
+      Suggest::Model::Argument* argumentSuggestModel;
+      Suggest::Model::NamedMessage* namedMessageSuggestModel;
+      Suggest::Model::TypedMessage* typedMessageSuggestModel;
 
       const Package::Info* packageInfo;
       QString path;

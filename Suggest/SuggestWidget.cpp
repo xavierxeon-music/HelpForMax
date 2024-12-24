@@ -1,7 +1,40 @@
 #include "SuggestWidget.h"
 
-Suggest::Widget::Widget(QWidget* parent)
-   : QWidget(parent)
+#include "PatchWidget.h"
+
+Suggest::Widget::Widget(Patch::Widget* patchWidget)
+   : QWidget(patchWidget)
+   , patchWidget(patchWidget)
 {
    setupUi(this);
+
+   auto setIcon = [&](QLabel* iconLabel, Ref::Structure::PatchPart part)
+   {
+      iconLabel->setPixmap(patchWidget->maxRef.partIcon(part).pixmap(16, 16));
+   };
+
+   setIcon(argumentIcon, Ref::Structure::PatchPart::Argument);
+   setIcon(typedMessageIcon, Ref::Structure::PatchPart::MessageTyped);
+   setIcon(attributeIcon, Ref::Structure::PatchPart::Attribute);
+   setIcon(nameMessageIcon, Ref::Structure::PatchPart::MessageNamed);
+
+   // set suggest models
+   argumentSuggestTree->init(patchWidget->argumentSuggestModel);
+   argumentSuggestTree->setButton(argumnetTransferButton);
+
+   typedMessageSuggestTree->init(patchWidget->typedMessageSuggestModel);
+   typedMessageSuggestTree->setButton(typedMessageTransferButton);
+
+   namedMessageSuggestTree->init(patchWidget->namedMessageSuggestModel);
+   namedMessageSuggestTree->setButton(namedMessageTransferButton);
+
+   // set reference models
+   argumentPatchTree->setModel(patchWidget->argumentPatchModel);
+   typedMessagePatchTree->setModel(patchWidget->typedMessagPatcheModel);
+   namedMessagePatchTree->setModel(patchWidget->namedMessagePatchModel);
+}
+
+void Suggest::Widget::rebuild()
+{
+   Model::Abstract::rebuildAll();
 }

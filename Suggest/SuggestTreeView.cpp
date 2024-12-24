@@ -9,7 +9,6 @@ QList<QWidget*> Suggest::TreeView::instanceList;
 
 Suggest::TreeView::TreeView(QWidget* parent)
    : QTreeView(parent)
-   , widget(nullptr)
    , model(nullptr)
 {
    setRootIsDecorated(false);
@@ -23,9 +22,8 @@ Suggest::TreeView::~TreeView()
    instanceList.removeAll(this);
 }
 
-void Suggest::TreeView::init(Patch::Widget* widget, Model::Abstract* model)
+void Suggest::TreeView::init(Model::Abstract* model)
 {
-   this->widget = widget;
    this->model = model;
 
    setModel(model);

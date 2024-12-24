@@ -26,7 +26,7 @@ namespace Suggest
       ~TreeView();
 
    public:
-      void init(Patch::Widget* widget, Model::Abstract* model);
+      void init(Model::Abstract* model);
       void setButton(QToolButton* transferButton);
 
       static void setAllVisible(bool visible);
@@ -37,7 +37,6 @@ namespace Suggest
 
    private:
       static QList<QWidget*> instanceList;
-      Patch::Widget* widget;
       Model::Abstract* model;
    };
 } // namespace Suggest

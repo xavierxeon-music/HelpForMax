@@ -8,11 +8,6 @@
 #include "DelegatePatchType.h"
 #include "DescriptionHighlighter.h"
 #include "PackageInfo.h"
-#include "PatchRefModelArgument.h"
-#include "PatchRefModelHeader.h"
-#include "PatchRefModelNamedMessage.h"
-#include "PatchRefModelOutput.h"
-#include "PatchRefModelTypedMessage.h"
 #include "PatchWidget.h"
 
 PatchRef::Widget::Widget(Patch::Widget* patchWidget)
@@ -32,25 +27,20 @@ PatchRef::Widget::Widget(Patch::Widget* patchWidget)
    setIcon(otherIcon, Ref::Structure::PatchPart::Other);
 
    // set reference models
-   PatchRef::Model::Header* headerPatchModel = new PatchRef::Model::Header(this, patchWidget->maxRef);
-   headerPatchTree->init(this, headerPatchModel, 1);
-   headerPatchTree->setItemDelegateForColumn(0, new Delegate::PatchType(this, headerPatchModel));
+   headerPatchTree->init(this, patchWidget->headerPatchModel, 1);
+   headerPatchTree->setItemDelegateForColumn(0, new Delegate::PatchType(this, patchWidget->headerPatchModel));
 
-   PatchRef::Model::Argument* argumentPatchModel = new PatchRef::Model::Argument(this, patchWidget->maxRef);
-   argumentPatchTree->init(this, argumentPatchModel);
+   argumentPatchTree->init(this, patchWidget->argumentPatchModel);
    argumentPatchTree->setButtons(argumentAddButton, argumentRemoveButton);
-   argumentPatchTree->setItemDelegateForColumn(1, new Delegate::DataType(this, argumentPatchModel));
+   argumentPatchTree->setItemDelegateForColumn(1, new Delegate::DataType(this, patchWidget->argumentPatchModel));
 
-   PatchRef::Model::TypedMessage* typedMessagPatcheModel = new PatchRef::Model::TypedMessage(this, patchWidget->maxRef);
-   typedMessagePatchTree->init(this, typedMessagPatcheModel);
+   typedMessagePatchTree->init(this, patchWidget->typedMessagPatcheModel);
 
-   PatchRef::Model::NamedMessage* namedMessagePatchModel = new PatchRef::Model::NamedMessage(this, patchWidget->maxRef);
-   namedMessagePatchTree->init(this, namedMessagePatchModel);
+   namedMessagePatchTree->init(this, patchWidget->namedMessagePatchModel);
    namedMessagePatchTree->setButtons(namedMessageAddButton, namedMessageRemoveButton);
-   namedMessagePatchTree->setItemDelegateForColumn(1, new Delegate::DataType(this, namedMessagePatchModel));
+   namedMessagePatchTree->setItemDelegateForColumn(1, new Delegate::DataType(this, patchWidget->namedMessagePatchModel));
 
-   PatchRef::Model::Output* outputPatchModel = new PatchRef::Model::Output(this, patchWidget->maxRef);
-   outputPatchTree->init(this, outputPatchModel);
+   outputPatchTree->init(this, patchWidget->outputPatchModel);
    outputPatchTree->setButtons(outputAddButton, outputRemoveButton);
 
    // right: digest area
@@ -101,13 +91,13 @@ void PatchRef::Widget::setDigest(Ref::Structure::Digest* newDigest, const Ref::S
 
 void PatchRef::Widget::rebuild()
 {
-   PatchRef::Model::Abstract::rebuildAll();
+   Model::Abstract::rebuildAll();
    setDigest(&patchWidget->maxRef.header.digest, Ref::Structure::PatchPart::Header);
 }
 
 void PatchRef::Widget::update()
 {
-   PatchRef::Model::Abstract::updateAll();
+   Model::Abstract::updateAll();
 }
 
 void PatchRef::Widget::setIcon(QLabel* iconLabel, Ref::Structure::PatchPart part)

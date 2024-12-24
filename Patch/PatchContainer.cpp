@@ -59,6 +59,7 @@ void Patch::Container::createActions()
    QAction* suggestAction = addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", &Container::slotShowSuggestions);
    suggestAction->setCheckable(true);
    suggestAction->setChecked(toolsVisible & ToolVisibility::Suggestions);
+   suggestAction->setShortcut(QKeySequence::Find);
 
    QAction* structureAction = addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", &Container::slotShowStructure);
    structureAction->setCheckable(true);

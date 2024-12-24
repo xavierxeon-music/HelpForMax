@@ -16,10 +16,30 @@ Patch::Widget::Widget(Patch::Container* container, const Package::Info* packageI
    , structureWidget(nullptr)
    , maxRef()
    , maxPatch()
+   , headerPatchModel(nullptr)
+   , argumentPatchModel(nullptr)
+   , typedMessagPatcheModel(nullptr)
+   , namedMessagePatchModel(nullptr)
+   , outputPatchModel(nullptr)
+   , argumentSuggestModel(nullptr)
+   , namedMessageSuggestModel(nullptr)
+   , typedMessageSuggestModel(nullptr)
    , packageInfo(packageInfo)
    , path(patchFileName)
    , patchInfo{}
 {
+   // models
+   headerPatchModel = new PatchRef::Model::Header(this, maxRef);
+   argumentPatchModel = new PatchRef::Model::Argument(this, maxRef);
+   typedMessagPatcheModel = new PatchRef::Model::TypedMessage(this, maxRef);
+   namedMessagePatchModel = new PatchRef::Model::NamedMessage(this, maxRef);
+   outputPatchModel = new PatchRef::Model::Output(this, maxRef);
+
+   argumentSuggestModel = new Suggest::Model::Argument(this, maxRef, maxPatch);
+   namedMessageSuggestModel = new Suggest::Model::NamedMessage(this, maxRef, maxPatch);
+   typedMessageSuggestModel = new Suggest::Model::TypedMessage(this, maxRef, maxPatch);
+
+   // gui
    stackWidget = new QStackedWidget(this);
 
    refWidget = new PatchRef::Widget(this);
@@ -44,6 +64,7 @@ Patch::Widget::Widget(Patch::Container* container, const Package::Info* packageI
    File::RefXML(packageInfo, maxRef).read(patchInfo);
 
    refWidget->rebuild();
+   suggestWidget->rebuild();
 }
 
 Patch::Widget::~Widget()
