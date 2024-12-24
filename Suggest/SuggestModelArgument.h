@@ -15,6 +15,7 @@ namespace Suggest
          Argument(QObject* parent, Ref::Structure& structure, const Ref::Structure& suggest);
 
       private:
+         void update() override;
          void rebuild() override;
          void transfer(const QList<int>& rowList) override;
       };

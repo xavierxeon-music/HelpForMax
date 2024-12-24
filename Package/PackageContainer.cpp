@@ -26,6 +26,7 @@ Package::Container::Container(QWidget* parent)
    , linkMap()
 {
    me = this;
+   setMinimumWidth(200);
 
    linkMap[true] = QIcon(":/MaxLinkActive.svg");
    linkMap[false] = QIcon(":/MaxLinkInactive.svg");

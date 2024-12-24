@@ -3,36 +3,28 @@
 
 #include <QStandardItemModel>
 
+#include "RefModel.h"
 #include "RefStructure.h"
 
 namespace Suggest
 {
    namespace Model
    {
-      class Abstract : public QStandardItemModel
+      class Abstract : public ListedRefModel<"PatchRef">
       {
          Q_OBJECT
 
       public:
          Abstract(QObject* parent, Ref::Structure& structure, const Ref::Structure& suggest, const Ref::Structure::PatchPart& part);
-         ~Abstract();
 
       signals:
          void signalDataEdited();
 
       public:
-         virtual void rebuild() = 0;
-         static void rebuildAll();
-
          virtual void transfer(const QList<int>& rowList) = 0;
 
       protected:
-         Ref::Structure& structure;
          const Ref::Structure& suggest;
-         const Ref::Structure::PatchPart part;
-
-      private:
-         static QList<Abstract*> instanceList;
       };
    } // namespace Model
 } // namespace Suggest

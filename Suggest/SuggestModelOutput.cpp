@@ -5,6 +5,10 @@ Suggest::Model::Output::Output(QObject* parent, Ref::Structure& structure, const
 {
 }
 
+void Suggest::Model::Output::update()
+{
+}
+
 void Suggest::Model::Output::rebuild()
 {
    beginResetModel();
@@ -31,11 +35,12 @@ void Suggest::Model::Output::rebuild()
    }
 
    endResetModel();
+   update();
 
    emit signalDataEdited();
 }
 
 void Suggest::Model::Output::transfer(const QList<int>& rowList)
 {
-   qDebug() << __PRETTY_FUNCTION__ << rowList;
+   qDebug() << __FUNCTION__ << rowList;
 }

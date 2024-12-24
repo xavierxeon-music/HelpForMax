@@ -5,6 +5,10 @@ Suggest::Model::TypedMessage::TypedMessage(QObject* parent, Ref::Structure& stru
 {
 }
 
+void Suggest::Model::TypedMessage::update()
+{
+}
+
 void Suggest::Model::TypedMessage::rebuild()
 {
    beginResetModel();
@@ -31,11 +35,12 @@ void Suggest::Model::TypedMessage::rebuild()
    }
 
    endResetModel();
+   update();
 
    emit signalDataEdited();
 }
 
 void Suggest::Model::TypedMessage::transfer(const QList<int>& rowList)
 {
-   qDebug() << __PRETTY_FUNCTION__ << rowList;
+   qDebug() << __FUNCTION__ << rowList;
 }

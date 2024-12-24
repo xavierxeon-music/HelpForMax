@@ -30,9 +30,9 @@ TestClient::TestClient()
    };
 
 #ifdef Q_OS_WIN
-   const QFileInfo packageInfo("C:/dev/GitHub/MusicProjects/WaMax");
+   const QFileInfo packageInfo("C:/dev/GitHub/MaxPackages/WaMax");
 #else
-   const QFileInfo packageInfo(QDir::homePath() + "/GitHub/MusicProjects/WaMax");
+   const QFileInfo packageInfo(QDir::homePath() + "/GitHub/MaxPackages/WaMax");
 #endif
 
    const QString packageDir = packageInfo.canonicalFilePath();

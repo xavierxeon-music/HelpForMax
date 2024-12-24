@@ -5,6 +5,10 @@ Suggest::Model::Argument::Argument(QObject* parent, Ref::Structure& structure, c
 {
 }
 
+void Suggest::Model::Argument::update()
+{
+}
+
 void Suggest::Model::Argument::rebuild()
 {
    beginResetModel();
@@ -29,11 +33,12 @@ void Suggest::Model::Argument::rebuild()
    }
 
    endResetModel();
+   update();
 
    emit signalDataEdited();
 }
 
 void Suggest::Model::Argument::transfer(const QList<int>& rowList)
 {
-   qDebug() << __PRETTY_FUNCTION__ << rowList;
+   qDebug() << __FUNCTION__ << rowList;
 }
