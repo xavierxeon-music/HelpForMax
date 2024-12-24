@@ -12,11 +12,12 @@ namespace Suggest
          Q_OBJECT
 
       public:
-         Output(QObject* parent, Ref::Structure& structure, const Ref::Structure& suggest);
+         Output(QObject* parent, Ref::Structure& structure, Max::Patcher& suggest);
 
       private:
          void update() override;
          void rebuild() override;
+         void buildStructure() override;
          void transfer(const QList<int>& rowList) override;
       };
    } // namespace Model

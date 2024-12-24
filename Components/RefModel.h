@@ -36,8 +36,8 @@ public:
    virtual ~ListedRefModel() override;
 
 public:
-   static void updateAll();
-   static void rebuildAll();
+   template <typename ModelClass>
+   static void callOnAllInstances(void (ModelClass::*function)());
 
 private:
    static QList<RefModel*> instanceList;

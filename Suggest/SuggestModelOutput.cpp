@@ -1,6 +1,6 @@
 #include "SuggestModelOutput.h"
 
-Suggest::Model::Output::Output(QObject* parent, Ref::Structure& structure, const Ref::Structure& suggest)
+Suggest::Model::Output::Output(QObject* parent, Ref::Structure& structure, Max::Patcher &suggest)
    : Abstract(parent, structure, suggest, Ref::Structure::PatchPart::Output)
 {
 }
@@ -38,6 +38,11 @@ void Suggest::Model::Output::rebuild()
    update();
 
    emit signalDataEdited();
+}
+
+void Suggest::Model::Output::buildStructure()
+{
+   qDebug() << __FUNCTION__;
 }
 
 void Suggest::Model::Output::transfer(const QList<int>& rowList)

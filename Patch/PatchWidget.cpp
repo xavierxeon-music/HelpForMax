@@ -57,6 +57,8 @@ Patch::Widget::Widget(Patch::Container* container, const Package::Info* packageI
    propagateDirty(false);
 
    maxPatch.readPatch(path);
+   Suggest::Model::Abstract::callOnAllInstances(&Suggest::Model::Abstract::buildStructure);
+
    structureWidget->load(maxPatch);
 
    maxRef.dirtyHook = std::bind(&Widget::setDirty, this);

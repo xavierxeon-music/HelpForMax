@@ -20,17 +20,16 @@ ListedRefModel<Category>::~ListedRefModel()
 }
 
 template <CompileTimeString Category>
-void ListedRefModel<Category>::rebuildAll()
+template <typename ModelClass>
+void ListedRefModel<Category>::callOnAllInstances(void (ModelClass::*function)())
 {
-   for (RefModel* model : instanceList)
-      model->rebuild();
-}
-
-template <CompileTimeString Category>
-void ListedRefModel<Category>::updateAll()
-{
-   for (RefModel* model : instanceList)
-      model->update();
+   for (RefModel* modelInstance : instanceList)
+   {
+      ModelClass* model = dynamic_cast<ModelClass*>(modelInstance);
+      if (!model)
+         continue;
+      (model->*function)();
+   }
 }
 
 #endif // NOT RefModelHPP
