@@ -17,7 +17,7 @@ PatchRef::TreeView::TreeView(QWidget* parent)
    connect(this, &QAbstractItemView::clicked, this, &TreeView::slotUpdateDigest);
 }
 
-void PatchRef::TreeView::init(Widget* widget, Model::Abstract *model, int forceRowHeight)
+void PatchRef::TreeView::init(Widget* widget, Model::Abstract* model, int forceRowHeight)
 {
    this->widget = widget;
    this->model = model;
@@ -32,13 +32,13 @@ void PatchRef::TreeView::init(Widget* widget, Model::Abstract *model, int forceR
 void PatchRef::TreeView::setButtons(QToolButton* addButton, QToolButton* removeButton)
 {
    static const QString styleSheet = "QToolButton { border: 0px none #8f8f91;}";
-
    static const QString plus = QString::fromUtf8("\u2795");
+   static const QString minus = QString::fromUtf8("\u2796");
+
    addButton->setStyleSheet(styleSheet);
    addButton->setText(plus);
    connect(addButton, &QAbstractButton::clicked, this, &TreeView::slotAddElement);
 
-   static const QString minus = QString::fromUtf8("\u2796");
    removeButton->setStyleSheet(styleSheet);
    removeButton->setText(minus);
    connect(removeButton, &QAbstractButton::clicked, this, &TreeView::slotRemoveElement);

@@ -19,14 +19,9 @@ Suggest::Widget::Widget(Patch::Widget* patchWidget)
    setIcon(nameMessageIcon, Ref::Structure::PatchPart::MessageNamed);
 
    // set suggest models
-   argumentSuggestTree->init(patchWidget->argumentSuggestModel);
-   argumentSuggestTree->setButton(argumnetTransferButton);
-
-   typedMessageSuggestTree->init(patchWidget->typedMessageSuggestModel);
-   typedMessageSuggestTree->setButton(typedMessageTransferButton);
-
-   namedMessageSuggestTree->init(patchWidget->namedMessageSuggestModel);
-   namedMessageSuggestTree->setButton(namedMessageTransferButton);
+   argumentSuggestTree->init(patchWidget->argumentSuggestModel, argumnetTransferButton);
+   typedMessageSuggestTree->init(patchWidget->typedMessageSuggestModel, typedMessageTransferButton);
+   namedMessageSuggestTree->init(patchWidget->namedMessageSuggestModel, namedMessageTransferButton);
 
    // set reference models
    argumentPatchTree->setModel(patchWidget->argumentPatchModel);

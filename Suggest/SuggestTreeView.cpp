@@ -22,22 +22,19 @@ Suggest::TreeView::~TreeView()
    instanceList.removeAll(this);
 }
 
-void Suggest::TreeView::init(Model::Abstract* model)
+void Suggest::TreeView::init(Model::Abstract* model, QToolButton* transferButton)
 {
    this->model = model;
 
    setModel(model);
 
    //connect(model, &Model::Abstract::signalDataEdited, this, &TreeView::slotResizeColumns);
-}
 
-void Suggest::TreeView::setButton(QToolButton* transferButton)
-{
    instanceList.append(transferButton);
 
    static const QString styleSheet = "QToolButton { border: 0px none #8f8f91;}";
-
    static const QString transfer = QString::fromUtf8("\u27a4");
+
    transferButton->setStyleSheet(styleSheet);
    transferButton->setText(transfer);
 

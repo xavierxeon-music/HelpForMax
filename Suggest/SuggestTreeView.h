@@ -26,8 +26,7 @@ namespace Suggest
       ~TreeView();
 
    public:
-      void init(Model::Abstract* model);
-      void setButton(QToolButton* transferButton);
+      void init(Model::Abstract* model, QToolButton* transferButton);
 
       static void setAllVisible(bool visible);
 
