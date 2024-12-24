@@ -2,10 +2,7 @@
 
 #include <QTimer>
 
-#include "PatchRefWidget.h"
 #include "SuggestModelAbstract.h"
-
-QList<QWidget*> Suggest::TreeView::instanceList;
 
 Suggest::TreeView::TreeView(QWidget* parent)
    : QTreeView(parent)
@@ -14,37 +11,34 @@ Suggest::TreeView::TreeView(QWidget* parent)
    setRootIsDecorated(false);
    setUniformRowHeights(true);
 
-   instanceList.append(this);
+   setSelectionBehavior(QAbstractItemView::SelectRows);
+   setSelectionMode(QAbstractItemView::MultiSelection);
 }
 
-Suggest::TreeView::~TreeView()
-{
-   instanceList.removeAll(this);
-}
-
-void Suggest::TreeView::init(Model::Abstract* model, QToolButton* transferButton)
+void Suggest::TreeView::init(Model::Abstract* model)
 {
    this->model = model;
 
    setModel(model);
-
-   //connect(model, &Model::Abstract::signalDataEdited, this, &TreeView::slotResizeColumns);
-
-   instanceList.append(transferButton);
-
-   static const QString styleSheet = "QToolButton { border: 0px none #8f8f91;}";
-   static const QString transfer = QString::fromUtf8("\u27a4");
-
-   transferButton->setStyleSheet(styleSheet);
-   transferButton->setText(transfer);
-
-   connect(transferButton, &QAbstractButton::clicked, this, &TreeView::slotTransfer);
+   connect(model, &Model::Abstract::signalDataEdited, this, &TreeView::slotResizeColumns);
 }
 
-void Suggest::TreeView::setAllVisible(bool visible)
+void Suggest::TreeView::transferAll()
 {
-   for (QWidget* widget : instanceList)
-      widget->setVisible(visible);
+   QList<int> rowList;
+   for (int index = 0; index < model->rowCount(); index++)
+      rowList.append(index);
+
+   model->transfer(rowList);
+}
+
+void Suggest::TreeView::transferSelected()
+{
+   QList<int> rowList;
+   for (const QModelIndex& index : selectionModel()->selectedRows())
+      rowList.append(index.row());
+
+   model->transfer(rowList);
 }
 
 void Suggest::TreeView::slotResizeColumns()
@@ -53,16 +47,7 @@ void Suggest::TreeView::slotResizeColumns()
    {
       for (int col = 0; col < model->columnCount(); col++)
          this->resizeColumnToContents(col);
-
-      QModelIndex index = this->model->index(0, 0);
-      const int height = this->header()->height() + this->rowHeight(index);
-
-      this->setMaximumHeight(height + 10);
    };
 
    QTimer::singleShot(10, this, resizeIternal);
-}
-
-void Suggest::TreeView::slotTransfer()
-{
 }

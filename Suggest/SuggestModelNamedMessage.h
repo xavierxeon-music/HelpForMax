@@ -16,6 +16,7 @@ namespace Suggest
 
       private:
          void rebuild() override;
+         void transfer(const QList<int>& rowList) override;
       };
    } // namespace Model
 } // namespace Suggest

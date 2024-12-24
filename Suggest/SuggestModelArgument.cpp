@@ -29,4 +29,11 @@ void Suggest::Model::Argument::rebuild()
    }
 
    endResetModel();
+
+   emit signalDataEdited();
+}
+
+void Suggest::Model::Argument::transfer(const QList<int>& rowList)
+{
+   qDebug() << __PRETTY_FUNCTION__ << rowList;
 }

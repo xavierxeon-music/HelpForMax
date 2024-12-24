@@ -21,6 +21,10 @@ namespace Suggest
    public:
       void rebuild();
 
+   private slots:
+      void slotTransferAll();
+      void slotTransferSelected();
+
    private:
       Patch::Widget* patchWidget;
    };

@@ -17,9 +17,14 @@ namespace Suggest
          Abstract(QObject* parent, Ref::Structure& structure, const Ref::Structure& suggest, const Ref::Structure::PatchPart& part);
          ~Abstract();
 
+      signals:
+         void signalDataEdited();
+
       public:
          virtual void rebuild() = 0;
          static void rebuildAll();
+
+         virtual void transfer(const QList<int>& rowList) = 0;
 
       protected:
          Ref::Structure& structure;

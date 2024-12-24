@@ -31,4 +31,11 @@ void Suggest::Model::TypedMessage::rebuild()
    }
 
    endResetModel();
+
+   emit signalDataEdited();
+}
+
+void Suggest::Model::TypedMessage::transfer(const QList<int>& rowList)
+{
+   qDebug() << __PRETTY_FUNCTION__ << rowList;
 }
