@@ -1,0 +1,6 @@
+file(GLOB PATCH_FILES
+   ${CMAKE_CURRENT_LIST_DIR}/*.h
+   ${CMAKE_CURRENT_LIST_DIR}/*.cpp
+)
+
+target_sources(${PROJECT_NAME} PRIVATE ${PATCH_FILES})

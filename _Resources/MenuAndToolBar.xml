@@ -1,0 +1,40 @@
+<MenuAndTooBar>
+   <ToolBar Name="Toolbar">
+      <Action Name="Package.Link"/>
+      <Action Name="Patch.ShowSuggesions"/>
+      <Sperator/>
+      <Action Name="Patch.Save"/>
+      <Action Name="Patch.Close"/>    
+      <Spacer/>
+      <Action Name="Main.ShowPackage"/>
+      <Action Name="Patch.ShowStructure"/>
+   </ToolBar>   
+   <Menu Name="Patch">
+      <Action Name="Patch.Load"/>
+      <Action Name="Patch.Save"/>
+      <Action Name="Patch.SaveAll"/>
+      <Sperator/>
+      <Menu Name="Patch.Recent"/>
+      <Sperator/>
+      <Action Name="Patch.Close"/>      
+   </Menu>
+   <Menu Name="Package">
+      <Action Name="Package.Load"/>
+      <Action Name="Package.Link"/>
+      <Sperator/>
+      <Menu Name="Package.Recent"/>
+      <Sperator/>
+      <Action Name="Package.Close"/>            
+   </Menu>
+   <Menu Name="View">
+      <Action Name="Main.ShowPackage"/>
+      <Action Name="Patch.ShowStructure"/>
+      <Action Name="Main.ShowTestClient"/>      
+      <Sperator/>
+      <Action Name="Patch.ShowSuggesions"/>
+      <Sperator/>
+      <Action Name="Patch.Max"/>            
+      <Action Name="Patch.XML"/>      
+      <Sperator/>
+   </Menu>
+</MenuAndTooBar>

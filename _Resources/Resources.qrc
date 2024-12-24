@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DocArgument.svg</file>
+        <file>DocAttribute.svg</file>
+        <file>DocDescription.svg</file>
+        <file>DocMessageNamed.svg</file>
+        <file>DocMessageTyped.svg</file>
+        <file>DocOutput.svg</file>
+        <file>HelpForMax.svg</file>
+        <file>OverviewGeneral.svg</file>
+        <file>PackageClose.svg</file>
+        <file>PackageGeneral.svg</file>
+        <file>PackageLoad.svg</file>
+        <file>PatchClose.svg</file>
+        <file>PatchGeneral.svg</file>
+        <file>PatchLoad.svg</file>
+        <file>PatchOpenInMax.svg</file>
+        <file>PatchOpenRef.svg</file>
+        <file>PatchSave.svg</file>
+        <file>PatchSaveAll.svg</file>
+        <file>MaxLinkActive.svg</file>
+        <file>MaxLinkInactive.svg</file>
+        <file>PackageLink.svg</file>
+        <file>HelpCurrent.svg</file>
+        <file>HelpOutdated.svg</file>
+        <file>TreeClosed.svg</file>
+        <file>TreeOpen.svg</file>
+        <file>TreeClosedOutdated.svg</file>
+        <file>PatchSuggest.svg</file>
+        <file>MenuAndToolBar.xml</file>
+    </qresource>
+</RCC>
