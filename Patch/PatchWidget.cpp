@@ -57,7 +57,7 @@ Patch::Widget::Widget(Patch::Container* container, const Package::Info* packageI
    propagateDirty(false);
 
    maxPatch.readPatch(path);
-   Suggest::Model::Abstract::callOnAllInstances(&Suggest::Model::Abstract::buildStructure);
+   Suggest::Model::Abstract::callOnAllInstances(this, &Suggest::Model::Abstract::buildStructure);
 
    structureWidget->load(maxPatch);
 

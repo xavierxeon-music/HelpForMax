@@ -37,10 +37,12 @@ public:
 
 public:
    template <typename ModelClass>
-   static void callOnAllInstances(void (ModelClass::*function)());
+   static void callOnAllInstances(QObject* parent, void (ModelClass::*function)());
 
 private:
-   static QList<RefModel*> instanceList;
+   using InstanceList = QList<RefModel*>;
+   using InstanceMap = QMap<QObject*, InstanceList>;
+   static InstanceMap instanceMap;
 };
 
 #ifndef RefModelHPP

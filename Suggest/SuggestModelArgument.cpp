@@ -1,6 +1,6 @@
 #include "SuggestModelArgument.h"
 
-Suggest::Model::Argument::Argument(QObject* parent, Ref::Structure& structure, Max::Patcher &suggest)
+Suggest::Model::Argument::Argument(QObject* parent, Ref::Structure& structure, Max::Patcher& suggest)
    : Abstract(parent, structure, suggest, Ref::Structure::PatchPart::Argument)
 {
 }
@@ -24,6 +24,8 @@ void Suggest::Model::Argument::rebuild()
       QStandardItem* nameItem = new QStandardItem();
       nameItem->setEditable(false);
       nameItem->setText(argument.name);
+
+      qDebug() << argument.name;
 
       QStandardItem* typeItem = new QStandardItem();
       nameItem->setEditable(false);

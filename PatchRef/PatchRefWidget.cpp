@@ -91,13 +91,13 @@ void PatchRef::Widget::setDigest(Ref::Structure::Digest* newDigest, const Ref::S
 
 void PatchRef::Widget::rebuild()
 {
-   Model::Abstract::callOnAllInstances(&RefModel::rebuild);
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::rebuild);
    setDigest(&patchWidget->maxRef.header.digest, Ref::Structure::PatchPart::Header);
 }
 
 void PatchRef::Widget::update()
 {
-   Model::Abstract::callOnAllInstances(&RefModel::update);
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::update);
 }
 
 void PatchRef::Widget::setIcon(QLabel* iconLabel, Ref::Structure::PatchPart part)

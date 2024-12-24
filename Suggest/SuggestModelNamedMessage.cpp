@@ -64,6 +64,29 @@ void Suggest::Model::NamedMessage::rebuild()
 void Suggest::Model::NamedMessage::buildStructure()
 {
    // attributes
+   auto valueType = [&](const QString& value) -> Max::DataType
+   {
+      if (value.startsWith("@"))
+         return Max::DataType::Undefined;
+
+      bool isFloat = false;
+      for (const QChar& c : value)
+      {
+         if ("." == c)
+         {
+            isFloat = true;
+            continue;
+         }
+         if (c.isLetter())
+            return Max::DataType::Symbol;
+      }
+
+      if (isFloat)
+         return Max::DataType::Float;
+
+      return Max::DataType::Integer;
+   };
+
    const Max::Object::List patcherArgs = suggest.findAll(Max::Object::Type::PatcherArgs, true);
    for (const Max::Object* object : patcherArgs)
    {
@@ -83,16 +106,19 @@ void Suggest::Model::NamedMessage::buildStructure()
             break;
 
          QString value = attributeNameList.at(index);
-         if (value.contains("@"))
+         const Max::DataType dataType = valueType(value);
+         if (Max::DataType::Undefined == dataType)
             continue;
 
          Ref::Structure::AttributesAndMessageNamed attribute;
          attribute.patchParts = Ref::Structure::PatchPart::Attribute;
          attribute.name = key;
+         attribute.dataType = dataType;
          suggest.messageNamedMap.insert(key, attribute);
       }
    }
 
+   // messages
    DiscreteMaths::Algorithm algo(&suggest);
 
    const Max::Object::List inlets = suggest.findAll(Max::Object::Type::Inlet, false);
@@ -111,7 +137,6 @@ void Suggest::Model::NamedMessage::buildStructure()
       return false;
    };
 
-   // messages
    const Max::Object::List routeArgs = suggest.findAll(Max::Object::Type::Route, true) + suggest.findAll(Max::Object::Type::RoutePass, true);
    for (const Max::Object* object : routeArgs)
    {

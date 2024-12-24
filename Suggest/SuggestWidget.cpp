@@ -42,7 +42,7 @@ Suggest::Widget::Widget(Patch::Widget* patchWidget)
 
 void Suggest::Widget::rebuild()
 {
-   Model::Abstract::callOnAllInstances(&RefModel::rebuild);
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::rebuild);
 }
 
 void Suggest::Widget::slotTransferAll()
