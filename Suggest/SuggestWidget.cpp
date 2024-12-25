@@ -40,6 +40,11 @@ Suggest::Widget::Widget(Patch::Widget* patchWidget)
    namedMessagePatchTree->setModel(patchWidget->namedMessagePatchModel);
 }
 
+void Suggest::Widget::update()
+{
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::update);
+}
+
 void Suggest::Widget::rebuild()
 {
    Model::Abstract::callOnAllInstances(patchWidget, &RefModel::rebuild);

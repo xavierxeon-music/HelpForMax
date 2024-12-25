@@ -1,12 +1,13 @@
 #include "SuggestModelOutput.h"
 
-Suggest::Model::Output::Output(QObject* parent, Ref::Structure& structure, Max::Patcher &suggest)
+Suggest::Model::Output::Output(QObject* parent, Ref::Structure& structure, Max::Patcher& suggest)
    : Abstract(parent, structure, suggest, Ref::Structure::PatchPart::Output)
 {
 }
 
 void Suggest::Model::Output::update()
 {
+   emit signalDataEdited();
 }
 
 void Suggest::Model::Output::rebuild()
@@ -23,7 +24,7 @@ void Suggest::Model::Output::rebuild()
 
       QStandardItem* typeItem = new QStandardItem(Max::dataTypeName(type));
       typeItem->setEditable(false);
-      typeItem->setData(QVariant::fromValue(type));
+      typeItem->setData(QVariant::fromValue(type), DataMarker);
 
       QStandardItem* activeItem = new QStandardItem();
       activeItem->setEditable(false);
@@ -36,8 +37,6 @@ void Suggest::Model::Output::rebuild()
 
    endResetModel();
    update();
-
-   emit signalDataEdited();
 }
 
 void Suggest::Model::Output::buildStructure()

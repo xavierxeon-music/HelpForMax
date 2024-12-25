@@ -26,7 +26,16 @@ namespace Suggest
          virtual void buildStructure() = 0;
 
       protected:
+         enum Data
+         {
+            DataMarker = Qt::UserRole + 1,
+            DataActive = Qt::UserRole + 2
+         };
+
+      protected:
          Max::Patcher& suggest;
+         QBrush brushActive;
+         QBrush brushInactive;
       };
    } // namespace Model
 } // namespace Suggest

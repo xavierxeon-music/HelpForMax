@@ -68,7 +68,7 @@ MainWindow::MainWindow()
    populateMenuAndToolBar();
 
    QSettings settings;
-   qDebug() << "SETTINGS @" << settings.fileName();
+   qInfo() << "SETTINGS @" << settings.fileName();
    restoreGeometry(settings.value("MainWidget/Geometry").toByteArray());
    restoreState(settings.value("MainWidget/State").toByteArray());
 }

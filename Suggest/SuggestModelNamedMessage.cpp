@@ -9,6 +9,23 @@ Suggest::Model::NamedMessage::NamedMessage(QObject* parent, Ref::Structure& stru
 
 void Suggest::Model::NamedMessage::update()
 {
+   for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
+   {
+      QStandardItem* nameItem = invisibleRootItem()->child(row, 0);
+      QStandardItem* typeItem = invisibleRootItem()->child(row, 1);
+      QStandardItem* isAttributeItem = invisibleRootItem()->child(row, 2);
+      QStandardItem* isMessageItem = invisibleRootItem()->child(row, 3);
+
+      if (!nameItem)
+         continue;
+
+      const QString name = nameItem->data(DataMarker).toString();
+
+      //const Ref::Structure::AttributesAndMessageNamed& messageNamedStructure = structure.messageNamedMap.value(name);
+      //const Ref::Structure::AttributesAndMessageNamed& messageNamedSuggest = suggest.messageNamedMap.value(name);
+   }
+
+   emit signalDataEdited();
 }
 
 void Suggest::Model::NamedMessage::rebuild()
@@ -26,7 +43,7 @@ void Suggest::Model::NamedMessage::rebuild()
       QStandardItem* nameItem = new QStandardItem();
       nameItem->setEditable(false);
       nameItem->setText(messageNamed.name);
-      nameItem->setData(QVariant::fromValue(it));
+      nameItem->setData(it.key(), DataMarker);
 
       QStandardItem* typeItem = new QStandardItem();
       typeItem->setEditable(false);
@@ -57,8 +74,6 @@ void Suggest::Model::NamedMessage::rebuild()
 
    endResetModel();
    update();
-
-   emit signalDataEdited();
 }
 
 void Suggest::Model::NamedMessage::buildStructure()

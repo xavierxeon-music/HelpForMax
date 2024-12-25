@@ -7,6 +7,24 @@ Suggest::Model::TypedMessage::TypedMessage(QObject* parent, Ref::Structure& stru
 
 void Suggest::Model::TypedMessage::update()
 {
+   for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
+   {
+      QStandardItem* typeItem = invisibleRootItem()->child(row, 0);
+      QStandardItem* activeItem = invisibleRootItem()->child(row, 1);
+
+      const Max::DataType type = typeItem->data(DataMarker).value<Max::DataType>();
+      const Ref::Structure::MessageTyped& messageStructure = structure.messageTypedMap[type];
+      const Ref::Structure::MessageTyped& messageSuggest = suggest.messageTypedMap[type];
+
+      const bool active = (messageSuggest.active != messageStructure.active);
+      typeItem->setData(active, DataActive);
+
+      const QBrush& fgBRush = active ? brushActive : brushInactive;
+      typeItem->setForeground(fgBRush);
+      activeItem->setForeground(fgBRush);
+   }
+
+   emit signalDataEdited();
 }
 
 void Suggest::Model::TypedMessage::rebuild()
@@ -23,7 +41,7 @@ void Suggest::Model::TypedMessage::rebuild()
 
       QStandardItem* typeItem = new QStandardItem(Max::dataTypeName(type));
       typeItem->setEditable(false);
-      typeItem->setData(QVariant::fromValue(type));
+      typeItem->setData(QVariant::fromValue(type), DataMarker);
 
       QStandardItem* activeItem = new QStandardItem();
       activeItem->setEditable(false);
@@ -36,8 +54,6 @@ void Suggest::Model::TypedMessage::rebuild()
 
    endResetModel();
    update();
-
-   emit signalDataEdited();
 }
 
 void Suggest::Model::TypedMessage::buildStructure()

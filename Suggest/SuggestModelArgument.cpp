@@ -7,6 +7,7 @@ Suggest::Model::Argument::Argument(QObject* parent, Ref::Structure& structure, M
 
 void Suggest::Model::Argument::update()
 {
+   emit signalDataEdited();
 }
 
 void Suggest::Model::Argument::rebuild()
@@ -25,8 +26,6 @@ void Suggest::Model::Argument::rebuild()
       nameItem->setEditable(false);
       nameItem->setText(argument.name);
 
-      qDebug() << argument.name;
-
       QStandardItem* typeItem = new QStandardItem();
       nameItem->setEditable(false);
       typeItem->setText(Max::dataTypeName(argument.dataType));
@@ -36,8 +35,6 @@ void Suggest::Model::Argument::rebuild()
 
    endResetModel();
    update();
-
-   emit signalDataEdited();
 }
 
 void Suggest::Model::Argument::buildStructure()

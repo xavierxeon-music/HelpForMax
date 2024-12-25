@@ -26,8 +26,6 @@ void Max::Patcher::readPatch(const QString& patchFileName)
    if (!file.open(QIODevice::ReadOnly))
       return;
 
-   qDebug() << patchFileName;
-
    const QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
    file.close();
 

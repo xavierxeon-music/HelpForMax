@@ -19,6 +19,7 @@ namespace Suggest
       Widget(Patch::Widget* patchWidget);
 
    public:
+      void update();
       void rebuild();
 
    private slots:

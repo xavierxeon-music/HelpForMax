@@ -33,7 +33,7 @@ Package::Container::Container(QWidget* parent)
 
    server = new QLocalServer(this);
    connect(server, &QLocalServer::newConnection, this, &Container::slotNewConnection);
-   qDebug() << "Server @" << HelpForMax::socketName();
+   qInfo() << "Server @" << HelpForMax::socketName();
    server->listen(HelpForMax::socketName());
 }
 
@@ -49,7 +49,6 @@ void Package::Container::slotRefWritten(const QString& patchPath)
 
    QJsonObject object;
    object["patch"] = patchPath;
-   qDebug() << "SEND" << object;
 
    QJsonDocument doc(object);
    socket->write(doc.toJson(QJsonDocument::Compact));

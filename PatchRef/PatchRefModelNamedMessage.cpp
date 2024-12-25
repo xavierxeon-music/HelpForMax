@@ -112,8 +112,6 @@ bool PatchRef::Model::NamedMessage::setData(const QModelIndex& index, const QVar
    QStandardItem* nameItem = invisibleRootItem()->child(index.row(), 0);
    Ref::Structure::AttributesAndMessageNamed& messageNamed = structure.messageNamedMap[nameItem->text()];
 
-   qDebug() << nameItem->text() << value.toString();
-
    const bool result = QStandardItemModel::setData(index, value, role);
 
    if (Qt::EditRole == role)

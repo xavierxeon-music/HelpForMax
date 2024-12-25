@@ -128,6 +128,7 @@ void Patch::Widget::setDirty()
 {
    propagateDirty(true);
    refWidget->update();
+   suggestWidget->update();
 }
 
 void Patch::Widget::propagateDirty(bool isDirty)
