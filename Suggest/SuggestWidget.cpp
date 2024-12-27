@@ -1,10 +1,13 @@
 #include "SuggestWidget.h"
 
+#include <QTimer>
+
 #include "PatchWidget.h"
 
 Suggest::Widget::Widget(Patch::Widget* patchWidget)
    : QWidget(patchWidget)
    , patchWidget(patchWidget)
+   , refTreeViewList()
 {
    setupUi(this);
 
@@ -35,9 +38,21 @@ Suggest::Widget::Widget(Patch::Widget* patchWidget)
    namedMessageSuggestTree->init(patchWidget->namedMessageSuggestModel);
 
    // set reference models
-   argumentPatchTree->setModel(patchWidget->argumentPatchModel);
-   typedMessagePatchTree->setModel(patchWidget->typedMessagPatcheModel);
-   namedMessagePatchTree->setModel(patchWidget->namedMessagePatchModel);
+   auto prepareRefTree = [&](QTreeView* treeView, PatchRef::Model::Abstract* model)
+   {
+      treeView->setModel(model);
+      treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+      treeView->setRootIsDecorated(false);
+      treeView->setUniformRowHeights(true);
+
+      refTreeViewList.append(treeView);
+
+      connect(model, &PatchRef::Model::Abstract::signalDataEdited, this, &Widget::slotResizeRefColumns);
+   };
+
+   prepareRefTree(argumentPatchTree, patchWidget->argumentPatchModel);
+   prepareRefTree(typedMessagePatchTree, patchWidget->typedMessagPatcheModel);
+   prepareRefTree(namedMessagePatchTree, patchWidget->namedMessagePatchModel);
 }
 
 void Suggest::Widget::update()
@@ -62,4 +77,20 @@ void Suggest::Widget::slotTransferSelected()
    argumentSuggestTree->transferSelected();
    typedMessageSuggestTree->transferSelected();
    namedMessageSuggestTree->transferSelected();
+}
+
+void Suggest::Widget::slotResizeRefColumns()
+{
+   auto resizeIternal = [this]()
+   {
+      for (QTreeView* treeView : refTreeViewList)
+      {
+         for (int col = 0; col < treeView->model()->columnCount(); col++)
+         {
+            treeView->resizeColumnToContents(col);
+         }
+      }
+   };
+
+   QTimer::singleShot(10, this, resizeIternal);
 }

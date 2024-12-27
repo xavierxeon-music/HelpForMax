@@ -25,9 +25,11 @@ namespace Suggest
    private slots:
       void slotTransferAll();
       void slotTransferSelected();
+      void slotResizeRefColumns();
 
    private:
       Patch::Widget* patchWidget;
+      QList<QTreeView*> refTreeViewList;
    };
 } // namespace Suggest
 

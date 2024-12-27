@@ -255,6 +255,7 @@ int main(int argc, char** argv)
    QSettings::setDefaultFormat(QSettings::IniFormat);
 
    QApplication app(argc, argv);
+   app.setAttribute(Qt::AA_DontShowIconsInMenus, true);
 
    // only allow one instance
    using HelpForMax = Shared<"HelpForMax">;

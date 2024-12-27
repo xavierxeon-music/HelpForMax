@@ -1,5 +1,7 @@
 #include "RefStructure.h"
 
+#include <QDebug>
+
 // structure
 
 const QList<QByteArray> Ref::Structure::descriptionMaxTags = {"o", "m", "at", "ar", "b", "u", "i"};
@@ -25,8 +27,8 @@ Ref::Structure::Structure()
    , argumentList()
    , messageTypedMap()
    , messageNamedMap()
-   , clearHook()
-   , dirtyHook()
+   , clearHook(nullptr)
+   , dirtyHook(nullptr)
 {
    for (const Max::DataType& dataType : Max::dataTypeList())
    {
@@ -53,7 +55,13 @@ Ref::Structure::~Structure()
 
 void Ref::Structure::clear()
 {
-   *this = Structure();
+   Hook ch = clearHook;
+   Hook dh = dirtyHook;
+
+   *this = Structure(); // this also resets the hooks
+
+   clearHook = ch;
+   dirtyHook = dh;
 
    if (clearHook)
       clearHook();
