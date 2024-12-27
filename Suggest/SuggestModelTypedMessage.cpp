@@ -58,7 +58,7 @@ void Suggest::Model::TypedMessage::rebuild()
 
 void Suggest::Model::TypedMessage::buildStructure()
 {
-   const Max::Object::List routeArgs = suggest.findAll(Max::Object::Type::Route, true) + suggest.findAll(Max::Object::Type::RoutePass, true);
+   const Max::Object::List routeArgs = suggest.findAll({Max::Object::Type::Route, Max::Object::Type::RoutePass}, true);
    for (const Max::Object* object : routeArgs)
    {
       const QStringList argumentNameList = object->text.split(" ", Qt::SkipEmptyParts);

@@ -41,6 +41,7 @@ TestClient::TestClient()
    addItem(packageDir + "/patchers/oscilators/wa.ringbuffer.granular_mk1~.maxpat");
    addItem(packageDir + "/patchers/oscilators/wa.sound.image~.maxpat");
    addItem(packageDir + "/patchers/visu/wa.visu.noise.maxpat");
+   addItem(packageDir + "/patchers/other/wa.test.maxpat");
 
    connect(selectTree, &QTreeWidget::currentItemChanged, this, &TestClient::slotSelectItemChanged);
 }

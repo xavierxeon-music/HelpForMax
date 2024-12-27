@@ -27,10 +27,18 @@
     <number>2</number>
    </property>
    <item row="4" column="1">
-    <widget class="QTreeView" name="argumentPatchTree"/>
+    <widget class="QTreeView" name="argumentPatchTree">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QTreeView" name="typedMessagePatchTree"/>
+    <widget class="QTreeView" name="typedMessagePatchTree">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="Suggest::TreeView" name="argumentSuggestTree"/>
@@ -157,7 +165,11 @@
     </layout>
    </item>
    <item row="8" column="1">
-    <widget class="QTreeView" name="namedMessagePatchTree"/>
+    <widget class="QTreeView" name="namedMessagePatchTree">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+    </widget>
    </item>
    <item row="8" column="0">
     <widget class="Suggest::TreeView" name="namedMessageSuggestTree"/>

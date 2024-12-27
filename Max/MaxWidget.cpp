@@ -17,10 +17,6 @@
 Max::Widget::Widget(QWidget* parent)
    : QGraphicsView(parent)
    , scene(nullptr)
-   , blackBorderPen(Qt::black)
-   , blackLinePen(Qt::darkGray, 3.0, Qt::SolidLine)
-   , whiteBrush(Qt::white)
-   , blackBrush(Qt::black)
    , font()
    , zoomLevel(1.0)
 {
@@ -50,9 +46,18 @@ void Max::Widget::load(const Patcher& patcher)
 {
    scene->clear();
 
+   static const QPen blackBorderPen(Qt::black);
+   static const QPen blackLinePen(Qt::darkGray, 3.0, Qt::SolidLine);
+   static const QBrush whiteBrush(QColor(255, 255, 255));
+   static const QBrush inletBrush(QColor(255, 255, 230));
+   static const QBrush outletBrush(QColor(230, 255, 255));
+   static const QBrush blackBrush(Qt::black);
+
+   const Max::Object::List inputArgs = patcher.findAll({Max::Object::Type::Inlet, Max::Object::Type::PatcherArgs}, false);
+   const Max::Object::List outputArgs = patcher.findAll(Max::Object::Type::Outlet, false);
+
    static const Style defaultStyle{QColor(0, 0, 0)};
    const Style::Map& styleMap = patcher.getStyleMap();
-   qDebug() << "default" << defaultStyle.accentColor;
 
    for (int lineIndex = 0; lineIndex < patcher.edgeCount(); lineIndex++)
    {
@@ -67,26 +72,30 @@ void Max::Widget::load(const Patcher& patcher)
 
       const Style& style = styleMap.value(object->style, defaultStyle);
       const QPen accentPen(style.accentColor);
-      const QPen accentPen2(QColor::fromRgbF(0.960784, 0.827451, 0.156863));
-
-      if ("wa.receive" == object->style)
-         qDebug() << object->id << accentPen << accentPen2 << (accentPen == accentPen2);
 
       QString toolTip = object->comment;
       if (!toolTip.isEmpty())
          toolTip += " ";
       toolTip += "(" + object->id + ")";
 
-      /*
-      QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackBorderPen, whiteBrush);
+      const QBrush bgBrush = [&]()
+      {
+         if (inputArgs.contains(object))
+            return inletBrush;
+         else if (outputArgs.contains(object))
+            return outletBrush;
+         return whiteBrush;
+      }();
+
+      QGraphicsRectItem* rectItem = scene->addRect(QRectF(0, 0, patchRect.width(), patchRect.height()), blackBorderPen, bgBrush);
       rectItem->setToolTip(toolTip);
       rectItem->setPos(patchRect.x(), patchRect.y());
-      */
+
       QGraphicsRectItem* topBar = scene->addRect(QRectF(0, 0, patchRect.width(), 2), accentPen, blackBrush);
       topBar->setToolTip(toolTip);
       topBar->setPos(patchRect.x(), patchRect.y());
 
-      QGraphicsRectItem* bottomBar = scene->addRect(QRectF(0, patchRect.height(), patchRect.width(), 2), accentPen2, blackBrush);
+      QGraphicsRectItem* bottomBar = scene->addRect(QRectF(0, patchRect.height(), patchRect.width(), 2), accentPen, blackBrush);
       bottomBar->setToolTip(toolTip);
       bottomBar->setPos(patchRect.x(), patchRect.y());
 

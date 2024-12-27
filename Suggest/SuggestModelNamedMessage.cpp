@@ -16,13 +16,17 @@ void Suggest::Model::NamedMessage::update()
       QStandardItem* isAttributeItem = invisibleRootItem()->child(row, 2);
       QStandardItem* isMessageItem = invisibleRootItem()->child(row, 3);
 
-      if (!nameItem)
-         continue;
-
       const QString name = nameItem->data(DataMarker).toString();
+      const bool active = !structure.messageNamedMap.contains(name);
 
-      //const Ref::Structure::AttributesAndMessageNamed& messageNamedStructure = structure.messageNamedMap.value(name);
-      //const Ref::Structure::AttributesAndMessageNamed& messageNamedSuggest = suggest.messageNamedMap.value(name);
+      nameItem->setData(active, DataActive);
+
+      const QBrush& fgBRush = active ? brushActive : brushInactive;
+
+      nameItem->setForeground(fgBRush);
+      typeItem->setForeground(fgBRush);
+      isAttributeItem->setForeground(fgBRush);
+      isMessageItem->setForeground(fgBRush);
    }
 
    emit signalDataEdited();
@@ -152,7 +156,7 @@ void Suggest::Model::NamedMessage::buildStructure()
       return false;
    };
 
-   const Max::Object::List routeArgs = suggest.findAll(Max::Object::Type::Route, true) + suggest.findAll(Max::Object::Type::RoutePass, true);
+   const Max::Object::List routeArgs = suggest.findAll({Max::Object::Type::Route, Max::Object::Type::RoutePass}, true);
    for (const Max::Object* object : routeArgs)
    {
       if (!connectedToInlet(object)) // this is an attribute only

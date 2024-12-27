@@ -30,13 +30,7 @@ namespace Max
 
    private:
       QGraphicsScene* scene;
-
-      QPen blackBorderPen;
-      QPen blackLinePen;
-      QBrush whiteBrush;
-      QBrush blackBrush;
       QFont font;
-
       double zoomLevel;
    };
 } // namespace Max

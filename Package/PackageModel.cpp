@@ -24,14 +24,6 @@ void Package::Model::create()
    for (const QFileInfo& folderInfo : packageDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
    {
       QDir patcherDir(folderInfo.canonicalFilePath());
-      if (folderInfo.canonicalFilePath().contains("other"))
-      {
-         for (const QFileInfo& patchFileInfo : patcherDir.entryInfoList(QDir::AllEntries, QDir::Name))
-         {
-            qDebug() << patchFileInfo.fileName();
-         }
-      }
-
       for (const QFileInfo& patchFileInfo : patcherDir.entryInfoList(QDir::Files, QDir::Name))
       {
          if (!patchFileInfo.fileName().endsWith(".maxpat"))
