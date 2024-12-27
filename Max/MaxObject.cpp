@@ -8,6 +8,7 @@ Max::Object::Object(const QJsonObject& boxObject)
    , className()
    , text()
    , comment()
+   , style()
    , inlets(0)
    , outlets(0)
    , type(Type::Other)
@@ -15,6 +16,7 @@ Max::Object::Object(const QJsonObject& boxObject)
    , isParamObject(false)
 {
    className = boxObject["maxclass"].toString();
+   style = boxObject["style"].toString();
 
    QJsonArray patchRectData = boxObject["patching_rect"].toArray();
    patchRect.setX(patchRectData[0].toDouble());

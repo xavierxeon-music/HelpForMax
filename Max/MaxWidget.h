@@ -33,7 +33,6 @@ namespace Max
 
       QPen blackBorderPen;
       QPen blackLinePen;
-      QPen blueLinePen;
       QBrush whiteBrush;
       QBrush blackBrush;
       QFont font;

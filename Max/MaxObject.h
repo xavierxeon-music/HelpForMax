@@ -6,6 +6,8 @@
 #include <QJsonObject>
 #include <QRectF>
 
+#include "MaxStyle.h"
+
 namespace Max
 {
    class Line;
@@ -47,6 +49,7 @@ namespace Max
       QString className;
       QString text;
       QString comment;
+      QString style;
       Ports inlets;
       Ports outlets;
       Type type;

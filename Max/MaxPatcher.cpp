@@ -11,6 +11,7 @@ Max::Patcher::Patcher()
    : Ref::Structure()
    , DiscreteMaths::Graph()
    , typeBuffer()
+   , styleMap()
 {
 }
 
@@ -35,6 +36,8 @@ void Max::Patcher::readPatch(const QString& patchFileName)
 
    const QJsonObject patcherObject = object["patcher"].toObject();
 
+   readStyles(patcherObject);
+
    const IdMap idMap = readObjects(patcherObject);
    readLines(patcherObject, idMap);
 
@@ -53,6 +56,41 @@ Max::Line* Max::Patcher::getEdgeCast(int edgeIndex) const
 {
    Line* edge = static_cast<Line*>(getEdge(edgeIndex));
    return edge;
+}
+
+Max::Object::List Max::Patcher::findAll(const Object::Type& type, bool paramObjectsOnly) const
+{
+   return findAll(QList<Object::Type>() << type, paramObjectsOnly);
+}
+
+Max::Object::List Max::Patcher::findAll(const QList<Object::Type>& typeList, bool paramObjectsOnly) const
+{
+   Object::List list;
+   for (const Object::Type& type : typeList)
+   {
+      if (!typeBuffer.contains(type))
+         continue;
+
+      if (paramObjectsOnly)
+      {
+         for (Object* object : typeBuffer.value(type))
+         {
+            if (object->isParamObject)
+               list.append(object);
+         }
+      }
+      else
+      {
+         list.append(typeBuffer.value(type));
+      }
+   }
+
+   return list;
+}
+
+const Max::Style::Map& Max::Patcher::getStyleMap() const
+{
+   return styleMap;
 }
 
 void Max::Patcher::analyse()
@@ -110,34 +148,20 @@ void Max::Patcher::analyse()
    }
 }
 
-Max::Object::List Max::Patcher::findAll(const Object::Type& type, bool paramObjectsOnly) const
+void Max::Patcher::readStyles(const QJsonObject patcherObject)
 {
-   return findAll(QList<Object::Type>() << type, paramObjectsOnly);
-}
-
-Max::Object::List Max::Patcher::findAll(const QList<Object::Type>& typeList, bool paramObjectsOnly) const
-{
-   Object::List list;
-   for (const Object::Type& type : typeList)
+   const QJsonArray styleArray = patcherObject["styles"].toArray();
+   for (int index = 0; index < styleArray.size(); index++)
    {
-      if (!typeBuffer.contains(type))
-         continue;
+      QJsonObject styleObject = styleArray.at(index).toObject();
+      const QString name = styleObject["name"].toString();
 
-      if (paramObjectsOnly)
-      {
-         for (Object* object : typeBuffer.value(type))
-         {
-            if (object->isParamObject)
-               list.append(object);
-         }
-      }
-      else
-      {
-         list.append(typeBuffer.value(type));
-      }
+      const QJsonObject defaultObject = styleObject["default"].toObject();
+
+      Style style;
+      style.accentColor = readColor(defaultObject, "accentcolor");
+      styleMap[name] = style;
    }
-
-   return list;
 }
 
 Max::IdMap Max::Patcher::readObjects(const QJsonObject patcherObject)
@@ -184,4 +208,12 @@ void Max::Patcher::readLines(const QJsonObject patcherObject, const IdMap& idMap
       Line* line = new Line(lineObject, idMap);
       addEdge(line);
    }
+}
+
+QColor Max::Patcher::readColor(const QJsonObject object, const QString& key) const
+{
+   const QJsonArray colorArray = object[key].toArray();
+   const QColor color = QColor::fromRgbF(colorArray[0].toDouble(), colorArray[1].toDouble(), colorArray[2].toDouble());
+
+   return color;
 }
