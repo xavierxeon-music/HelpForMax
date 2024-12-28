@@ -71,7 +71,7 @@ void Max::Widget::load(const Patcher& patcher)
       const QRectF& patchRect = object->patchRect;
 
       const Style& style = styleMap.value(object->style, defaultStyle);
-      const QPen accentPen(style.accentColor);
+      const QPen accentPen(style.accentColor, 2.0);
 
       QString toolTip = object->comment;
       if (!toolTip.isEmpty())
