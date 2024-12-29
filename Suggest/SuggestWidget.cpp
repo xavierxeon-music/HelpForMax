@@ -67,16 +67,30 @@ void Suggest::Widget::rebuild()
 
 void Suggest::Widget::slotTransferAll()
 {
-   argumentSuggestTree->transferAll();
-   typedMessageSuggestTree->transferAll();
-   namedMessageSuggestTree->transferAll();
+   for (TreeView* treeView : {argumentSuggestTree, typedMessageSuggestTree, namedMessageSuggestTree})
+      treeView->transferAll();
+
+   QString& shortText = patchWidget->maxRef.header.digest.shortText;
+   if ("Hello World" == shortText)
+   {
+      QString name = patchWidget->getPatchInfo().name;
+      name.replace("wa.", "");
+      name.replace(".", " ");
+      name.replace("_", " ");
+      shortText = name;
+   }
+
+   PatchRef::Model::Abstract::callOnAllInstances(patchWidget, &RefModel::rebuild);
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::update);
 }
 
 void Suggest::Widget::slotTransferSelected()
 {
-   argumentSuggestTree->transferSelected();
-   typedMessageSuggestTree->transferSelected();
-   namedMessageSuggestTree->transferSelected();
+   for (TreeView* treeView : {argumentSuggestTree, typedMessageSuggestTree, namedMessageSuggestTree})
+      treeView->transferSelected();
+
+   PatchRef::Model::Abstract::callOnAllInstances(patchWidget, &RefModel::rebuild);
+   Model::Abstract::callOnAllInstances(patchWidget, &RefModel::update);
 }
 
 void Suggest::Widget::slotResizeRefColumns()

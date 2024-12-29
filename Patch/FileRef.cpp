@@ -334,7 +334,7 @@ QDomElement File::RefXML::createSubElement(QDomElement parent, const QString& na
 
 void File::RefXML::addDigest(const QDomElement& parentElement, const Ref::Structure::Digest& digest)
 {
-   createSubElement(parentElement, "digest", digest.text);
+   createSubElement(parentElement, "digest", digest.shortText);
    if (!digest.description.isEmpty())
    {
       QString description = digest.description;
@@ -346,7 +346,7 @@ void File::RefXML::addDigest(const QDomElement& parentElement, const Ref::Struct
 void File::RefXML::readDigest(const QDomElement& parentElement, Ref::Structure::Digest& digest) const
 {
    const QDomElement textElement = parentElement.firstChildElement("digest");
-   digest.text = readText(textElement);
+   digest.shortText = readText(textElement);
 
    const QDomElement descriptionElement = parentElement.firstChildElement("description");
    digest.description = readText(descriptionElement);

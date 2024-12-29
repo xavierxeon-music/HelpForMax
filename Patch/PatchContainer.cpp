@@ -71,6 +71,9 @@ void Patch::Container::createActions()
 
    QAction* showXMLAction = addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", &Container::slotOpenXML);
    showXMLAction->setShortcut(QKeySequence::Open);
+
+   QAction* transferAllAction = addAction(QIcon(":/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", &Container::slotTranferAllSuggestions);
+   transferAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_T);
 }
 
 void Patch::Container::init()
@@ -194,6 +197,13 @@ void Patch::Container::slotOpenXML()
    Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
    if (patchWidget)
       patchWidget->openXML();
+}
+
+void Patch::Container::slotTranferAllSuggestions()
+{
+   Widget* patchWidget = qobject_cast<Widget*>(currentWidget());
+   if (patchWidget)
+      patchWidget->tranferAllSuggestions();
 }
 
 void Patch::Container::slotShowSuggestions(bool enabled)

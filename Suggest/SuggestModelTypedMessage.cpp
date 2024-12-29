@@ -32,8 +32,7 @@ void Suggest::Model::TypedMessage::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Type", "Active"});
 
-   while (0 < invisibleRootItem()->rowCount())
-      invisibleRootItem()->removeRow(0);
+   removeContent();
 
    for (const Max::DataType& type : Max::dataTypeList())
    {
@@ -98,5 +97,22 @@ void Suggest::Model::TypedMessage::buildStructure()
 
 void Suggest::Model::TypedMessage::transfer(const QList<int>& rowList)
 {
-   qDebug() << __FUNCTION__ << rowList;
+   for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
+   {
+      if (!rowList.contains(row))
+         continue;
+
+      QStandardItem* typeItem = invisibleRootItem()->child(row, 0);
+      const bool active = typeItem->data(DataActive).toBool();
+      if (!active)
+         continue;
+
+      const Max::DataType type = typeItem->data(DataMarker).value<Max::DataType>();
+      qDebug() << type << structure.messageTypedMap.contains(type);
+
+      Ref::Structure::MessageTyped& messageStructure = structure.messageTypedMap[type];
+      const Ref::Structure::MessageTyped& messageSuggest = suggest.messageTypedMap[type];
+
+      messageStructure.active = messageSuggest.active;
+   }
 }

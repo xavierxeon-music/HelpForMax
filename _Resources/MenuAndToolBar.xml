@@ -4,7 +4,8 @@
       <Action Name="Patch.ShowSuggesions"/>
       <Sperator/>
       <Action Name="Patch.Save"/>
-      <Action Name="Patch.Close"/>    
+      <Action Name="Patch.Close"/>
+      <Action Name="Patch.TransferAllSuggestions"/>    
       <Spacer/>
       <Action Name="Main.ShowPackage"/>
       <Action Name="Patch.ShowStructure"/>
@@ -13,6 +14,8 @@
       <Action Name="Patch.Load"/>
       <Action Name="Patch.Save"/>
       <Action Name="Patch.SaveAll"/>
+      <Sperator/>      
+      <Action Name="Patch.TransferAllSuggestions"/>
       <Sperator/>
       <Menu Name="Patch.Recent"/>
       <Sperator/>

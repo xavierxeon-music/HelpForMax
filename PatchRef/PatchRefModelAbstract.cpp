@@ -7,8 +7,8 @@ PatchRef::Model::Abstract::Abstract(QObject* parent, Ref::Structure& structure, 
 
 void PatchRef::Model::Abstract::updateDigestItem(QStandardItem* digestItem, const Ref::Structure::Digest& digest)
 {
-   QString description = digest.text;
-   digestItem->setText(description);
+   QString shortText = digest.shortText;
+   digestItem->setText(shortText);
 
    if (digest.description.isEmpty())
       digestItem->setIcon(QIcon());

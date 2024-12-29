@@ -35,10 +35,9 @@ void Suggest::Model::NamedMessage::update()
 void Suggest::Model::NamedMessage::rebuild()
 {
    beginResetModel();
-   setHorizontalHeaderLabels({"Name", "Type", "At", "M"});
+   setHorizontalHeaderLabels({"Name", "Type", "At", "M", "Digest"});
 
-   while (0 < invisibleRootItem()->rowCount())
-      invisibleRootItem()->removeRow(0);
+   removeContent();
 
    for (Ref::Structure::AttributesAndMessageNamed::Map::const_iterator it = suggest.messageNamedMap.constBegin(); it != suggest.messageNamedMap.constEnd(); it++)
    {
@@ -186,5 +185,29 @@ void Suggest::Model::NamedMessage::buildStructure()
 
 void Suggest::Model::NamedMessage::transfer(const QList<int>& rowList)
 {
-   qDebug() << __FUNCTION__ << rowList;
+   for (int row = 0; row < invisibleRootItem()->rowCount(); row++)
+   {
+      if (!rowList.contains(row))
+         continue;
+
+      QStandardItem* nameItem = invisibleRootItem()->child(row, 0);
+      const bool active = nameItem->data(DataActive).toBool();
+      if (!active)
+         continue;
+
+      const QString name = nameItem->data(DataMarker).toString();
+      if (!structure.messageNamedMap.contains(name))
+      {
+         Ref::Structure::AttributesAndMessageNamed message;
+         message.name = name;
+         structure.messageNamedMap.insert(name, message);
+      }
+
+      Ref::Structure::AttributesAndMessageNamed& messageStructure = structure.messageNamedMap[name];
+      const Ref::Structure::AttributesAndMessageNamed& messageSuggest = suggest.messageNamedMap[name];
+
+      messageStructure.patchParts = messageSuggest.patchParts;
+      messageStructure.dataType = messageSuggest.dataType;
+      messageStructure.digest = messageSuggest.digest;
+   }
 }

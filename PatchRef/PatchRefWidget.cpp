@@ -58,7 +58,7 @@ void PatchRef::Widget::slotSetPatchDigest()
 
 void PatchRef::Widget::slotSaveDigestText()
 {
-   digest->text = digestEdit->text();
+   digest->shortText = digestEdit->text();
    patchWidget->setDirty();
 }
 
@@ -82,7 +82,7 @@ void PatchRef::Widget::setDigest(Ref::Structure::Digest* newDigest, const Ref::S
    setIcon(topicIcon, part);
 
    topicInfo->setText(patchWidget->maxRef.partName(part));
-   digestEdit->setText(digest->text);
+   digestEdit->setText(digest->shortText);
 
    descriptionEdit->blockSignals(true);
    descriptionEdit->setText(digest->description);

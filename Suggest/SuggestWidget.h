@@ -21,9 +21,9 @@ namespace Suggest
    public:
       void update();
       void rebuild();
+      void slotTransferAll();
 
    private slots:
-      void slotTransferAll();
       void slotTransferSelected();
       void slotResizeRefColumns();
 

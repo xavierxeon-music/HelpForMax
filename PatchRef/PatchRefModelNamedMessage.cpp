@@ -49,6 +49,8 @@ void PatchRef::Model::NamedMessage::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Name", "Type", "At", "M", "Digest"});
 
+   removeContent();
+
    for (Ref::Structure::AttributesAndMessageNamed::Map::const_iterator it = structure.messageNamedMap.constBegin(); it != structure.messageNamedMap.constEnd(); it++)
    {
       QStandardItem* nameItem = new QStandardItem();

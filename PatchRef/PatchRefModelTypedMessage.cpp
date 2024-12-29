@@ -29,6 +29,8 @@ void PatchRef::Model::TypedMessage::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Type", "Active", "Digest"});
 
+   removeContent();
+
    for (const Max::DataType& type : Max::dataTypeList())
    {
       QStandardItem* typeItem = new QStandardItem(Max::dataTypeName(type));
@@ -85,7 +87,7 @@ bool PatchRef::Model::TypedMessage::setData(const QModelIndex& index, const QVar
          if (enabled)
          {
             message.active = true;
-            message.digest.text = invisibleRootItem()->child(index.row(), 2)->text();
+            message.digest.shortText = invisibleRootItem()->child(index.row(), 2)->text();
          }
          else
          {

@@ -29,6 +29,8 @@ void PatchRef::Model::Output::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Type", "Active", "Digest"});
 
+   removeContent();
+
    for (const Max::DataType& type : Max::dataTypeList())
    {
       QStandardItem* typeItem = new QStandardItem(Max::dataTypeName(type));

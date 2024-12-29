@@ -24,6 +24,9 @@ public:
    const Ref::Structure::PatchPart& getPart() const;
 
 protected:
+   void removeContent();
+
+protected:
    Ref::Structure& structure;
    Ref::Structure::PatchPart part;
 };

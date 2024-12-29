@@ -15,8 +15,7 @@ void Suggest::Model::Output::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Type", "Active"});
 
-   while (0 < invisibleRootItem()->rowCount())
-      invisibleRootItem()->removeRow(0);
+   removeContent();
 
    for (const Max::DataType& type : Max::dataTypeList())
    {

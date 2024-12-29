@@ -21,6 +21,8 @@ void PatchRef::Model::Header::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"PatchType", "Digest"});
 
+   removeContent();
+
    QStandardItem* typeItem = new QStandardItem();
 
    QStandardItem* digestItem = new QStandardItem();
@@ -52,7 +54,7 @@ bool PatchRef::Model::Header::setData(const QModelIndex& index, const QVariant& 
       }
       else if (1 == index.column())
       {
-         structure.header.digest.text = value.toString();
+         structure.header.digest.shortText = value.toString();
          emit signalUpdateDigest(index);
       }
    }

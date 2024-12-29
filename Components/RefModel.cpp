@@ -15,3 +15,9 @@ const Ref::Structure::PatchPart& RefModel::getPart() const
 {
    return part;
 }
+
+void RefModel::removeContent()
+{
+   while (0 < invisibleRootItem()->rowCount())
+      invisibleRootItem()->removeRow(0);
+}

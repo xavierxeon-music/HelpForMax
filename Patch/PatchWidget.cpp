@@ -108,6 +108,11 @@ void Patch::Widget::openXML()
    QDesktopServices::openUrl(QUrl::fromLocalFile(refPath));
 }
 
+void Patch::Widget::tranferAllSuggestions()
+{
+   suggestWidget->slotTransferAll();
+}
+
 bool Patch::Widget::isDirty() const
 {
    return dirty;

@@ -44,7 +44,7 @@ namespace Ref
 
       struct Digest
       {
-         QString text;
+         QString shortText;
          QString description;
       };
 

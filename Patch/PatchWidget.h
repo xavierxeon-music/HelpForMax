@@ -36,6 +36,7 @@ namespace Patch
       virtual void writeRef();
       void openInMax();
       void openXML();
+      void tranferAllSuggestions();
       bool isDirty() const;
       void setToolsVisible(Container::ToolsVisible toolsVisible);
 

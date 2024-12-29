@@ -32,6 +32,8 @@ void PatchRef::Model::Argument::rebuild()
    beginResetModel();
    setHorizontalHeaderLabels({"Name", "Type", "Optional", "Digest"});
 
+   removeContent();
+
    for (int row = 0; row < structure.argumentList.count(); row++)
    {
       QStandardItem* nameItem = new QStandardItem();

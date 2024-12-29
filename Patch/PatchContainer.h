@@ -60,6 +60,7 @@ namespace Patch
       void slotWriteAllRefs();
       void slotOpenInMax();
       void slotOpenXML();
+      void slotTranferAllSuggestions();
       void slotShowSuggestions(bool enabled);
       void slotShowStructure(bool enabled);
       void slotTabSplitterChanged();
