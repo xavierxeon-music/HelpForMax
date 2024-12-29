@@ -130,7 +130,7 @@ void MainWindow::createActions()
 
 void MainWindow::populateMenuAndToolBar()
 {
-   QFile file(":/MenuAndToolBar.xml");
+   QFile file(":/_MenuAndToolBar.xml");
    if (!file.open(QIODevice::ReadOnly))
       return;
 

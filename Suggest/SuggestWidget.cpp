@@ -16,10 +16,12 @@ Suggest::Widget::Widget(Patch::Widget* patchWidget)
 
    transferAllButton->setText("Transfer All " + transferArrow);
    transferAllButton->setStyleSheet(styleSheet);
+   transferAllButton->setIcon(QIcon(":/PatchTransferAll.svg"));
    connect(transferAllButton, &QAbstractButton::clicked, this, &Widget::slotTransferAll);
 
    transferSelectedButton->setText("Transfer Selected " + transferArrow);
    transferSelectedButton->setStyleSheet(styleSheet);
+   transferSelectedButton->setIcon(QIcon(":/PatchTransferSelected.svg"));
    connect(transferSelectedButton, &QAbstractButton::clicked, this, &Widget::slotTransferSelected);
 
    auto setIcon = [&](QLabel* iconLabel, Ref::Structure::PatchPart part)

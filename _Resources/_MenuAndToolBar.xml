@@ -1,11 +1,12 @@
 <MenuAndTooBar>
    <ToolBar Name="Toolbar">
       <Action Name="Package.Link"/>
-      <Action Name="Patch.ShowSuggesions"/>
       <Sperator/>
       <Action Name="Patch.Save"/>
       <Action Name="Patch.Close"/>
-      <Action Name="Patch.TransferAllSuggestions"/>    
+      <Sperator/>
+      <Action Name="Patch.ShowSuggesions"/>
+      <Action Name="Patch.TransferAllSuggestions"/>
       <Spacer/>
       <Action Name="Main.ShowPackage"/>
       <Action Name="Patch.ShowStructure"/>
