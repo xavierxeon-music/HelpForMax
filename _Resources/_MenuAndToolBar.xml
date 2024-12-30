@@ -16,8 +16,11 @@
       <Action Name="Patch.Save"/>
       <Action Name="Patch.SaveAll"/>
       <Sperator/>      
-      <Action Name="Patch.TransferAllSuggestions"/>
-      <Sperator/>
+      <SubMenu Name="Tools">
+         <Action Name="Patch.TransferAllSuggestions"/>
+         <Action Name="Patch.Max"/>
+         <Action Name="Patch.XML"/>
+      </SubMenu>
       <Menu Name="Patch.Recent"/>
       <Sperator/>
       <Action Name="Patch.Close"/>      
@@ -26,6 +29,9 @@
       <Action Name="Package.Load"/>
       <Action Name="Package.Link"/>
       <Sperator/>
+      <SubMenu Name="Tools">
+         <Action Name="Package.TransferAllSuggestions"/>
+      </SubMenu>
       <Menu Name="Package.Recent"/>
       <Sperator/>
       <Action Name="Package.Close"/>            
@@ -36,9 +42,5 @@
       <Action Name="Main.ShowTestClient"/>      
       <Sperator/>
       <Action Name="Patch.ShowSuggesions"/>
-      <Sperator/>
-      <Action Name="Patch.Max"/>            
-      <Action Name="Patch.XML"/>      
-      <Sperator/>
    </Menu>
 </MenuAndTooBar>

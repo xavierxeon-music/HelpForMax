@@ -40,6 +40,7 @@ namespace Package
       void slotNewConnection();
       void slotReceiveSocket();
       void slotLinkToMax(bool enabled);
+      void slotOpenSuggestions();
 
    private:
       Info* get(const QString& packagePath);

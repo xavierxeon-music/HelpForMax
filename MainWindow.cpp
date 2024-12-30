@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDockWidget>
-#include <QDomElement>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -145,67 +144,6 @@ void MainWindow::populateMenuAndToolBar()
       return;
    }
 
-   auto createToolBar = [&](QDomElement thingElement)
-   {
-      const QString name = thingElement.attribute("Name");
-      QToolBar* toolBar = addToolBar(name);
-      toolBar->setObjectName(name);
-      toolBar->setMovable(false);
-      toolBar->setIconSize(QSize(24, 24));
-
-      for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
-      {
-         const QString what = contentElement.tagName();
-         if ("Action" == what)
-         {
-            const QString name = contentElement.attribute("Name");
-            QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
-            if (action)
-               toolBar->addAction(action);
-         }
-         else if ("Sperator" == what)
-         {
-            toolBar->addSeparator();
-         }
-         else if ("Spacer" == what)
-         {
-            QWidget* widget = new QWidget(this);
-            widget->setMinimumWidth(100);
-            widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-            toolBar->addWidget(widget);
-         }
-      }
-   };
-
-   auto createMenu = [&](QDomElement thingElement)
-   {
-      const QString name = thingElement.attribute("Name");
-      QMenu* menu = menuBar()->addMenu(name);
-
-      for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
-      {
-         const QString what = contentElement.tagName();
-         if ("Action" == what)
-         {
-            const QString name = contentElement.attribute("Name");
-            QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
-            if (action)
-               menu->addAction(action);
-         }
-         else if ("Sperator" == what)
-         {
-            menu->addSeparator();
-         }
-         else if ("Menu" == what)
-         {
-            const QString name = contentElement.attribute("Name");
-            QMenu* subMenu = findChild<QMenu*>(name, Qt::FindChildrenRecursively);
-            if (subMenu)
-               menu->addMenu(subMenu);
-         }
-      }
-   };
-
    const QDomElement rootElement = doc.documentElement();
    for (QDomElement thingElement = rootElement.firstChildElement(); !thingElement.isNull(); thingElement = thingElement.nextSiblingElement())
    {
@@ -213,7 +151,72 @@ void MainWindow::populateMenuAndToolBar()
       if ("ToolBar" == what)
          createToolBar(thingElement);
       else if ("Menu" == what)
-         createMenu(thingElement);
+         createMenu(thingElement, nullptr);
+   }
+}
+
+void MainWindow::createToolBar(QDomElement thingElement)
+{
+   const QString name = thingElement.attribute("Name");
+   QToolBar* toolBar = addToolBar(name);
+   toolBar->setObjectName(name);
+   toolBar->setMovable(false);
+   toolBar->setIconSize(QSize(24, 24));
+
+   for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
+   {
+      const QString what = contentElement.tagName();
+      if ("Action" == what)
+      {
+         const QString name = contentElement.attribute("Name");
+         QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
+         if (action)
+            toolBar->addAction(action);
+      }
+      else if ("Sperator" == what)
+      {
+         toolBar->addSeparator();
+      }
+      else if ("Spacer" == what)
+      {
+         QWidget* widget = new QWidget(this);
+         widget->setMinimumWidth(100);
+         widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+         toolBar->addWidget(widget);
+      }
+   }
+}
+
+void MainWindow::createMenu(QDomElement thingElement, QMenu* parentMenu)
+{
+   const QString name = thingElement.attribute("Name");
+   QMenu* menu = parentMenu ? parentMenu->addMenu(name) : menuBar()->addMenu(name);
+
+   for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
+   {
+      const QString what = contentElement.tagName();
+      if ("Action" == what)
+      {
+         const QString name = contentElement.attribute("Name");
+         QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
+         if (action)
+            menu->addAction(action);
+      }
+      else if ("Sperator" == what)
+      {
+         menu->addSeparator();
+      }
+      else if ("Menu" == what)
+      {
+         const QString name = contentElement.attribute("Name");
+         QMenu* subMenu = findChild<QMenu*>(name, Qt::FindChildrenRecursively);
+         if (subMenu)
+            menu->addMenu(subMenu);
+      }
+      else if ("SubMenu" == what)
+      {
+         createMenu(contentElement, menu);
+      }
    }
 }
 

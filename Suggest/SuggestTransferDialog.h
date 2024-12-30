@@ -1,12 +1,17 @@
 #ifndef SuggestTransferDialogH
 #define SuggestTransferDialogH
 
+#include "ui_SuggestTransferDialog.h"
+#include <QDialog>
+
 namespace Suggest
 {
-   class TransferDialog
+   class TransferDialog : public QDialog, private Ui::TransferDialog
    {
+      Q_OBJECT
+
    public:
-      TransferDialog();
+      TransferDialog(QWidget* parent);
    };
 } // namespace Suggest
 

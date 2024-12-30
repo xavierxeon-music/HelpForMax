@@ -11,6 +11,7 @@
 #include "MessageBar.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
+#include "SuggestTransferDialog.h"
 
 using HelpForMax = Shared<"HelpForMax">;
 
@@ -121,6 +122,8 @@ void Package::Container::createActions()
    linkAction->setChecked(linkEnabled);
 
    addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
+
+   addAction(QIcon(":/PackageTransferAll.svg"), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
 }
 
 void Package::Container::init()
@@ -233,6 +236,12 @@ void Package::Container::slotLinkToMax(bool enabled)
 
    QSettings settings;
    settings.setValue("Package/Link", linkEnabled);
+}
+
+void Package::Container::slotOpenSuggestions()
+{
+   Suggest::TransferDialog dialog(this);
+   dialog.exec();
 }
 
 RecentTabWidget::Entry Package::Container::creatreEntry(const QFileInfo& fileInfo)

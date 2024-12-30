@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include <QDomElement>
+
 #include "PackageContainer.h"
 #include "PatchContainer.h"
 
@@ -23,6 +25,8 @@ private slots:
 private:
    void createActions();
    void populateMenuAndToolBar();
+   void createToolBar(QDomElement thingElement);
+   void createMenu(QDomElement thingElement, QMenu* parentMenu);
    void closeEvent(QCloseEvent* ce) override;
    void toogleDock(QWidget* widget, const QString& name, bool enabled);
 
