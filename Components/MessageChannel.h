@@ -12,6 +12,9 @@ namespace Message
       Q_OBJECT
 
    public:
+      using PrintFunction = std::function<void(const QString& message)>;
+
+   public:
       Channel(Bar* bar, bool isWarning);
 
    private:

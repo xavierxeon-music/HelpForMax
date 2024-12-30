@@ -9,6 +9,7 @@
 #include <Shared.h>
 
 #include "MessageBar.h"
+#include "PackageCleanDialog.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
 #include "SuggestTransferDialog.h"
@@ -113,6 +114,10 @@ void Package::Container::createActions()
 
    //
    addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", &Container::slotLoadPackage);
+   addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
+
+   addAction(QIcon(":/PackageTransferAll.svg"), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
+   addAction(QIcon(":/PackageClean.svg"), "Clean", "Package.Clean", &Container::slotCleanup);
 
    linkAction = addAction(linkMap.value(false), "Link", "Package.Link", &Container::slotLinkToMax);
    linkAction->setCheckable(true);
@@ -120,10 +125,6 @@ void Package::Container::createActions()
    QSettings settings;
    linkEnabled = settings.value("Package/Link").toBool();
    linkAction->setChecked(linkEnabled);
-
-   addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
-
-   addAction(QIcon(":/PackageTransferAll.svg"), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
 }
 
 void Package::Container::init()
@@ -241,6 +242,12 @@ void Package::Container::slotLinkToMax(bool enabled)
 void Package::Container::slotOpenSuggestions()
 {
    Suggest::TransferDialog dialog(this);
+   dialog.exec();
+}
+
+void Package::Container::slotCleanup()
+{
+   CleanDialog dialog(this);
    dialog.exec();
 }
 
