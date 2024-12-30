@@ -22,6 +22,9 @@ public:
    QTextStream message();
 
 private:
+   void print(const QString& text);
+
+private:
    QLabel* messageLabel;
    QProgressBar* progressBar;
    Message::Channel* messageChannel;

@@ -13,8 +13,12 @@ Message::Bar::Bar(QWidget* parent)
    , warningChannel(nullptr)
 {
    me = this;
-   messageChannel = new Channel(this, false);
-   warningChannel = new Channel(this, true);
+
+   Channel::PrintFunction messageFunction = std::bind(&Bar::print, this, std::placeholders::_1, false);
+   messageChannel = new Channel(this, messageFunction);
+
+   Channel::PrintFunction warningFunction = std::bind(&Bar::print, this, std::placeholders::_1, true);
+   warningChannel = new Channel(this, warningFunction);
 
    setSizeGripEnabled(false);
 }

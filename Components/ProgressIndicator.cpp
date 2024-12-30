@@ -26,10 +26,16 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    masterLayout->addWidget(messageLabel);
    masterLayout->addWidget(progressBar);
 
-   messageChannel = new Message::Channel(this, false);
+   Message::Channel::PrintFunction printFunction = std::bind(&ProgressIndicator::print, this, std::placeholders::_1);
+   messageChannel = new Message::Channel(this, printFunction);
 }
 
 QTextStream ProgressIndicator::message()
 {
-   return QTextStream(messageChannel);
+   return messageChannel->stream();
+}
+
+void ProgressIndicator::print(const QString& text)
+{
+   messageLabel->setText(text);
 }

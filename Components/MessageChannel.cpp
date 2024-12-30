@@ -2,12 +2,16 @@
 
 #include "MessageBar.h"
 
-Message::Channel::Channel(Bar* bar, bool isWarning)
-   : QIODevice(bar)
-   , bar(bar)
-   , isWarning(isWarning)
+Message::Channel::Channel(QObject* parent, PrintFunction printFunction)
+   : QIODevice(parent)
+   , printFunction(printFunction)
 {
    open(QIODevice::WriteOnly);
+}
+
+QTextStream Message::Channel::stream()
+{
+   return QTextStream(this);
 }
 
 qint64 Message::Channel::readData(char* data, qint64 maxSize)
@@ -20,6 +24,8 @@ qint64 Message::Channel::readData(char* data, qint64 maxSize)
 
 qint64 Message::Channel::writeData(const char* data, qint64 maxSize)
 {
-   bar->print(data, isWarning);
+   if (printFunction)
+      printFunction(QString::fromUtf8(data));
+
    return maxSize;
 }
