@@ -116,8 +116,8 @@ void Package::Container::createActions()
    addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", &Container::slotLoadPackage);
    addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
 
-   addAction(QIcon(":/PackageTransferAll.svg"), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
-   addAction(QIcon(":/PackageClean.svg"), "Clean", "Package.Clean", &Container::slotCleanup);
+   addAction(QIcon(), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
+   addAction(QIcon(), "Clean", "Package.Clean", &Container::slotCleanup);
 
    linkAction = addAction(linkMap.value(false), "Link", "Package.Link", &Container::slotLinkToMax);
    linkAction->setCheckable(true);

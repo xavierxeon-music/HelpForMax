@@ -1,17 +1,23 @@
 <MenuAndTooBar>
-   <ToolBar Name="Toolbar">
-      <Action Name="Package.Link"/>
-      <Sperator/>
-      <Action Name="Patch.Save"/>
-      <Action Name="Patch.Close"/>
-      <Sperator/>
-      <Action Name="Patch.ShowSuggesions"/>
-      <Action Name="Patch.TransferAllSuggestions"/>
-      <Spacer/>
-      <Action Name="Main.ShowPackage"/>
-      <Action Name="Patch.ShowStructure"/>
-   </ToolBar>   
-   <Menu Name="Patch">
+    <ToolBar Name="Package">
+        <Label Text="Package"/>
+        <Action Name="Package.Link"/>
+    </ToolBar>
+    <ToolBar Name="Patch">
+       <Label Text="Patch"/>
+       <Action Name="Patch.Save"/>
+       <Action Name="Patch.Close"/>
+       <Sperator/>
+       <Action Name="Patch.ShowSuggesions"/>
+       <Action Name="Patch.TransferAllSuggestions"/>
+    </ToolBar>
+    <ToolBar Name="View">
+       <Spacer/>
+       <Label Text="View"/>
+       <Action Name="Main.ShowPackage"/>
+       <Action Name="Patch.ShowStructure"/>
+    </ToolBar>
+    <Menu Name="Patch">
       <Action Name="Patch.Load"/>
       <Action Name="Patch.Save"/>
       <Action Name="Patch.SaveAll"/>

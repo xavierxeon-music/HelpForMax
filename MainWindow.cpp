@@ -184,6 +184,13 @@ void MainWindow::createToolBar(QDomElement thingElement)
          widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
          toolBar->addWidget(widget);
       }
+      else if ("Label" == what)
+      {
+         const QString text = contentElement.attribute("Text");
+         QLabel* label = new QLabel(text, this);
+         label->setMargin(5);
+         toolBar->addWidget(label);
+      }
    }
 }
 
@@ -245,6 +252,11 @@ void MainWindow::toogleDock(QWidget* widget, const QString& name, bool enabled)
       if (size.width() > 0 && size.height() > 0)
          widget->resize(size);
    }
+}
+
+QMenu* MainWindow::createPopupMenu()
+{
+   return nullptr;
 }
 
 // main function

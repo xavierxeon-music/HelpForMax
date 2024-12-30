@@ -29,6 +29,7 @@ private:
    void createMenu(QDomElement thingElement, QMenu* parentMenu);
    void closeEvent(QCloseEvent* ce) override;
    void toogleDock(QWidget* widget, const QString& name, bool enabled);
+   QMenu* createPopupMenu() override;
 
 private:
    Package::Container* packageWidget;
