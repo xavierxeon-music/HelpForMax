@@ -6,10 +6,7 @@
 #include <QLabel>
 #include <QProgressBar>
 
-namespace Message
-{
-   class Channel;
-}
+#include <IOChannel.h>
 
 class ProgressIndicator : public QWidget
 {
@@ -27,7 +24,7 @@ private:
 private:
    QLabel* messageLabel;
    QProgressBar* progressBar;
-   Message::Channel* messageChannel;
+   IOChannel* messageChannel;
 };
 
 #endif // NOT ProgressIndicatorH

@@ -16,6 +16,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 #
+find_package(WaLog REQUIRED)
 find_package(WaTools REQUIRED)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network Svg Xml)

@@ -5,6 +5,8 @@
 
 #include <QLabel>
 
+#include <IOChannel.h>
+
 namespace Message
 {
    class Channel;
@@ -22,15 +24,12 @@ namespace Message
       static QTextStream warning();
 
    private:
-      friend class Channel;
-
-   private:
       void print(const QString& text, bool isWarning = false);
 
    private:
       static Bar* me;
-      Channel* messageChannel;
-      Channel* warningChannel;
+      IOChannel* messageChannel;
+      IOChannel* warningChannel;
    };
 } // namespace Message
 

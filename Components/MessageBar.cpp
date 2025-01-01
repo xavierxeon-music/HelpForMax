@@ -3,8 +3,6 @@
 #include <QApplication>
 #include <QTimer>
 
-#include "MessageChannel.h"
-
 Message::Bar* Message::Bar::me = nullptr;
 
 Message::Bar::Bar(QWidget* parent)
@@ -14,11 +12,11 @@ Message::Bar::Bar(QWidget* parent)
 {
    me = this;
 
-   Channel::PrintFunction messageFunction = std::bind(&Bar::print, this, std::placeholders::_1, false);
-   messageChannel = new Channel(this, messageFunction);
+   IOChannel::PrintFunction messageFunction = std::bind(&Bar::print, this, std::placeholders::_1, false);
+   messageChannel = new IOChannel(this, messageFunction);
 
-   Channel::PrintFunction warningFunction = std::bind(&Bar::print, this, std::placeholders::_1, true);
-   warningChannel = new Channel(this, warningFunction);
+   IOChannel::PrintFunction warningFunction = std::bind(&Bar::print, this, std::placeholders::_1, true);
+   warningChannel = new IOChannel(this, warningFunction);
 
    setSizeGripEnabled(false);
 }
@@ -33,7 +31,7 @@ QTextStream Message::Bar::message()
    if (!me)
       return QTextStream();
 
-   return QTextStream(me->messageChannel);
+   return me->messageChannel->stream();
 }
 
 QTextStream Message::Bar::warning()
@@ -41,7 +39,7 @@ QTextStream Message::Bar::warning()
    if (!me)
       return QTextStream();
 
-   return QTextStream(me->warningChannel);
+   return me->warningChannel->stream();
 }
 
 void Message::Bar::print(const QString& text, bool isWarning)

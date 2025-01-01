@@ -2,8 +2,6 @@
 
 #include <QHBoxLayout>
 
-#include "MessageChannel.h"
-
 ProgressIndicator::ProgressIndicator(QWidget* parent)
    : QWidget(parent)
    , messageLabel(nullptr)
@@ -26,8 +24,8 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    masterLayout->addWidget(messageLabel);
    masterLayout->addWidget(progressBar);
 
-   Message::Channel::PrintFunction printFunction = std::bind(&ProgressIndicator::print, this, std::placeholders::_1);
-   messageChannel = new Message::Channel(this, printFunction);
+   IOChannel::PrintFunction printFunction = std::bind(&ProgressIndicator::print, this, std::placeholders::_1);
+   messageChannel = new IOChannel(this, printFunction);
 }
 
 QTextStream ProgressIndicator::message()
