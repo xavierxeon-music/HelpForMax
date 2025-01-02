@@ -7,30 +7,25 @@
 
 #include <IOChannel.h>
 
-namespace Message
+class MessageBar : public QStatusBar
 {
-   class Channel;
+   Q_OBJECT
 
-   class Bar : public QStatusBar
-   {
-      Q_OBJECT
+public:
+   MessageBar(QWidget* parent);
+   ~MessageBar();
 
-   public:
-      Bar(QWidget* parent);
-      ~Bar();
+public:
+   static QTextStream message();
+   static QTextStream warning();
 
-   public:
-      static QTextStream message();
-      static QTextStream warning();
+private:
+   void print(const QString& text, bool isWarning = false);
 
-   private:
-      void print(const QString& text, bool isWarning = false);
-
-   private:
-      static Bar* me;
-      IOChannel* messageChannel;
-      IOChannel* warningChannel;
-   };
-} // namespace Message
+private:
+   static MessageBar* me;
+   IOChannel* messageChannel;
+   IOChannel* warningChannel;
+};
 
 #endif // NOT MessageBarH

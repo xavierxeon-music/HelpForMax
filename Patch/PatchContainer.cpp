@@ -103,7 +103,7 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
    Package::Info* info = Package::Container::findOrCreate(patchFileName);
    if (!info)
    {
-      Message::Bar::warning() << "PATCH does not belong to a package" << patchFileName;
+      MessageBar::warning() << "PATCH does not belong to a package" << patchFileName;
       this->deleteLater();
       return;
    }

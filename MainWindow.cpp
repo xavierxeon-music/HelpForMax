@@ -28,7 +28,7 @@ MainWindow::MainWindow()
    patchWidget = new Patch::Container(this);
    setCentralWidget(patchWidget);
 
-   Message::Bar* messageBar = new Message::Bar(this);
+   MessageBar* messageBar = new MessageBar(this);
    setStatusBar(messageBar);
 
    auto addDock = [&](QWidget* widget, const Qt::DockWidgetArea& area, const QString& name)

@@ -156,7 +156,7 @@ Package::Info* Package::Container::get(const QString& packagePath)
       info->author = object["author"].toString();
       info->name = object["name"].toString();
 
-      Message::Bar::message() << "LOADED PACKAGE " << info->name;
+      MessageBar::message() << "LOADED PACKAGE " << info->name;
    }
 
    Widget* view = new Widget(this, info);
@@ -217,7 +217,10 @@ void Package::Container::slotReceiveSocket()
    const QString path = object["patch"].toString();
    Info* info = findOrCreate(path);
    if (!info)
+   {
+      MessageBar::warning() << "Unable to lcate package of " << path;
       return;
+   }
 
    for (int index = 0; index < tabBar()->count(); index++)
    {

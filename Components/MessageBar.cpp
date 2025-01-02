@@ -3,30 +3,32 @@
 #include <QApplication>
 #include <QTimer>
 
-Message::Bar* Message::Bar::me = nullptr;
+MessageBar* MessageBar::me = nullptr;
 
-Message::Bar::Bar(QWidget* parent)
+MessageBar::MessageBar(QWidget* parent)
    : QStatusBar(parent)
    , messageChannel(nullptr)
    , warningChannel(nullptr)
 {
    me = this;
 
-   IOChannel::PrintFunction messageFunction = std::bind(&Bar::print, this, std::placeholders::_1, false);
-   messageChannel = new IOChannel(this, messageFunction);
+   auto printFunction = [&](bool isWarning)
+   {
+      return std::bind(&MessageBar::print, this, std::placeholders::_1, isWarning);
+   };
 
-   IOChannel::PrintFunction warningFunction = std::bind(&Bar::print, this, std::placeholders::_1, true);
-   warningChannel = new IOChannel(this, warningFunction);
+   messageChannel = new IOChannel(this, printFunction(false));
+   warningChannel = new IOChannel(this, printFunction(true));
 
    setSizeGripEnabled(false);
 }
 
-Message::Bar::~Bar()
+MessageBar::~MessageBar()
 {
    me = nullptr;
 }
 
-QTextStream Message::Bar::message()
+QTextStream MessageBar::message()
 {
    if (!me)
       return QTextStream();
@@ -34,7 +36,7 @@ QTextStream Message::Bar::message()
    return me->messageChannel->stream();
 }
 
-QTextStream Message::Bar::warning()
+QTextStream MessageBar::warning()
 {
    if (!me)
       return QTextStream();
@@ -42,7 +44,7 @@ QTextStream Message::Bar::warning()
    return me->warningChannel->stream();
 }
 
-void Message::Bar::print(const QString& text, bool isWarning)
+void MessageBar::print(const QString& text, bool isWarning)
 {
    static const QString urgentSymbol = QString::fromUtf8("\u2622");
    if (isWarning)
