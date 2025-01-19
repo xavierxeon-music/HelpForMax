@@ -16,7 +16,7 @@ public:
    ProgressIndicator(QWidget* parent);
 
 public:
-   QTextStream message();
+   QTextStream message(const int percent = -1);
 
 private:
    void print(const QString& text);

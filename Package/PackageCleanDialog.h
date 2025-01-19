@@ -6,13 +6,24 @@
 
 namespace Package
 {
-   class CleanDialog : public QDialog, private Ui::CleanDialog
+   namespace Clean
    {
-      Q_OBJECT
+      class Model;
 
-   public:
-      CleanDialog(QWidget* parent);
-   };
+      class Dialog : public QDialog, private Ui::Dialog
+      {
+         Q_OBJECT
+
+      public:
+         Dialog(QWidget* parent);
+
+      private slots:
+         void slotCleanup();
+
+      private:
+         Model* model;
+      };
+   } // namespace Clean
 } // namespace Package
 
 #endif // PackageCleanDialogH

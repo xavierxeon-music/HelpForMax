@@ -6,13 +6,25 @@
 
 namespace Suggest
 {
-   class TransferDialog : public QDialog, private Ui::TransferDialog
+   namespace Transfer
    {
-      Q_OBJECT
+      class Model;
 
-   public:
-      TransferDialog(QWidget* parent);
-   };
+      class Dialog : public QDialog, private Ui::Dialog
+      {
+         Q_OBJECT
+
+      public:
+         Dialog(QWidget* parent);
+
+      private:
+         void slotAnalyse();
+         void slotTransfer();
+
+      private:
+         Model* model;
+      };
+   } // namespace Transfer
 } // namespace Suggest
 
 #endif // NOT SuggestTransferDialogH

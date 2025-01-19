@@ -244,13 +244,13 @@ void Package::Container::slotLinkToMax(bool enabled)
 
 void Package::Container::slotOpenSuggestions()
 {
-   Suggest::TransferDialog dialog(this);
+   Suggest::Transfer::Dialog dialog(this);
    dialog.exec();
 }
 
 void Package::Container::slotCleanup()
 {
-   CleanDialog dialog(this);
+   Clean::Dialog dialog(this);
    dialog.exec();
 }
 

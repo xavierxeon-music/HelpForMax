@@ -8,6 +8,8 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    , progressBar(nullptr)
    , messageChannel(nullptr)
 {
+   setMinimumHeight(30);
+
    messageLabel = new QLabel(this);
    messageLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
    messageLabel->setText("Hello");
@@ -28,8 +30,9 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    messageChannel = new IOChannel(this, printFunction);
 }
 
-QTextStream ProgressIndicator::message()
+QTextStream ProgressIndicator::message(const int percent)
 {
+   progressBar->setValue(percent);
    return messageChannel->stream();
 }
 
