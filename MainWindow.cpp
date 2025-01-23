@@ -9,13 +9,13 @@
 #include <QSettings>
 #include <QToolBar>
 
+#include <MessageBar.h>
 #include <Shared.h>
 
-#include "MessageBar.h"
 #include "PatchWidget.h"
 
 MainWindow::MainWindow()
-   : QMainWindow(nullptr)
+   : PopulatedMainWindow()
    , packageWidget(nullptr)
    , patchWidget(nullptr)
 #ifdef TEST_CLIENT_AVAILABLE
@@ -64,7 +64,7 @@ MainWindow::MainWindow()
    packageWidget->createActions();
    patchWidget->createActions();
 
-   populateMenuAndToolBar();
+   populateMenuAndToolBar(":/_MenuAndToolBar.xml");
 
    QSettings settings;
    qInfo() << "SETTINGS @" << settings.fileName();
@@ -125,115 +125,6 @@ void MainWindow::createActions()
 #ifdef TEST_CLIENT_AVAILABLE
    addViewToggle(testClient, "Test Client", "Main.ShowTestClient");
 #endif // TEST_CLIENT_AVAILABLE
-}
-
-void MainWindow::populateMenuAndToolBar()
-{
-   QFile file(":/_MenuAndToolBar.xml");
-   if (!file.open(QIODevice::ReadOnly))
-      return;
-
-   const QByteArray content = file.readAll();
-   file.close();
-
-   QDomDocument doc;
-   QDomDocument::ParseResult result = doc.setContent(content);
-   if (!result.errorMessage.isEmpty())
-   {
-      qWarning() << "unable to read xml" << result.errorMessage;
-      return;
-   }
-
-   const QDomElement rootElement = doc.documentElement();
-   for (QDomElement thingElement = rootElement.firstChildElement(); !thingElement.isNull(); thingElement = thingElement.nextSiblingElement())
-   {
-      const QString what = thingElement.tagName();
-      if ("ToolBar" == what)
-         createToolBar(thingElement);
-      else if ("Menu" == what)
-         createMenu(thingElement, nullptr);
-   }
-}
-
-void MainWindow::createToolBar(QDomElement thingElement)
-{
-   const QString name = thingElement.attribute("Name");
-   QToolBar* toolBar = addToolBar(name);
-   toolBar->setObjectName(name);
-   toolBar->setMovable(false);
-   toolBar->setIconSize(QSize(24, 24));
-
-   for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
-   {
-      const QString what = contentElement.tagName();
-      if ("Action" == what)
-      {
-         const QString name = contentElement.attribute("Name");
-         QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
-         if (action)
-            toolBar->addAction(action);
-      }
-      else if ("Sperator" == what)
-      {
-         toolBar->addSeparator();
-      }
-      else if ("Spacer" == what)
-      {
-         QWidget* widget = new QWidget(this);
-         widget->setMinimumWidth(100);
-         widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-         toolBar->addWidget(widget);
-      }
-      else if ("Label" == what)
-      {
-         const QString text = contentElement.attribute("Text");
-         QLabel* label = new QLabel(text, this);
-         label->setMargin(5);
-         toolBar->addWidget(label);
-      }
-   }
-}
-
-void MainWindow::createMenu(QDomElement thingElement, QMenu* parentMenu)
-{
-   const QString name = thingElement.attribute("Name");
-   QMenu* menu = parentMenu ? parentMenu->addMenu(name) : menuBar()->addMenu(name);
-
-   for (QDomElement contentElement = thingElement.firstChildElement(); !contentElement.isNull(); contentElement = contentElement.nextSiblingElement())
-   {
-      const QString what = contentElement.tagName();
-      if ("Action" == what)
-      {
-         const QString name = contentElement.attribute("Name");
-         QAction* action = findChild<QAction*>(name, Qt::FindChildrenRecursively);
-         if (action)
-            menu->addAction(action);
-      }
-      else if ("Sperator" == what)
-      {
-         menu->addSeparator();
-      }
-      else if ("Menu" == what)
-      {
-         const QString name = contentElement.attribute("Name");
-         QMenu* subMenu = findChild<QMenu*>(name, Qt::FindChildrenRecursively);
-         if (subMenu)
-            menu->addMenu(subMenu);
-      }
-      else if ("SubMenu" == what)
-      {
-         createMenu(contentElement, menu);
-      }
-   }
-}
-
-void MainWindow::closeEvent(QCloseEvent* ce)
-{
-   QSettings settings;
-   settings.setValue("MainWidget/Geometry", saveGeometry());
-   settings.setValue("MainWidget/State", saveState());
-
-   ce->accept();
 }
 
 void MainWindow::toogleDock(QWidget* widget, const QString& name, bool enabled)

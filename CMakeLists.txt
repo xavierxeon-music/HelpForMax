@@ -16,13 +16,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 #
-find_package(WaLog REQUIRED)
-find_package(WaTools REQUIRED)
+
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network Svg Xml)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
+find_package(WaLog REQUIRED)
+find_package(WaQt REQUIRED)
+find_package(WaTools REQUIRED)
 
 #
 include_directories(

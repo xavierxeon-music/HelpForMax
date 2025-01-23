@@ -1,9 +1,7 @@
 #ifndef MainWindowH
 #define MainWindowH
 
-#include <QMainWindow>
-
-#include <QDomElement>
+#include <PopulatedMainWindow.h>
 
 #include "PackageContainer.h"
 #include "PatchContainer.h"
@@ -12,7 +10,7 @@
 #include "TestClient.h"
 #endif // TEST_CLIENT_AVAILABLE
 
-class MainWindow : public QMainWindow
+class MainWindow : public PopulatedMainWindow
 {
    Q_OBJECT
 
@@ -24,10 +22,7 @@ private slots:
 
 private:
    void createActions();
-   void populateMenuAndToolBar();
-   void createToolBar(QDomElement thingElement);
-   void createMenu(QDomElement thingElement, QMenu* parentMenu);
-   void closeEvent(QCloseEvent* ce) override;
+
    void toogleDock(QWidget* widget, const QString& name, bool enabled);
    QMenu* createPopupMenu() override;
 
