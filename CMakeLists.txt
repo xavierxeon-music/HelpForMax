@@ -26,14 +26,11 @@ find_package(WaQt REQUIRED)
 find_package(WaTools REQUIRED)
 
 #
-add_include_subdirs(${CMAKE_CURRENT_SOURCE_DIR})
-
 file(GLOB SOURCE_FILES
    ${CMAKE_CURRENT_SOURCE_DIR}/*.h
    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/*.ui
-   ${CMAKE_CURRENT_SOURCE_DIR}/_Resources/*.qrc
 )
 
 list(APPEND SOURCE_FILES
@@ -42,6 +39,7 @@ list(APPEND SOURCE_FILES
 )
 
 qt_add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_subdirs_files(${CMAKE_CURRENT_SOURCE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
    WIN32_EXECUTABLE TRUE
@@ -57,10 +55,3 @@ add_subdirectory(DiscreteMaths)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DiscreteMaths)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE DiscreteMaths Qt6::Widgets Qt6::Network Qt6::Svg Qt6::Xml)
-
-include(${CMAKE_CURRENT_LIST_DIR}/Components/build.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/Max/build.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/Package/build.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/Patch/build.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/PatchRef/build.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/Suggest/build.cmake)

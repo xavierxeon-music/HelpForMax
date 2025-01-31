@@ -108,7 +108,7 @@ void Package::Container::createActions()
    PopulatedMainWindow::addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
    PopulatedMainWindow::addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
 
-   PopulatedMainWindow::addAction(QIcon(), "Suggest Dialog", "Package.TransferAllSuggestions", this, &Container::slotOpenSuggestions);
+   PopulatedMainWindow::addAction(QIcon(), "Suggestions", "Package.OpenSuggestionsDialog", this, &Container::slotOpenSuggestions);
    PopulatedMainWindow::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
 
    linkAction = PopulatedMainWindow::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
@@ -236,13 +236,19 @@ void Package::Container::slotLinkToMax(bool enabled)
 
 void Package::Container::slotOpenSuggestions()
 {
-   Suggest::Transfer::Dialog dialog(this);
+   Widget* view = qobject_cast<Widget*>(currentWidget());
+   const Info* info = view->getPackageInfo();
+
+   Suggest::Transfer::Dialog dialog(this, info);
    dialog.exec();
 }
 
 void Package::Container::slotCleanup()
 {
-   Clean::Dialog dialog(this);
+   Widget* view = qobject_cast<Widget*>(currentWidget());
+   const Info* info = view->getPackageInfo();
+
+   Clean::Dialog dialog(this, info);
    dialog.exec();
 }
 

@@ -22,8 +22,8 @@ namespace Package
       ~Container();
 
    signals:
-      void signalCloseAllPatches(const Info* info);
-      void signalPatchSeleted(const QString& path, const Info* info);
+      void signalCloseAllPatches(const Package::Info* info);
+      void signalPatchSeleted(const QString& path, const Package::Info* info);
 
    public slots:
       void slotRefWritten(const QString& patchPath);

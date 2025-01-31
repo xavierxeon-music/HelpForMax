@@ -4,6 +4,8 @@
 #include "ui_SuggestTransferDialog.h"
 #include <QDialog>
 
+#include "SuggestTransferModel.h"
+
 namespace Suggest
 {
    namespace Transfer
@@ -15,7 +17,7 @@ namespace Suggest
          Q_OBJECT
 
       public:
-         Dialog(QWidget* parent);
+         Dialog(QWidget* parent, const Package::Info* packageInfo);
 
       private:
          void slotAnalyse();

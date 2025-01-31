@@ -36,7 +36,7 @@
       <Action Name="Package.Link"/>
       <Sperator/>
       <SubMenu Name="Tools">
-         <Action Name="Package.TransferAllSuggestions"/>
+         <Action Name="Package.OpenSuggestionsDialog"/>
          <Action Name="Package.Clean"/>
       </SubMenu>
       <Menu Name="Package.Recent"/>

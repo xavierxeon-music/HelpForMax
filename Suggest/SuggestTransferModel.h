@@ -3,6 +3,11 @@
 
 #include <QStandardItemModel>
 
+namespace Package
+{
+   class Info;
+}
+
 namespace Suggest
 {
    namespace Transfer
@@ -12,7 +17,7 @@ namespace Suggest
          Q_OBJECT
 
       public:
-         Model(QObject* parent);
+         Model(QObject* parent, const Package::Info* packageInfo);
       };
    } // namespace Transfer
 } // namespace Suggest

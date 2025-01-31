@@ -1,6 +1,6 @@
 #include "PackageCleanDialog.h"
 
-Package::Clean::Dialog::Dialog(QWidget* parent)
+Package::Clean::Dialog::Dialog(QWidget* parent, const Info* info)
    : QDialog(parent)
    , model(nullptr)
 {
