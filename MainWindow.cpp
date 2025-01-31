@@ -65,11 +65,6 @@ MainWindow::MainWindow()
    patchWidget->createActions();
 
    populateMenuAndToolBar(":/_MenuAndToolBar.xml");
-
-   QSettings settings;
-   qInfo() << "SETTINGS @" << settings.fileName();
-   restoreGeometry(settings.value("MainWidget/Geometry").toByteArray());
-   restoreState(settings.value("MainWidget/State").toByteArray());
 }
 
 void MainWindow::slotCheckDirty()
@@ -85,15 +80,6 @@ void MainWindow::slotCheckDirty()
 
 void MainWindow::createActions()
 {
-   auto addAction = [&](QIcon icon, QString text, QString objectName, auto slotFunction)
-   {
-      QAction* action = new QAction(icon, text, this);
-      action->setObjectName(objectName);
-      connect(action, &QAction::triggered, this, slotFunction);
-
-      return action;
-   };
-
    auto addViewToggle = [&](QWidget* widget, const QString& text, QString objectName, const QIcon& icon = QIcon())
    {
       QAction* viewAction = new QAction(icon, text, this);
@@ -145,11 +131,6 @@ void MainWindow::toogleDock(QWidget* widget, const QString& name, bool enabled)
    }
 }
 
-QMenu* MainWindow::createPopupMenu()
-{
-   return nullptr;
-}
-
 // main function
 
 int main(int argc, char** argv)
@@ -159,6 +140,7 @@ int main(int argc, char** argv)
    QApplication::setOrganizationName("SchweineSystem");
 
    QSettings::setDefaultFormat(QSettings::IniFormat);
+   PopulatedMainWindow::printSettingsLocation();
 
    QApplication app(argc, argv);
    app.setAttribute(Qt::AA_DontShowIconsInMenus, true);

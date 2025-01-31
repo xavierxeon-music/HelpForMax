@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QSettings>
 
+#include <PopulatedMainWindow.h>
 #include <Shared.h>
 
 #include "MessageBar.h"
@@ -103,23 +104,14 @@ Package::Info* Package::Container::findOrCreate(const QString& someFileInPackage
 
 void Package::Container::createActions()
 {
-   auto addAction = [&](QIcon icon, QString text, QString objectName, auto slotFunction)
-   {
-      QAction* action = new QAction(icon, text, this);
-      action->setObjectName(objectName);
-      connect(action, &QAction::triggered, this, slotFunction);
-
-      return action;
-   };
-
    //
-   addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", &Container::slotLoadPackage);
-   addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", &Container::slotClosePackage);
+   PopulatedMainWindow::addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
+   PopulatedMainWindow::addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
 
-   addAction(QIcon(), "Suggest Dialog", "Package.TransferAllSuggestions", &Container::slotOpenSuggestions);
-   addAction(QIcon(), "Clean", "Package.Clean", &Container::slotCleanup);
+   PopulatedMainWindow::addAction(QIcon(), "Suggest Dialog", "Package.TransferAllSuggestions", this, &Container::slotOpenSuggestions);
+   PopulatedMainWindow::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
 
-   linkAction = addAction(linkMap.value(false), "Link", "Package.Link", &Container::slotLinkToMax);
+   linkAction = PopulatedMainWindow::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
    linkAction->setCheckable(true);
 
    QSettings settings;

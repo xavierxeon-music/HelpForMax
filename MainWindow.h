@@ -22,9 +22,7 @@ private slots:
 
 private:
    void createActions();
-
    void toogleDock(QWidget* widget, const QString& name, bool enabled);
-   QMenu* createPopupMenu() override;
 
 private:
    Package::Container* packageWidget;
