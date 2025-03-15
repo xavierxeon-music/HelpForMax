@@ -47,13 +47,13 @@ use_precompiled_headers()
 set_application_icon(${CMAKE_CURRENT_SOURCE_DIR}/_Resources/${PROJECT_NAME})
 
 
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
    WIN32_EXECUTABLE TRUE
    MACOSX_BUNDLE TRUE
 )
 
-# run_qt_deploy()
+run_qt_deploy()
+
 add_subdirectory(DiscreteMaths)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DiscreteMaths)
 
