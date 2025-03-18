@@ -40,6 +40,8 @@ Max::Widget::Widget(QWidget* parent)
    }
 
    updateZoom(false);
+
+   setDragMode(ScrollHandDrag);
 }
 
 void Max::Widget::load(const Patcher& patcher)
@@ -109,6 +111,10 @@ void Max::Widget::load(const Patcher& patcher)
 
 void Max::Widget::wheelEvent(QWheelEvent* wheelEvent)
 {
+   const bool enabled = Qt::ShiftModifier & wheelEvent->modifiers();
+   if (!enabled)
+      return;
+
    const double delta = 0.001 * wheelEvent->angleDelta().y();
    const double factor = std::pow(2.0, delta);
 
@@ -124,18 +130,6 @@ void Max::Widget::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       zoomLevel = 1.0;
       updateZoom(true);
    }
-}
-
-void Max::Widget::keyPressEvent(QKeyEvent* event)
-{
-   const bool enabled = Qt::ShiftModifier & event->modifiers();
-   setDragMode(enabled ? ScrollHandDrag : NoDrag);
-}
-
-void Max::Widget::keyReleaseEvent(QKeyEvent* event)
-{
-   const bool enabled = Qt::ShiftModifier & event->modifiers();
-   setDragMode(enabled ? ScrollHandDrag : NoDrag);
 }
 
 void Max::Widget::updateZoom(bool save)

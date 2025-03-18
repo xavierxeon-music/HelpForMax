@@ -22,10 +22,6 @@ namespace Max
    private:
       void wheelEvent(QWheelEvent* wheelEvent) override;
       void mouseDoubleClickEvent(QMouseEvent* mouseEvent) override;
-
-      void keyPressEvent(QKeyEvent* event) override;
-      void keyReleaseEvent(QKeyEvent* event) override;
-
       void updateZoom(bool save);
 
    private:
