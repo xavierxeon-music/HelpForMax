@@ -42,7 +42,7 @@ list(APPEND SOURCE_FILES
 set_standrard_release_output_path()
 
 qt_add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-add_subdirs_files(${CMAKE_CURRENT_SOURCE_DIR})
+add_all_subdirs_files(${CMAKE_CURRENT_SOURCE_DIR})
 use_precompiled_headers()
 set_application_icon(${CMAKE_CURRENT_SOURCE_DIR}/_Resources/${PROJECT_NAME})
 
