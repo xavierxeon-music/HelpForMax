@@ -8,7 +8,7 @@
 
 #include <PopulatedMainWindow.h>
 
-#include "MessageBar.h"
+#include "MessageLabel.h"
 #include "PackageContainer.h"
 #include "PackageInfo.h"
 #include "PatchWidget.h"
@@ -96,7 +96,7 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
    Package::Info* info = Package::Container::findOrCreate(patchFileName);
    if (!info)
    {
-      MessageBar::warning() << "PATCH does not belong to a package" << patchFileName;
+      MessageLabel::warning() << "PATCH does not belong to a package" << patchFileName;
       this->deleteLater();
       return;
    }

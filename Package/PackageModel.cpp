@@ -110,6 +110,8 @@ void Package::Model::updateIcons()
 
 QModelIndex Package::Model::find(const QString& patchFileName) const
 {
+   QFileInfo fileInfo(patchFileName);
+
    for (int folderRow = 0; folderRow < invisibleRootItem()->rowCount(); folderRow++)
    {
       QStandardItem* folderItem = invisibleRootItem()->child(folderRow, 0);
@@ -117,7 +119,8 @@ QModelIndex Package::Model::find(const QString& patchFileName) const
       for (int patchRow = 0; patchRow < folderItem->rowCount(); patchRow++)
       {
          QStandardItem* patchItem = folderItem->child(patchRow, 0);
-         if (patchItem->data(RolePath).toString() == patchFileName)
+         const QString itemPath = patchItem->data(RolePath).toString();
+         if (itemPath == fileInfo.canonicalFilePath())
             return patchItem->index();
       }
    }

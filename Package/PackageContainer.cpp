@@ -9,7 +9,7 @@
 #include <PopulatedMainWindow.h>
 #include <Shared.h>
 
-#include "MessageBar.h"
+#include "MessageLabel.h"
 #include "PackageCleanDialog.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
@@ -36,8 +36,12 @@ Package::Container::Container(QWidget* parent)
 
    server = new QLocalServer(this);
    connect(server, &QLocalServer::newConnection, this, &Container::slotNewConnection);
-   qInfo() << "Server @" << HelpForMax::socketName();
-   server->listen(HelpForMax::socketName());
+
+   const QString serverName = HelpForMax::socketName();
+   server->removeServer(serverName);
+   server->listen(serverName);
+
+   qInfo() << "Server @" << serverName;
 }
 
 Package::Container::~Container()
@@ -148,7 +152,7 @@ Package::Info* Package::Container::get(const QString& packagePath)
       info->author = object["author"].toString();
       info->name = object["name"].toString();
 
-      MessageBar::message() << "LOADED PACKAGE " << info->name;
+      MessageLabel::message() << "LOADED PACKAGE " << info->name;
    }
 
    Widget* view = new Widget(this, info);
@@ -210,7 +214,7 @@ void Package::Container::slotReceiveSocket()
    Info* info = findOrCreate(path);
    if (!info)
    {
-      MessageBar::warning() << "Unable to lcate package of " << path;
+      MessageLabel::warning() << "Unable to locate package of " << path;
       return;
    }
 

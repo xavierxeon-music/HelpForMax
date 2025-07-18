@@ -269,6 +269,7 @@ QByteArray File::RefXML::writeContent(const QString& patchName)
             QDomElement attributeElement = createSubElement(attributeListElement, "attribute");
             attributeElement.setAttribute("name", messageNamed.name);
             attributeElement.setAttribute("type", typeName);
+            attributeElement.setAttribute("set", true);
 
             addDigest(attributeElement, messageNamed.digest);
          }

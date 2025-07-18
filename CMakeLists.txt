@@ -33,11 +33,6 @@ file(GLOB SOURCE_FILES
    ${CMAKE_CURRENT_SOURCE_DIR}/*.ui
 )
 
-list(APPEND SOURCE_FILES
-   ${WAQT_INCLUDE_DIRS}/MessageBar.h
-   ${WAQT_INCLUDE_DIRS}/PopulatedMainWindow.h
-)
-
 
 set_standrard_release_output_path()
 
@@ -52,7 +47,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
    MACOSX_BUNDLE TRUE
 )
 
-run_qt_deploy()
+#run_qt_deploy()
 
 add_subdirectory(DiscreteMaths)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/DiscreteMaths)

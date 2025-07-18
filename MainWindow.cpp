@@ -7,9 +7,10 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QSettings>
+#include <QStatusBar>
 #include <QToolBar>
 
-#include <MessageBar.h>
+#include <MessageLabel.h>
 #include <Shared.h>
 
 #include "PatchWidget.h"
@@ -28,22 +29,11 @@ MainWindow::MainWindow()
    patchWidget = new Patch::Container(this);
    setCentralWidget(patchWidget);
 
-   MessageBar* messageBar = new MessageBar(this);
-   setStatusBar(messageBar);
-
-   auto addDock = [&](QWidget* widget, const Qt::DockWidgetArea& area, const QString& name)
-   {
-      QDockWidget* dockWidget = new QDockWidget(this);
-      dockWidget->setObjectName(name);
-      dockWidget->setWidget(widget);
-      dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
-      dockWidget->setTitleBarWidget(new QWidget());
-
-      addDockWidget(area, dockWidget);
-   };
+   MessageLabel* messageLabel = new MessageLabel(this);
+   statusBar()->addPermanentWidget(messageLabel);
 
    packageWidget = new Package::Container(this);
-   addDock(packageWidget, Qt::LeftDockWidgetArea, "Package");
+   addDockWidget(packageWidget, Qt::LeftDockWidgetArea);
 
    connect(patchWidget, &Patch::Container::signalCheckDirty, this, &MainWindow::slotCheckDirty);
    connect(patchWidget, &Patch::Container::signalCheckDirty, packageWidget, &Package::Container::slotCheckDirty);
@@ -54,7 +44,7 @@ MainWindow::MainWindow()
 
 #ifdef TEST_CLIENT_AVAILABLE
    testClient = new TestClient;
-   addDock(testClient, Qt::RightDockWidgetArea, "Test");
+   addDockWidget(testClient, Qt::RightDockWidgetArea);
 #endif // TEST_CLIENT_AVAILABLE
 
    packageWidget->init();
