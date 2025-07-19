@@ -29,7 +29,7 @@ MainWindow::MainWindow()
    patchWidget = new Patch::Container(this);
    setCentralWidget(patchWidget);
 
-   MessageLabel* messageLabel = new MessageLabel(this);
+   MessageLabel* messageLabel = new MessageLabel(this, 20);
    statusBar()->addPermanentWidget(messageLabel);
 
    packageWidget = new Package::Container(this);
