@@ -6,7 +6,6 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    : QWidget(parent)
    , messageLabel(nullptr)
    , progressBar(nullptr)
-   , messageChannel(nullptr)
 {
    setMinimumHeight(30);
 
@@ -25,18 +24,4 @@ ProgressIndicator::ProgressIndicator(QWidget* parent)
    masterLayout->setContentsMargins(0, 0, 0, 0);
    masterLayout->addWidget(messageLabel);
    masterLayout->addWidget(progressBar);
-
-   IOChannel::PrintFunction printFunction = std::bind(&ProgressIndicator::print, this, std::placeholders::_1);
-   messageChannel = new IOChannel(this, printFunction);
-}
-
-QTextStream ProgressIndicator::message(const int percent)
-{
-   progressBar->setValue(percent);
-   return messageChannel->stream();
-}
-
-void ProgressIndicator::print(const QString& text)
-{
-   messageLabel->setText(text);
 }

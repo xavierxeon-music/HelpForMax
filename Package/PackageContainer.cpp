@@ -6,10 +6,10 @@
 #include <QJsonObject>
 #include <QSettings>
 
+#include <Logger.h>
 #include <PopulatedMainWindow.h>
 #include <Shared.h>
 
-#include "MessageLabel.h"
 #include "PackageCleanDialog.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
@@ -152,7 +152,7 @@ Package::Info* Package::Container::get(const QString& packagePath)
       info->author = object["author"].toString();
       info->name = object["name"].toString();
 
-      MessageLabel::message() << "LOADED PACKAGE " << info->name;
+      Logger::stream() << "LOADED PACKAGE " << info->name;
    }
 
    Widget* view = new Widget(this, info);
@@ -214,7 +214,7 @@ void Package::Container::slotReceiveSocket()
    Info* info = findOrCreate(path);
    if (!info)
    {
-      MessageLabel::warning() << "Unable to locate package of " << path;
+      Logger::stream(Qt::red) << "Unable to locate package of " << path;
       return;
    }
 

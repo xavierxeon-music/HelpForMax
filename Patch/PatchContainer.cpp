@@ -6,9 +6,9 @@
 #include <QTabBar>
 #include <QTimer>
 
+#include <Logger.h>
 #include <PopulatedMainWindow.h>
 
-#include "MessageLabel.h"
 #include "PackageContainer.h"
 #include "PackageInfo.h"
 #include "PatchWidget.h"
@@ -96,7 +96,7 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
    Package::Info* info = Package::Container::findOrCreate(patchFileName);
    if (!info)
    {
-      MessageLabel::warning() << "PATCH does not belong to a package" << patchFileName;
+      Logger::stream(Qt::red) << "PATCH does not belong to a package" << patchFileName;
       this->deleteLater();
       return;
    }

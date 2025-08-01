@@ -6,8 +6,6 @@
 #include <QLabel>
 #include <QProgressBar>
 
-#include <IOChannel.h>
-
 class ProgressIndicator : public QWidget
 {
    Q_OBJECT
@@ -15,16 +13,9 @@ class ProgressIndicator : public QWidget
 public:
    ProgressIndicator(QWidget* parent);
 
-public:
-   QTextStream message(const int percent = -1);
-
-private:
-   void print(const QString& text);
-
 private:
    QLabel* messageLabel;
    QProgressBar* progressBar;
-   IOChannel* messageChannel;
 };
 
 #endif // NOT ProgressIndicatorH
