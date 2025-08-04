@@ -1,53 +1,53 @@
 <MenuAndTooBar>
-    <ToolBar Name="Package">
+    <ToolBar Text="Package">
         <Label Text="Package"/>
-        <Action Name="Package.Link"/>
+        <Action ObjectName="Package.Link"/>
     </ToolBar>
-    <ToolBar Name="Patch">
+    <ToolBar Text="Patch">
        <Label Text="Patch"/>
-       <Action Name="Patch.Save"/>
-       <Action Name="Patch.Close"/>
-       <Sperator/>
-       <Action Name="Patch.ShowSuggesions"/>
-       <Action Name="Patch.TransferAllSuggestions"/>
+       <Action ObjectName="Patch.Save"/>
+       <Action ObjectName="Patch.Close"/>
+       <Separator/>
+       <Action ObjectName="Patch.ShowSuggesions"/>
+       <Action ObjectName="Patch.TransferAllSuggestions"/>
     </ToolBar>
-    <ToolBar Name="View">
+    <ToolBar Text="View">
        <Spacer/>
        <Label Text="View"/>
-       <Action Name="Main.ShowPackage"/>
-       <Action Name="Patch.ShowStructure"/>
+       <Action ObjectName="Main.ShowPackage"/>
+       <Action ObjectName="Patch.ShowStructure"/>
     </ToolBar>
-    <Menu Name="Patch">
-      <Action Name="Patch.Load"/>
-      <Action Name="Patch.Save"/>
-      <Action Name="Patch.SaveAll"/>
-      <Sperator/>      
-      <SubMenu Name="Tools">
-         <Action Name="Patch.TransferAllSuggestions"/>
-         <Action Name="Patch.Max"/>
-         <Action Name="Patch.XML"/>
-      </SubMenu>
-      <Menu Name="Patch.Recent"/>
-      <Sperator/>
-      <Action Name="Patch.Close"/>      
+    <Menu ObjectName="Patch.Menu" Text="Patch">
+      <Action ObjectName="Patch.Load"/>
+      <Action ObjectName="Patch.Save"/>
+      <Action ObjectName="Patch.SaveAll"/>
+      <Separator/>
+      <Menu ObjectName="Pathc.Menu.Tools" Text="Tools">
+         <Action ObjectName="Patch.TransferAllSuggestions"/>
+         <Action ObjectName="Patch.Max"/>
+         <Action ObjectName="Patch.XML"/>
+      </Menu>
+      <Menu ObjectName="Patch.Recent" Text="Recent"/>
+      <Separator/>
+      <Action ObjectName="Patch.Close"/>
    </Menu>
-   <Menu Name="Package">
-      <Action Name="Package.Load"/>
-      <Action Name="Package.Link"/>
-      <Sperator/>
-      <SubMenu Name="Tools">
-         <Action Name="Package.OpenSuggestionsDialog"/>
-         <Action Name="Package.Clean"/>
-      </SubMenu>
-      <Menu Name="Package.Recent"/>
-      <Sperator/>
-      <Action Name="Package.Close"/>            
+   <Menu ObjectName="Package.Menu" Text="Package">
+      <Action ObjectName="Package.Load"/>
+      <Action ObjectName="Package.Link"/>
+      <Separator/>
+      <Menu ObjectName="Package.Menu.Tools" Text="Tools">
+         <Action ObjectName="Package.OpenSuggestionsDialog"/>
+         <Action ObjectName="Package.Clean"/>
+      </Menu>
+      <Menu ObjectName="Package.Recent" Text="Recent"/>
+      <Separator/>
+      <Action ObjectName="Package.Close"/>
    </Menu>
-   <Menu Name="View">
-      <Action Name="Main.ShowPackage"/>
-      <Action Name="Patch.ShowStructure"/>
-      <Action Name="Main.ShowTestClient"/>      
-      <Sperator/>
-      <Action Name="Patch.ShowSuggesions"/>
+   <Menu ObjectName="View.Menu" Text="View">
+      <Action ObjectName="Main.ShowPackage"/>
+      <Action ObjectName="Patch.ShowStructure"/>
+      <Action ObjectName="Main.ShowTestClient"/>
+      <Separator/>
+      <Action ObjectName="Patch.ShowSuggesions"/>
    </Menu>
 </MenuAndTooBar>
