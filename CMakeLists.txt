@@ -21,9 +21,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(WaLog REQUIRED)
-find_package(WaQt REQUIRED)
-find_package(WaTools REQUIRED)
+find_package(WaTools REQUIRED COMPONENTS General Qt Log)
 
 #
 file(GLOB SOURCE_FILES
@@ -40,12 +38,6 @@ qt_add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 add_all_subdirs_files(${CMAKE_CURRENT_SOURCE_DIR})
 use_precompiled_headers()
 set_application_icon(${CMAKE_CURRENT_SOURCE_DIR}/_Resources/${PROJECT_NAME})
-
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-   WIN32_EXECUTABLE TRUE
-   MACOSX_BUNDLE TRUE
-)
 
 #run_qt_deploy()
 
