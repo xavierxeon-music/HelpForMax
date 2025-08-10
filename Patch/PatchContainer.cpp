@@ -66,7 +66,8 @@ void Patch::Container::createActions()
    showXMLAction->setShortcut(QKeySequence::Open);
 
    QAction* transferAllAction = PopulatedMainWindow::addAction(QIcon(":/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", this, &Container::slotTranferAllSuggestions);
-   transferAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_T);
+   //transferAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_T);
+   transferAllAction->setShortcut(Qt::ControlModifier | Qt::Key_T);
 }
 
 void Patch::Container::init()
