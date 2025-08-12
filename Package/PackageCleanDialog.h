@@ -6,8 +6,6 @@
 
 namespace Package
 {
-   class Info;
-
    namespace Clean
    {
       class Model;
@@ -17,10 +15,10 @@ namespace Package
          Q_OBJECT
 
       public:
-         Dialog(QWidget* parent, const Info* info);
+         Dialog(QWidget* parent, Model* model);
 
-      private slots:
-         void slotCleanup();
+      private:
+         void cleanup();
 
       private:
          Model* model;

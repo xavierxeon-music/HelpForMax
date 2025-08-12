@@ -13,6 +13,10 @@ class ProgressIndicator : public QWidget
 public:
    ProgressIndicator(QWidget* parent);
 
+public:
+   void setMaxValue(const int& maxValue);
+   void setProgress(const QString& message, const int& value);
+
 private:
    QLabel* messageLabel;
    QProgressBar* progressBar;

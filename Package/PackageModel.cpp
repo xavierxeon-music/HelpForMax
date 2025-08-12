@@ -20,11 +20,11 @@ void Package::Model::create()
    using FolderMap = QMap<QString, QStandardItem*>;
    FolderMap folderMap;
 
-   QDir packageDir(packageInfo->getPath() + "/patchers");
-   for (const QFileInfo& folderInfo : packageDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+   QDir patcherDir(packageInfo->getPath() + "/patchers");
+   for (const QFileInfo& folderInfo : patcherDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
    {
-      QDir patcherDir(folderInfo.canonicalFilePath());
-      for (const QFileInfo& patchFileInfo : patcherDir.entryInfoList(QDir::Files, QDir::Name))
+      QDir patcherSubDir(folderInfo.canonicalFilePath());
+      for (const QFileInfo& patchFileInfo : patcherSubDir.entryInfoList(QDir::Files, QDir::Name))
       {
          if (!patchFileInfo.fileName().endsWith(".maxpat"))
             continue;

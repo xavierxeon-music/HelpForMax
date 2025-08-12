@@ -6,35 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
-    <height>276</height>
+    <width>1475</width>
+    <height>982</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Clean Package</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QPushButton" name="cleanupButton">
      <property name="text">
       <string>Cleanup</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="0" column="1">
     <widget class="ProgressIndicator" name="progress" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -43,7 +37,7 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" colspan="2">
     <widget class="QTreeView" name="packageTree"/>
    </item>
   </layout>
