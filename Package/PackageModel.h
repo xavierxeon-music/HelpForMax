@@ -14,9 +14,8 @@ namespace Package
    public:
       enum DataRoles
       {
-         RolePath = Qt::UserRole + 1,
-         RoleInfo = Qt::UserRole + 2,
-         RoleExpanded = Qt::UserRole + 3
+         RoleKey = Qt::UserRole + 1,
+         RoleExpanded = Qt::UserRole + 2
       };
 
    public:

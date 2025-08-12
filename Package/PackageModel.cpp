@@ -20,8 +20,8 @@ void Package::Model::create()
    using FolderMap = QMap<QString, QStandardItem*>;
    FolderMap folderMap;
 
-   const Patch::Info::Map& filesMap = packageInfo->getPatchInfoMap();
-   for (Patch::Info::Map::const_iterator it = filesMap.constBegin(); it != filesMap.constEnd(); ++it)
+   const Patch::Info::Map& infoMap = packageInfo->getPatchInfoMap();
+   for (Patch::Info::Map::const_iterator it = infoMap.constBegin(); it != infoMap.constEnd(); ++it)
    {
       if (it.key().startsWith("_"))
          continue;
@@ -48,8 +48,7 @@ void Package::Model::create()
       patchItem->setEditable(false);
       dirItem->appendRow(patchItem);
 
-      patchItem->setData(patchPath, RolePath);
-      patchItem->setData(QVariant::fromValue(patchInfo), RoleInfo);
+      patchItem->setData(it.key(), RoleKey);
    }
 
    updateIcons();
@@ -64,6 +63,7 @@ void Package::Model::updateIcons()
    static const QIcon closedOutdatedIcon(":/TreeClosedOutdated.svg");
    static const QIcon openIcon(":/TreeOpen.svg");
 
+   const Patch::Info::Map& infoMap = packageInfo->getPatchInfoMap();
    for (int folderRow = 0; folderRow < invisibleRootItem()->rowCount(); folderRow++)
    {
       QStandardItem* folderItem = invisibleRootItem()->child(folderRow, 0);
@@ -73,12 +73,13 @@ void Package::Model::updateIcons()
       {
          QStandardItem* patchItem = folderItem->child(patchRow, 0);
 
-         const QString path = patchItem->data(RolePath).toString();
-         const Patch::Info patchInfo = patchItem->data(RoleInfo).value<Patch::Info>();
+         const QString key = patchItem->data(RoleKey).toString();
+         const Patch::Info patchInfo = infoMap.value(key);
+
          static Ref::Structure dummy;
          const QString refPath = File::RefXML(packageInfo, dummy).getFilePath(patchInfo);
 
-         const QDateTime patchTime = QFileInfo(path).lastModified();
+         const QDateTime patchTime = QFileInfo(patchInfo.patchPath).lastModified();
          const QDateTime refTime = QFileInfo(refPath).lastModified();
 
          const bool upToDate = refTime >= patchTime;
@@ -100,7 +101,8 @@ void Package::Model::updateIcons()
 
 QModelIndex Package::Model::find(const QString& patchFileName) const
 {
-   QFileInfo fileInfo(patchFileName);
+   const QFileInfo fileInfo(patchFileName);
+   const Patch::Info::Map& infoMap = packageInfo->getPatchInfoMap();
 
    for (int folderRow = 0; folderRow < invisibleRootItem()->rowCount(); folderRow++)
    {
@@ -109,8 +111,10 @@ QModelIndex Package::Model::find(const QString& patchFileName) const
       for (int patchRow = 0; patchRow < folderItem->rowCount(); patchRow++)
       {
          QStandardItem* patchItem = folderItem->child(patchRow, 0);
-         const QString itemPath = patchItem->data(RolePath).toString();
-         if (itemPath == fileInfo.canonicalFilePath())
+         const QString key = patchItem->data(RoleKey).toString();
+         const Patch::Info patchInfo = infoMap.value(key);
+
+         if (patchInfo.patchPath == fileInfo.canonicalFilePath())
             return patchItem->index();
       }
    }
