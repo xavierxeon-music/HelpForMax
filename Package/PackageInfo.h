@@ -8,11 +8,26 @@
 
 namespace Package
 {
-   class TabWidget;
-
    class Info
    {
    public:
+      struct Entry
+      {
+         QString patchPath;
+         QString refPath;
+         QString helpPath;
+         QString initPath;
+
+         using Map = QMap<QString, Entry>;
+
+         using Variable = QString Entry::*;
+      };
+
+   public:
+      const Entry::Map& getEntryMap() const;
+      void updateEntries();
+      QStringList compileRedundantFiles() const;
+
       Patch::Info extractPatchInfo(const QString& patchFileName) const;
       const QString& getPath() const;
       const QString& getName() const;
@@ -25,9 +40,15 @@ namespace Package
       Info(const QString& path);
 
    private:
-      QString path;
+      void fillEntryMap(const QString& path, const bool scanSubFolders, const QString& extension, Entry::Variable entryVarialble);
+      void fillEntrySources(const QString& path);
+
+   private:
+      const QString path;
       QString name;
       QString author;
+
+      Entry::Map entryMap;
    };
 } // namespace Package
 
