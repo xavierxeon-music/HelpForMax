@@ -25,7 +25,7 @@ Package::Clean::Dialog::Dialog(QWidget* parent, const Info* packageInfo)
 
 void Package::Clean::Dialog::cleanup()
 {
-   const QStringList fileList = packageInfo->compileRedundantFiles();
+   const QStringList fileList = packageInfo->compileOrphanFiles();
    progress->setMaxValue(fileList.size());
 
    for (int index = 0; index < fileList.size(); index++)
@@ -49,7 +49,7 @@ QStandardItemModel* Package::Clean::Dialog::createModel()
    for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
    {
       const Entry& entry = it.value();
-      if (!entry.patchPath.isEmpty())
+      if (!entry.isOrphan())
          continue;
 
       QStandardItem* nameItem = new QStandardItem(it.key());

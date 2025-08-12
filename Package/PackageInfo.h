@@ -14,19 +14,21 @@ namespace Package
       struct Entry
       {
          QString patchPath;
+         QString sourcePath;
          QString refPath;
          QString helpPath;
          QString initPath;
 
          using Map = QMap<QString, Entry>;
-
          using Variable = QString Entry::*;
+
+         bool isOrphan() const;
       };
 
    public:
       const Entry::Map& getEntryMap() const;
       void updateEntries();
-      QStringList compileRedundantFiles() const;
+      QStringList compileOrphanFiles() const;
 
       Patch::Info extractPatchInfo(const QString& patchFileName) const;
       const QString& getPath() const;

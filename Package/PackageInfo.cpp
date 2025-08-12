@@ -2,6 +2,15 @@
 
 #include <QDir>
 
+// entry
+
+bool Package::Info::Entry::isOrphan() const
+{
+   return (patchPath.isEmpty() && sourcePath.isEmpty());
+}
+
+// info
+
 Package::Info::Info(const QString& path)
    : path(path)
    , name()
@@ -28,13 +37,13 @@ void Package::Info::updateEntries()
    fillEntrySources(path + "/source/maxglobal");
 }
 
-QStringList Package::Info::compileRedundantFiles() const
+QStringList Package::Info::compileOrphanFiles() const
 {
    QStringList fileList;
    for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
    {
       const Entry& entry = it.value();
-      if (!entry.patchPath.isEmpty())
+      if (!entry.isOrphan())
          continue;
 
       if (!entry.refPath.isEmpty())
@@ -103,6 +112,6 @@ void Package::Info::fillEntrySources(const QString& path)
    {
       const QString name = contentInfo.fileName().replace("_tilde", "~");
       Entry& entry = entryMap[name];
-      entry.patchPath = contentInfo.absoluteFilePath();
+      entry.sourcePath = contentInfo.absoluteFilePath();
    }
 }

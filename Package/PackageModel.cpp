@@ -17,49 +17,40 @@ void Package::Model::create()
 {
    setHorizontalHeaderLabels({"Folder / Patch Name"});
 
+   using Entry = Package::Info::Entry;
    using FolderMap = QMap<QString, QStandardItem*>;
    FolderMap folderMap;
 
-   QDir patcherDir(packageInfo->getPath() + "/patchers");
-   for (const QFileInfo& folderInfo : patcherDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+   const Entry::Map& entryMap = packageInfo->getEntryMap();
+   for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
    {
-      QDir patcherSubDir(folderInfo.canonicalFilePath());
-      for (const QFileInfo& patchFileInfo : patcherSubDir.entryInfoList(QDir::Files, QDir::Name))
+      if (it.key().startsWith("_"))
+         continue;
+
+      const Entry& entry = it.value();
+      const QString patchPath = entry.patchPath;
+      if (patchPath.isEmpty())
+         continue;
+
+      Patch::Info patchInfo = packageInfo->extractPatchInfo(patchPath);
+
+      if (!folderMap.contains(patchInfo.folder))
       {
-         if (!patchFileInfo.fileName().endsWith(".maxpat"))
-            continue;
+         QStandardItem* folderItem = new QStandardItem(patchInfo.folder);
+         folderItem->setEditable(false);
+         invisibleRootItem()->appendRow(folderItem);
 
-         if (patchFileInfo.fileName().startsWith("_"))
-            continue;
-
-         const QString patchPath = patchFileInfo.absoluteFilePath();
-         Patch::Info patchInfo = packageInfo->extractPatchInfo(patchPath);
-         //qDebug() << patchInfo.name;
-
-         QString dirName = patchFileInfo.absolutePath();
-         int index = dirName.lastIndexOf("/");
-         if (index < 0)
-            continue;
-         dirName = dirName.mid(index + 1);
-
-         if (!folderMap.contains(dirName))
-         {
-            QStandardItem* folderItem = new QStandardItem(dirName);
-            folderItem->setEditable(false);
-            invisibleRootItem()->appendRow(folderItem);
-
-            folderMap[dirName] = folderItem;
-         }
-
-         QStandardItem* dirItem = folderMap[dirName];
-
-         QStandardItem* patchItem = new QStandardItem(patchInfo.name);
-         patchItem->setEditable(false);
-         dirItem->appendRow(patchItem);
-
-         patchItem->setData(patchPath, RolePath);
-         patchItem->setData(QVariant::fromValue(patchInfo), RoleInfo);
+         folderMap[patchInfo.folder] = folderItem;
       }
+
+      QStandardItem* dirItem = folderMap[patchInfo.folder];
+
+      QStandardItem* patchItem = new QStandardItem(patchInfo.name);
+      patchItem->setEditable(false);
+      dirItem->appendRow(patchItem);
+
+      patchItem->setData(patchPath, RolePath);
+      patchItem->setData(QVariant::fromValue(patchInfo), RoleInfo);
    }
 
    updateIcons();
