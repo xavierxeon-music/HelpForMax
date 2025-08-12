@@ -11,7 +11,6 @@
 #include <Shared.h>
 
 #include "PackageCleanDialog.h"
-#include "PackageCleanModel.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
 #include "SuggestTransferDialog.h"
@@ -253,8 +252,7 @@ void Package::Container::slotCleanup()
    Widget* view = qobject_cast<Widget*>(currentWidget());
    const Info* info = view->getPackageInfo();
 
-   Clean::Model model(this, info);
-   Clean::Dialog dialog(this, &model);
+   Clean::Dialog dialog(this, info);
    dialog.exec();
 }
 
