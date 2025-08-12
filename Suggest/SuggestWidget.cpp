@@ -75,7 +75,7 @@ void Suggest::Widget::slotTransferAll()
    QString& shortText = patchWidget->maxRef.header.digest.shortText;
    if ("Hello World" == shortText)
    {
-      QString name = patchWidget->getPatchInfo().name;
+      QString name = patchWidget->getPatchInfo().getName();
       name.replace("wa.", "");
       name.replace(".", " ");
       name.replace("_", " ");

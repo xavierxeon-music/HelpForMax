@@ -53,7 +53,7 @@ Patch::Widget::Widget(Patch::Container* container, const Package::Info* packageI
    addWidget(structureWidget);
 
    // load content
-   patchInfo = packageInfo->extractPatchInfo(path);
+   patchInfo = packageInfo->findPatchInfo(path);
    propagateDirty(false);
 
    maxPatch.readPatch(path);

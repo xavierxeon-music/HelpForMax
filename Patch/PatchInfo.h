@@ -7,8 +7,17 @@ namespace Patch
 {
    struct Info
    {
-      QString name;
-      QString folder;
+      QString patchPath;
+      QString sourcePath;
+      QString refPath;
+      QString helpPath;
+      QString initPath;
+
+      using Map = QMap<QString, Info>;
+
+      bool isOrphan() const;
+      QString getName() const;
+      QString getFolder() const;
    };
 } // namespace Patch
 

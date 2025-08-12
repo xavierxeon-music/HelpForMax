@@ -23,8 +23,8 @@ Suggest::Transfer::Model::Model(QObject* parent, const Package::Info* packageInf
             continue;
 
          const QString patchPath = patchFileInfo.absoluteFilePath();
-         Patch::Info patchInfo = packageInfo->extractPatchInfo(patchPath);
-         //qDebug() << patchInfo.name;
+         Patch::Info patchInfo = packageInfo->findPatchInfo(patchPath);
+         //qDebug() << patchInfo.getName();
 
          static Ref::Structure dummy;
          const QString refPath = File::RefXML(packageInfo, dummy).getFilePath(patchInfo);
@@ -36,7 +36,7 @@ Suggest::Transfer::Model::Model(QObject* parent, const Package::Info* packageInf
          if (upToDate)
             continue;
 
-         QStandardItem* patchItem = new QStandardItem(patchInfo.name);
+         QStandardItem* patchItem = new QStandardItem(patchInfo.getName());
          patchItem->setEditable(false);
          invisibleRootItem()->appendRow(patchItem);
       }

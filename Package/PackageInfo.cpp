@@ -2,47 +2,38 @@
 
 #include <QDir>
 
-// entry
-
-bool Package::Info::Entry::isOrphan() const
-{
-   return (patchPath.isEmpty() && sourcePath.isEmpty());
-}
-
-// info
-
 Package::Info::Info(const QString& path)
    : path(path)
    , name()
    , author()
-   , entryMap()
+   , patchInfoMap()
 {
-   updateEntries();
+   updatePatchInfoMap();
 }
 
-const Package::Info::Entry::Map& Package::Info::getEntryMap() const
+const Patch::Info::Map& Package::Info::getPatchInfoMap() const
 {
-   return entryMap;
+   return patchInfoMap;
 }
 
-void Package::Info::updateEntries()
+void Package::Info::updatePatchInfoMap()
 {
-   entryMap.clear();
+   patchInfoMap.clear();
 
-   fillEntryMap(path + "/patchers", true, ".maxpat", &Entry::patchPath);
-   fillEntryMap(path + "/help", true, ".maxhelp", &Entry::refPath);
-   fillEntryMap(path + "/docs", true, ".maxref.xml", &Entry::helpPath);
-   fillEntryMap(path + "/init", false, ".txt", &Entry::initPath);
-   fillEntrySources(path + "/source/maxobjects");
-   fillEntrySources(path + "/source/maxglobal");
+   fillFiles(path + "/patchers", true, ".maxpat", &Patch::Info::patchPath);
+   fillFiles(path + "/help", true, ".maxhelp", &Patch::Info::refPath);
+   fillFiles(path + "/docs", true, ".maxref.xml", &Patch::Info::helpPath);
+   fillFiles(path + "/init", false, ".txt", &Patch::Info::initPath);
+   fillFilesSources(path + "/source/maxobjects");
+   fillFilesSources(path + "/source/maxglobal");
 }
 
-QStringList Package::Info::compileOrphanFiles() const
+QStringList Package::Info::compileOrphanedFiles() const
 {
    QStringList fileList;
-   for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
+   for (Patch::Info::Map::const_iterator it = patchInfoMap.constBegin(); it != patchInfoMap.constEnd(); ++it)
    {
-      const Entry& entry = it.value();
+      const Patch::Info& entry = it.value();
       if (!entry.isOrphan())
          continue;
 
@@ -59,14 +50,14 @@ QStringList Package::Info::compileOrphanFiles() const
    return fileList;
 }
 
-Patch::Info Package::Info::extractPatchInfo(const QString& patchFileName) const
+Patch::Info Package::Info::findPatchInfo(const QString& patchFileName) const
 {
-   QFileInfo patchFile(patchFileName);
-   Patch::Info patchInfo;
-   patchInfo.name = patchFile.fileName().replace(".maxpat", "");
-   patchInfo.folder = patchFile.dir().dirName();
+   static const Patch::Info dummy;
 
-   return patchInfo;
+   QFileInfo patchFile(patchFileName);
+   const QString key = patchFile.fileName().replace(".maxpat", "");
+
+   return patchInfoMap.value(key, dummy);
 }
 
 const QString& Package::Info::getPath() const
@@ -84,7 +75,7 @@ const QString& Package::Info::getAuthor() const
    return author;
 }
 
-void Package::Info::fillEntryMap(const QString& path, const bool scanSubFolders, const QString& extension, Entry::Variable entryVarialble)
+void Package::Info::fillFiles(const QString& path, const bool scanSubFolders, const QString& extension, Variable entryVarialble)
 {
    QDir dir(path);
    const QFileInfoList content = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Files, QDir::Name);
@@ -92,26 +83,26 @@ void Package::Info::fillEntryMap(const QString& path, const bool scanSubFolders,
    {
       if (contentInfo.isDir() && scanSubFolders)
       {
-         fillEntryMap(contentInfo.absoluteFilePath(), false, extension, entryVarialble);
+         fillFiles(contentInfo.absoluteFilePath(), false, extension, entryVarialble);
          continue;
       }
       if (!contentInfo.isFile() || !contentInfo.fileName().endsWith(extension))
          continue;
 
       const QString name = contentInfo.fileName().replace(extension, "");
-      Entry& entry = entryMap[name];
+      Patch::Info& entry = patchInfoMap[name];
       entry.*entryVarialble = contentInfo.absoluteFilePath();
    }
 }
 
-void Package::Info::fillEntrySources(const QString& path)
+void Package::Info::fillFilesSources(const QString& path)
 {
    QDir dir(path);
    const QFileInfoList content = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
    for (const QFileInfo& contentInfo : content)
    {
       const QString name = contentInfo.fileName().replace("_tilde", "~");
-      Entry& entry = entryMap[name];
+      Patch::Info& entry = patchInfoMap[name];
       entry.sourcePath = contentInfo.absoluteFilePath();
    }
 }

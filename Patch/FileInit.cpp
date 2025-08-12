@@ -29,13 +29,13 @@ void File::Init::write(const Patch::Info& patchInfo)
 
       if (structure.header.patcherType == Ref::Structure::PatchType::Gui)
       {
-         stream << "max objectfile " << patchInfo.name << " " << patchInfo.name << ";\n";
-         stream << "max definesubstitution " << patchInfo.name << " bpatcher @name " << patchInfo.name << ".maxpat;\n";
+         stream << "max objectfile " << patchInfo.getName() << " " << patchInfo.getName() << ";\n";
+         stream << "max definesubstitution " << patchInfo.getName() << " bpatcher @name " << patchInfo.getName() << ".maxpat;\n";
       }
       else if (structure.header.patcherType == Ref::Structure::PatchType::Poly)
       {
-         stream << "max objectfile " << patchInfo.name << " " << patchInfo.name << ";\n";
-         stream << "max definesubstitution " << patchInfo.name << " poly~ " << patchInfo.name << " 16;\n";
+         stream << "max objectfile " << patchInfo.getName() << " " << patchInfo.getName() << ";\n";
+         stream << "max definesubstitution " << patchInfo.getName() << " poly~ " << patchInfo.getName() << " 16;\n";
       }
       file.close();
    }
@@ -45,7 +45,7 @@ QString File::Init::getFilePath(const Patch::Info& patchInfo)
 {
    // do not use folder here!
    QString initPath = info->getPath() + "/init/";
-   initPath += patchInfo.name + ".txt";
+   initPath += patchInfo.getName() + ".txt";
 
    return initPath;
 }

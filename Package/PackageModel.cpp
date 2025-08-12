@@ -17,35 +17,34 @@ void Package::Model::create()
 {
    setHorizontalHeaderLabels({"Folder / Patch Name"});
 
-   using Entry = Package::Info::Entry;
    using FolderMap = QMap<QString, QStandardItem*>;
    FolderMap folderMap;
 
-   const Entry::Map& entryMap = packageInfo->getEntryMap();
-   for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
+   const Patch::Info::Map& filesMap = packageInfo->getPatchInfoMap();
+   for (Patch::Info::Map::const_iterator it = filesMap.constBegin(); it != filesMap.constEnd(); ++it)
    {
       if (it.key().startsWith("_"))
          continue;
 
-      const Entry& entry = it.value();
+      const Patch::Info& entry = it.value();
       const QString patchPath = entry.patchPath;
       if (patchPath.isEmpty())
          continue;
 
-      Patch::Info patchInfo = packageInfo->extractPatchInfo(patchPath);
+      Patch::Info patchInfo = packageInfo->findPatchInfo(patchPath);
 
-      if (!folderMap.contains(patchInfo.folder))
+      if (!folderMap.contains(patchInfo.getFolder()))
       {
-         QStandardItem* folderItem = new QStandardItem(patchInfo.folder);
+         QStandardItem* folderItem = new QStandardItem(patchInfo.getFolder());
          folderItem->setEditable(false);
          invisibleRootItem()->appendRow(folderItem);
 
-         folderMap[patchInfo.folder] = folderItem;
+         folderMap[patchInfo.getFolder()] = folderItem;
       }
 
-      QStandardItem* dirItem = folderMap[patchInfo.folder];
+      QStandardItem* dirItem = folderMap[patchInfo.getFolder()];
 
-      QStandardItem* patchItem = new QStandardItem(patchInfo.name);
+      QStandardItem* patchItem = new QStandardItem(patchInfo.getName());
       patchItem->setEditable(false);
       dirItem->appendRow(patchItem);
 

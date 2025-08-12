@@ -11,46 +11,32 @@ namespace Package
    class Info
    {
    public:
-      struct Entry
-      {
-         QString patchPath;
-         QString sourcePath;
-         QString refPath;
-         QString helpPath;
-         QString initPath;
+      const Patch::Info::Map& getPatchInfoMap() const;
+      void updatePatchInfoMap();
+      QStringList compileOrphanedFiles() const;
 
-         using Map = QMap<QString, Entry>;
-         using Variable = QString Entry::*;
-
-         bool isOrphan() const;
-      };
-
-   public:
-      const Entry::Map& getEntryMap() const;
-      void updateEntries();
-      QStringList compileOrphanFiles() const;
-
-      Patch::Info extractPatchInfo(const QString& patchFileName) const;
+      Patch::Info findPatchInfo(const QString& patchFileName) const;
       const QString& getPath() const;
       const QString& getName() const;
       const QString& getAuthor() const;
 
    private:
       friend class Container;
+      using Variable = QString Patch::Info::*;
 
    private:
       Info(const QString& path);
 
    private:
-      void fillEntryMap(const QString& path, const bool scanSubFolders, const QString& extension, Entry::Variable entryVarialble);
-      void fillEntrySources(const QString& path);
+      void fillFiles(const QString& path, const bool scanSubFolders, const QString& extension, Variable entryVarialble);
+      void fillFilesSources(const QString& path);
 
    private:
       const QString path;
       QString name;
       QString author;
 
-      Entry::Map entryMap;
+      Patch::Info::Map patchInfoMap;
    };
 } // namespace Package
 

@@ -102,10 +102,10 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
       return;
    }
 
-   const Patch::Info patchInfo = info->extractPatchInfo(patchFileName);
+   const Patch::Info patchInfo = info->findPatchInfo(patchFileName);
    for (int index = 0; index < tabBar()->count(); index++)
    {
-      if (patchInfo.name == tabText(index))
+      if (patchInfo.getName() == tabText(index))
       {
          setCurrentIndex(index);
          return;
@@ -120,7 +120,7 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
 
    connect(patchWidget, &QSplitter::splitterMoved, this, &Container::slotTabSplitterChanged);
 
-   const int index = addTab(patchWidget, patchInfo.name);
+   const int index = addTab(patchWidget, patchInfo.getName());
    setCurrentIndex(index);
 
    addRecentFile(patchFileName);
@@ -259,7 +259,7 @@ void Patch::Container::updateTabNames()
       if (!patchWidget)
          continue;
 
-      QString name = patchWidget->getPatchInfo().name;
+      QString name = patchWidget->getPatchInfo().getName();
       if (patchWidget->isDirty())
          name = bullet + name;
 

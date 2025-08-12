@@ -31,7 +31,7 @@ void File::RefXML::write(const Patch::Info& patchInfo)
    if (!file.open(QIODevice::WriteOnly))
       return;
 
-   QByteArray content = writeContent(patchInfo.name);
+   QByteArray content = writeContent(patchInfo.getName());
    content = domToMaxFile(content);
 
    file.write(content);
@@ -41,9 +41,9 @@ void File::RefXML::write(const Patch::Info& patchInfo)
 QString File::RefXML::getFilePath(const Patch::Info& patchInfo)
 {
    QString refPath = info->getPath() + "/docs/";
-   if (!patchInfo.folder.isEmpty())
-      refPath += patchInfo.folder + "/";
-   refPath += patchInfo.name + ".maxref.xml";
+   if (!patchInfo.getFolder().isEmpty())
+      refPath += patchInfo.getFolder() + "/";
+   refPath += patchInfo.getName() + ".maxref.xml";
 
    return refPath;
 }

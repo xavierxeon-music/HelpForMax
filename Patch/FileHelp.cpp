@@ -52,9 +52,9 @@ void File::Help::write(const Patch::Info& patchInfo)
 QString File::Help::getFilePath(const Patch::Info& patchInfo)
 {
    QString helpPath = info->getPath() + "/help/";
-   if (!patchInfo.folder.isEmpty())
-      helpPath += patchInfo.folder + "/";
-   helpPath += patchInfo.name + ".maxhelp";
+   if (!patchInfo.getFolder().isEmpty())
+      helpPath += patchInfo.getFolder() + "/";
+   helpPath += patchInfo.getName() + ".maxhelp";
 
    return helpPath;
 }

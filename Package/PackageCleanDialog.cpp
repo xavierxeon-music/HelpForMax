@@ -25,7 +25,7 @@ Package::Clean::Dialog::Dialog(QWidget* parent, const Info* packageInfo)
 
 void Package::Clean::Dialog::cleanup()
 {
-   const QStringList fileList = packageInfo->compileOrphanFiles();
+   const QStringList fileList = packageInfo->compileOrphanedFiles();
    progress->setMaxValue(fileList.size());
 
    for (int index = 0; index < fileList.size(); index++)
@@ -43,12 +43,11 @@ QStandardItemModel* Package::Clean::Dialog::createModel()
    QStandardItemModel* model = new QStandardItemModel(this);
    model->setHorizontalHeaderLabels({"Name", "Ref", "Help", "Init"});
 
-   using Entry = Package::Info::Entry;
-   const Entry::Map& entryMap = packageInfo->getEntryMap();
+   const Patch::Info::Map& filesMap = packageInfo->getPatchInfoMap();
 
-   for (Entry::Map::const_iterator it = entryMap.constBegin(); it != entryMap.constEnd(); ++it)
+   for (Patch::Info::Map::const_iterator it = filesMap.constBegin(); it != filesMap.constEnd(); ++it)
    {
-      const Entry& entry = it.value();
+      const Patch::Info& entry = it.value();
       if (!entry.isOrphan())
          continue;
 
