@@ -21,7 +21,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(WaTools REQUIRED COMPONENTS General Qt Log)
+find_package(WaTools REQUIRED COMPONENTS General Core Widgets Log)
 
 #
 file(GLOB SOURCE_FILES
