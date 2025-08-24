@@ -1,7 +1,7 @@
 #ifndef MaxPatcherH
 #define MaxPatcherH
 
-#include "DiscreteMathsGraph.h"
+#include "Graph.h"
 #include "RefStructure.h"
 
 #include "MaxLine.h"
@@ -9,7 +9,7 @@
 
 namespace Max
 {
-   class Patcher : public Ref::Structure, public DiscreteMaths::Graph
+   class Patcher : public Ref::Structure, public Graph
    {
    public:
       Patcher();

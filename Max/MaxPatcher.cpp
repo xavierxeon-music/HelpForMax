@@ -5,11 +5,11 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 
-#include "DiscreteMathsAlgorithm.h"
+#include "GraphAlgorithm.h"
 
 Max::Patcher::Patcher()
    : Ref::Structure()
-   , DiscreteMaths::Graph()
+   , Graph()
    , typeBuffer()
    , styleMap()
 {
@@ -18,7 +18,7 @@ Max::Patcher::Patcher()
 void Max::Patcher::readPatch(const QString& patchFileName)
 {
    typeBuffer.clear();
-   DiscreteMaths::Graph::clear(true);
+   Graph::clear(true);
 
    if (patchFileName.isEmpty())
       return;
@@ -101,14 +101,14 @@ void Max::Patcher::analyse()
    const Object::List sources = findAll(sourceTypeList, false);
    const Object::List processors = findAll(processTypeList, false);
 
-   DiscreteMaths::Algorithm algo(this);
+   Graph::Algorithm algo(this);
    for (Object* source : sources)
    {
-      const DiscreteMaths::Algorithm::Tree tree = algo.breadthFirst(source);
+      const Graph::Algorithm::Tree tree = algo.breadthFirst(source);
       for (Object* processor : processors)
       {
          const int targetIndex = vertexIndex(processor);
-         const DiscreteMaths::Algorithm::Path path = tree.compilePath(targetIndex);
+         const Graph::Algorithm::Path path = tree.compilePath(targetIndex);
          const int depth = path.verticies.count();
 
          auto pathIsValid = [&]()

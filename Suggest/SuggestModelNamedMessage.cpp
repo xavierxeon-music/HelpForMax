@@ -1,6 +1,6 @@
 #include "SuggestModelNamedMessage.h"
 
-#include "DiscreteMathsAlgorithm.h"
+#include "GraphAlgorithm.h"
 
 Suggest::Model::NamedMessage::NamedMessage(QObject* parent, Ref::Structure& structure, Max::Patcher& suggest)
    : Abstract(parent, structure, suggest, Ref::Structure::PatchPart::MessageNamed)
@@ -137,7 +137,7 @@ void Suggest::Model::NamedMessage::buildStructure()
    }
 
    // messages
-   DiscreteMaths::Algorithm algo(&suggest);
+   Graph::Algorithm algo(&suggest);
 
    const Max::Object::List inlets = suggest.findAll(Max::Object::Type::Inlet, false);
    auto connectedToInlet = [&](const Max::Object* object) -> bool
@@ -145,7 +145,7 @@ void Suggest::Model::NamedMessage::buildStructure()
       const int objectIndex = suggest.vertexIndex(object);
       for (const Max::Object* inlet : inlets)
       {
-         DiscreteMaths::Algorithm::Tree tree = algo.breadthFirst(inlet);
+         Graph::Algorithm::Tree tree = algo.breadthFirst(inlet);
          const int depth = tree.compileDepth(objectIndex);
 
          if (0 < depth)

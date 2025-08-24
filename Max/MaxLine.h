@@ -1,7 +1,7 @@
 #ifndef MaxLineH
 #define MaxLineH
 
-#include "DiscreteMathsEdge.h"
+#include "GraphEdge.h"
 
 #include <QJsonObject>
 #include <QPoint>
@@ -11,7 +11,7 @@ namespace Max
    class Object;
    using IdMap = QMap<QString, Object*>;
 
-   class Line : public DiscreteMaths::Edge
+   class Line : public Graph::Edge
    {
    public:
       Line(const QJsonObject& lineObject, const IdMap& idMap);
