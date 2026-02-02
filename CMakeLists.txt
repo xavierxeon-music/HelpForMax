@@ -21,7 +21,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(WaTools REQUIRED COMPONENTS General Core Widgets Log Graph)
+find_package(WaTools REQUIRED COMPONENTS Cpp Core Widgets Application Network Log Graph)
 
 #
 file(GLOB SOURCE_FILES
@@ -36,7 +36,7 @@ set_standrard_release_output_path()
 qt_add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 add_all_subdirs_files(${CMAKE_CURRENT_SOURCE_DIR})
 use_precompiled_headers()
-set_application_icon(${CMAKE_CURRENT_SOURCE_DIR}/_Resources/${PROJECT_NAME})
+set_application_icon(${CMAKE_CURRENT_SOURCE_DIR}/_Resources)
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Network Qt6::Svg Qt6::Xml)

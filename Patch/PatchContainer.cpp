@@ -37,35 +37,35 @@ Patch::Container::Container(QWidget* parent)
 void Patch::Container::createActions()
 {
    //
-   PopulatedMainWindow::addAction(QIcon(":/PatchLoad.svg"), "Load", "Patch.Load", this, &Container::slotPromptLoadPatch);
+   Populated::Abstract::addAction(QIcon(":/PatchLoad.svg"), "Load", "Patch.Load", this, &Container::slotPromptLoadPatch);
 
-   QAction* saveAction = PopulatedMainWindow::addAction(QIcon(":/PatchSave.svg"), "Save", "Patch.Save", this, &Container::slotWriteRef);
+   QAction* saveAction = Populated::Abstract::addAction(QIcon(":/PatchSave.svg"), "Save", "Patch.Save", this, &Container::slotWriteRef);
    saveAction->setShortcut(QKeySequence::Save);
 
-   QAction* saveAllAction = PopulatedMainWindow::addAction(QIcon(":/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", this, &Container::slotWriteAllRefs);
+   QAction* saveAllAction = Populated::Abstract::addAction(QIcon(":/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", this, &Container::slotWriteAllRefs);
    saveAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_S);
 
-   QAction* closeAction = PopulatedMainWindow::addAction(QIcon(":/PatchClose.svg"), "Close", "Patch.Close", this, &Container::slotClosePatch);
+   QAction* closeAction = Populated::Abstract::addAction(QIcon(":/PatchClose.svg"), "Close", "Patch.Close", this, &Container::slotClosePatch);
    closeAction->setShortcut(QKeySequence::Close);
 
    //
-   QAction* suggestAction = PopulatedMainWindow::addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", this, &Container::slotShowSuggestions);
+   QAction* suggestAction = Populated::Abstract::addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", this, &Container::slotShowSuggestions);
    suggestAction->setCheckable(true);
    suggestAction->setChecked(toolsVisible & ToolVisibility::Suggestions);
    suggestAction->setShortcut(QKeySequence::Find);
 
-   QAction* structureAction = PopulatedMainWindow::addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", this, &Container::slotShowStructure);
+   QAction* structureAction = Populated::Abstract::addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", this, &Container::slotShowStructure);
    structureAction->setCheckable(true);
    structureAction->setChecked(toolsVisible & ToolVisibility::Structure);
    structureAction->setShortcut(QKeySequence::Print);
 
-   QAction* openInMaxAction = PopulatedMainWindow::addAction(QIcon(":/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", this, &Container::slotOpenInMax);
+   QAction* openInMaxAction = Populated::Abstract::addAction(QIcon(":/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", this, &Container::slotOpenInMax);
    openInMaxAction->setShortcuts(QKeySequence::Italic);
 
-   QAction* showXMLAction = PopulatedMainWindow::addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", this, &Container::slotOpenXML);
+   QAction* showXMLAction = Populated::Abstract::addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", this, &Container::slotOpenXML);
    showXMLAction->setShortcut(QKeySequence::Open);
 
-   QAction* transferAllAction = PopulatedMainWindow::addAction(QIcon(":/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", this, &Container::slotTranferAllSuggestions);
+   QAction* transferAllAction = Populated::Abstract::addAction(QIcon(":/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", this, &Container::slotTranferAllSuggestions);
    //transferAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_T);
    transferAllAction->setShortcut(Qt::ControlModifier | Qt::Key_T);
 }

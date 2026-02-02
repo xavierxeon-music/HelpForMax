@@ -16,7 +16,7 @@
 #include "PatchWidget.h"
 
 MainWindow::MainWindow()
-   : PopulatedMainWindow()
+   : Populated::MainWindow()
    , packageWidget(nullptr)
    , patchWidget(nullptr)
 #ifdef TEST_CLIENT_AVAILABLE
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
    QApplication::setOrganizationName("SchweineSystem");
 
    QSettings::setDefaultFormat(QSettings::IniFormat);
-   PopulatedMainWindow::printSettingsLocation();
+   Populated::Abstract::printSettingsLocation();
 
    QApplication app(argc, argv);
    app.setAttribute(Qt::AA_DontShowIconsInMenus, true);

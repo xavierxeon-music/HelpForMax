@@ -10,7 +10,7 @@
 #include "TestClient.h"
 #endif // TEST_CLIENT_AVAILABLE
 
-class MainWindow : public PopulatedMainWindow
+class MainWindow : public Populated::MainWindow
 {
    Q_OBJECT
 

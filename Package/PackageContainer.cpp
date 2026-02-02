@@ -109,13 +109,13 @@ Package::Info* Package::Container::findOrCreate(const QString& someFileInPackage
 void Package::Container::createActions()
 {
    //
-   PopulatedMainWindow::addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
-   PopulatedMainWindow::addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
+   Populated::Abstract::addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
+   Populated::Abstract::addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
 
-   PopulatedMainWindow::addAction(QIcon(), "Suggestions", "Package.OpenSuggestionsDialog", this, &Container::slotOpenSuggestions);
-   PopulatedMainWindow::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
+   Populated::Abstract::addAction(QIcon(), "Suggestions", "Package.OpenSuggestionsDialog", this, &Container::slotOpenSuggestions);
+   Populated::Abstract::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
 
-   linkAction = PopulatedMainWindow::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
+   linkAction = Populated::Abstract::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
    linkAction->setCheckable(true);
 
    QSettings settings;
