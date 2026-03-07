@@ -1,7 +1,8 @@
 #include "RecentTabWidget.h"
 
 #include <QMenu>
-#include <QSettings>
+
+#include <XXSettings.h>
 
 RecentTabWidget::RecentTabWidget(QWidget* parent, const QString& settingsKey)
    : QTabWidget(parent)
@@ -18,14 +19,14 @@ RecentTabWidget::RecentTabWidget(QWidget* parent, const QString& settingsKey)
    auto populateFunction = std::bind(&RecentTabWidget::populateRecentMenu, this);
    QObject::connect(recentMenu, &QMenu::aboutToShow, populateFunction);
 
-   QSettings settings;
+   XX::Settings settings;
    currentFileList = settings.value(settingsKey + "/Current").toStringList();
    recentFileList = settings.value(settingsKey + "/Recent").toStringList();
 }
 
 RecentTabWidget::~RecentTabWidget()
 {
-   QSettings settings;
+   XX::Settings settings;
 
    settings.setValue(settingsKey + "/Current", currentFileList);
    settings.setValue(settingsKey + "/Recent", recentFileList);

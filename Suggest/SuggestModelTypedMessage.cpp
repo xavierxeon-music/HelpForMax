@@ -46,7 +46,7 @@ void Suggest::Model::TypedMessage::rebuild()
       activeItem->setEditable(false);
       activeItem->setCheckable(false);
       activeItem->setCheckState(message.active ? Qt::Checked : Qt::Unchecked);
-      activeItem->setIcon(QIcon(":/DocMessageTyped.svg"));
+      activeItem->setIcon(QIcon(":/Icons/DocMessageTyped.svg"));
 
       invisibleRootItem()->appendRow({typeItem, activeItem});
    }

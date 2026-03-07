@@ -1,7 +1,7 @@
 #ifndef RefModelH
 #define RefModelH
 
-#include <CompileTimeString.h>
+#include <XXCompileTimeString.h>
 #include <QStandardItemModel>
 
 #include "RefStructure.h"
@@ -31,7 +31,7 @@ protected:
    Ref::Structure::PatchPart part;
 };
 
-template <CompileTimeString Category>
+template <XX::CompileTimeString Category>
 class ListedRefModel : public RefModel
 {
 public:

@@ -4,18 +4,18 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QSettings>
 
-#include <Logger.h>
-#include <PopulatedMainWindow.h>
-#include <Shared.h>
+#include <XXLogger.h>
+#include <XXPopulatedMainWindow.h>
+#include <XXSettings.h>
+#include <XXShared.h>
 
 #include "PackageCleanDialog.h"
 #include "PackageInfo.h"
 #include "PackageWidget.h"
 #include "SuggestTransferDialog.h"
 
-using HelpForMax = Shared<"HelpForMax">;
+using HelpForMax = XX::Shared<"HelpForMax">;
 
 Package::Container* Package::Container::me = nullptr;
 
@@ -31,8 +31,8 @@ Package::Container::Container(QWidget* parent)
    me = this;
    setMinimumWidth(200);
 
-   linkMap[true] = QIcon(":/MaxLinkActive.svg");
-   linkMap[false] = QIcon(":/MaxLinkInactive.svg");
+   linkMap[true] = QIcon(":/Icons/MaxLinkActive.svg");
+   linkMap[false] = QIcon(":/Icons/MaxLinkInactive.svg");
 
    server = new QLocalServer(this);
    connect(server, &QLocalServer::newConnection, this, &Container::slotNewConnection);
@@ -109,16 +109,16 @@ Package::Info* Package::Container::findOrCreate(const QString& someFileInPackage
 void Package::Container::createActions()
 {
    //
-   Populated::Abstract::addAction(QIcon(":/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
-   Populated::Abstract::addAction(QIcon(":/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
+   XX::Populated::Abstract::addAction(QIcon(":/Icons/PackageLoad.svg"), "Load", "Package.Load", this, &Container::slotLoadPackage);
+   XX::Populated::Abstract::addAction(QIcon(":/Icons/PackageClose.svg"), "Close", "Package.Close", this, &Container::slotClosePackage);
 
-   Populated::Abstract::addAction(QIcon(), "Suggestions", "Package.OpenSuggestionsDialog", this, &Container::slotOpenSuggestions);
-   Populated::Abstract::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
+   XX::Populated::Abstract::addAction(QIcon(), "Suggestions", "Package.OpenSuggestionsDialog", this, &Container::slotOpenSuggestions);
+   XX::Populated::Abstract::addAction(QIcon(), "Clean", "Package.Clean", this, &Container::slotCleanup);
 
-   linkAction = Populated::Abstract::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
+   linkAction = XX::Populated::Abstract::addAction(linkMap.value(false), "Link", "Package.Link", this, &Container::slotLinkToMax);
    linkAction->setCheckable(true);
 
-   QSettings settings;
+   XX::Settings settings;
    linkEnabled = settings.value("Package/Link").toBool();
    linkAction->setChecked(linkEnabled);
 }
@@ -152,7 +152,7 @@ Package::Info* Package::Container::get(const QString& packagePath)
       info->author = object["author"].toString();
       info->name = object["name"].toString();
 
-      Logger::stream() << "LOADED PACKAGE " << info->name;
+      XX::Logger::stream() << "LOADED PACKAGE " << info->name;
    }
 
    Widget* view = new Widget(this, info);
@@ -214,7 +214,7 @@ void Package::Container::slotReceiveSocket()
    Info* info = findOrCreate(path);
    if (!info)
    {
-      Logger::stream(Qt::red) << "Unable to locate package of " << path;
+      XX::Logger::stream(Qt::red) << "Unable to locate package of " << path;
       return;
    }
 
@@ -234,7 +234,7 @@ void Package::Container::slotLinkToMax(bool enabled)
 {
    linkEnabled = enabled;
 
-   QSettings settings;
+   XX::Settings settings;
    settings.setValue("Package/Link", linkEnabled);
 }
 

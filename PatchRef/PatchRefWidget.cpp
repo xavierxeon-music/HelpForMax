@@ -45,7 +45,7 @@ PatchRef::Widget::Widget(Patch::Widget* patchWidget)
 
    // right: digest area
    new DescriptionHighlighter(descriptionEdit->document());
-   descriptionIcon->setPixmap(QIcon(":/DocDescription.svg").pixmap(16, 16));
+   descriptionIcon->setPixmap(QIcon(":/Icons/DocDescription.svg").pixmap(16, 16));
 
    connect(digestEdit, &QLineEdit::editingFinished, this, &Widget::slotSaveDigestText);
    connect(descriptionEdit, &QTextEdit::textChanged, this, &Widget::slotSaveDigestDescription);

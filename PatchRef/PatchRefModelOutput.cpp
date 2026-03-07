@@ -40,7 +40,7 @@ void PatchRef::Model::Output::rebuild()
       QStandardItem* activeItem = new QStandardItem();
       activeItem->setEditable(false);
       activeItem->setCheckable(true);
-      activeItem->setIcon(QIcon(":/DocOutput.svg"));
+      activeItem->setIcon(QIcon(":/Icons/DocOutput.svg"));
 
       QStandardItem* digestItem = new QStandardItem();
       digestItem->setEditable(false);

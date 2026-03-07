@@ -1,7 +1,7 @@
 #ifndef MaxObjectH
 #define MaxObjectH
 
-#include "GraphVertex.h"
+#include <XXGraphVertex.h>
 
 #include <QJsonObject>
 #include <QRectF>
@@ -12,7 +12,7 @@ namespace Max
 {
    class Line;
 
-   class Object : public Graph::Vertex
+   class Object : public XX::Graph::Vertex
    {
    public:
       using List = QList<Object*>;

@@ -6,8 +6,7 @@
 #include <QMenu>
 #include <QToolBar>
 
-#include "Locker.h"
-#include "MaxPatcher.h"
+#include <XXLocker.h>
 
 namespace Package
 {
@@ -32,7 +31,7 @@ namespace Patch
       Q_ENUM(ToolVisibility)
       Q_DECLARE_FLAGS(ToolsVisible, ToolVisibility)
 
-      using SplitterLocker = Locker<"Splitter">;
+      using SplitterLocker = XX::Locker<"Splitter">;
 
    public:
       Container(QWidget* parent);

@@ -43,7 +43,7 @@ void PatchRef::Model::Argument::rebuild()
       QStandardItem* optionalItem = new QStandardItem();
       optionalItem->setCheckable(true);
       optionalItem->setEditable(false);
-      optionalItem->setIcon(QIcon(":/DocArgument.svg"));
+      optionalItem->setIcon(QIcon(":/Icons/DocArgument.svg"));
 
       QStandardItem* digestItem = new QStandardItem();
       digestItem->setEditable(false);

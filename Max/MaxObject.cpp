@@ -3,7 +3,7 @@
 #include <QJsonArray>
 
 Max::Object::Object(const QJsonObject& boxObject)
-   : Graph::Vertex()
+   : XX::Graph::Vertex()
    , patchRect()
    , className()
    , text()

@@ -40,7 +40,7 @@ void PatchRef::Model::TypedMessage::rebuild()
       QStandardItem* activeItem = new QStandardItem();
       activeItem->setEditable(false);
       activeItem->setCheckable(true);
-      activeItem->setIcon(QIcon(":/DocMessageTyped.svg"));
+      activeItem->setIcon(QIcon(":/Icons/DocMessageTyped.svg"));
 
       QStandardItem* digestItem = new QStandardItem();
       digestItem->setEditable(false);

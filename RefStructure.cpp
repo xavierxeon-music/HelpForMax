@@ -103,19 +103,19 @@ QString Ref::Structure::partName(const PatchPart& part)
 QIcon Ref::Structure::partIcon(const PatchPart& part)
 {
    if (PatchPart::Header == part)
-      return QIcon(":/PatchGeneral.svg");
+      return QIcon(":/Icons/PatchGeneral.svg");
    else if (PatchPart::Argument == part)
-      return QIcon(":/DocArgument.svg");
+      return QIcon(":/Icons/DocArgument.svg");
    else if (PatchPart::Attribute == part)
-      return QIcon(":/DocAttribute.svg");
+      return QIcon(":/Icons/DocAttribute.svg");
    else if (PatchPart::MessageTyped == part)
-      return QIcon(":/DocMessageTyped.svg");
+      return QIcon(":/Icons/DocMessageTyped.svg");
    else if (PatchPart::MessageNamed == part)
-      return QIcon(":/DocMessageNamed.svg");
+      return QIcon(":/Icons/DocMessageNamed.svg");
    else if (PatchPart::Output == part)
-      return QIcon(":/DocOutput.svg");
+      return QIcon(":/Icons/DocOutput.svg");
    else if (PatchPart::Other == part)
-      return QIcon(":/OverviewGeneral.svg");
+      return QIcon(":/Icons/OverviewGeneral.svg");
    return QIcon();
 }
 

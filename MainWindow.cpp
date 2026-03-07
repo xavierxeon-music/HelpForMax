@@ -6,17 +6,17 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QSettings>
 #include <QStatusBar>
 #include <QToolBar>
 
-#include <MessageLabel.h>
-#include <Shared.h>
+#include <XXLoggerLabel.h>
+#include <XXSettings.h>
+#include <XXShared.h>
 
 #include "PatchWidget.h"
 
 MainWindow::MainWindow()
-   : Populated::MainWindow()
+   : XX::Populated::MainWindow()
    , packageWidget(nullptr)
    , patchWidget(nullptr)
 #ifdef TEST_CLIENT_AVAILABLE
@@ -24,13 +24,14 @@ MainWindow::MainWindow()
 #endif // TEST_CLIENT_AVAILABLE
 {
    setWindowTitle("Help For Max [*]");
-   setWindowIcon(QIcon(":/HelpForMax.svg"));
+   setWindowIcon(QIcon(":/AppIcon/HelpForMax.svg"));
 
    patchWidget = new Patch::Container(this);
    setCentralWidget(patchWidget);
 
-   MessageLabel* messageLabel = new MessageLabel(this, 20);
-   statusBar()->addPermanentWidget(messageLabel);
+   XX::LoggerLabel* loggerLabel = new XX::LoggerLabel(this, 20);
+   loggerLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+   statusBar()->addPermanentWidget(loggerLabel);
 
    packageWidget = new Package::Container(this);
    addDockWidget(packageWidget, Qt::LeftDockWidgetArea);
@@ -54,7 +55,7 @@ MainWindow::MainWindow()
    packageWidget->createActions();
    patchWidget->createActions();
 
-   populateMenuAndToolBar(":/_MenuAndToolBar.xml");
+   populateMenuAndToolBar(":/Config/MenuAndToolBar.xml");
 }
 
 void MainWindow::slotCheckDirty()
@@ -82,7 +83,7 @@ void MainWindow::createActions()
       if (!icon.isNull())
          viewAction->setIcon(icon);
 
-      QSettings dockSettings;
+      XX::Settings dockSettings;
       const bool enabled = dockSettings.value("DockEnabled/" + text).toBool();
 
       widget->setVisible(enabled);
@@ -96,7 +97,7 @@ void MainWindow::createActions()
    };
 
    //
-   addViewToggle(packageWidget, "Package", "Main.ShowPackage", QIcon(":/PackageGeneral.svg"));
+   addViewToggle(packageWidget, "Package", "Main.ShowPackage", QIcon(":/Icons/PackageGeneral.svg"));
 
 #ifdef TEST_CLIENT_AVAILABLE
    addViewToggle(testClient, "Test Client", "Main.ShowTestClient");
@@ -105,7 +106,7 @@ void MainWindow::createActions()
 
 void MainWindow::toogleDock(QWidget* widget, const QString& name, bool enabled)
 {
-   QSettings dockSettings;
+   XX::Settings dockSettings;
    dockSettings.setValue("DockEnabled/" + name, enabled);
    if (!enabled)
    {
@@ -129,14 +130,13 @@ int main(int argc, char** argv)
    QApplication::setOrganizationDomain("schweinesystem.ddns.org");
    QApplication::setOrganizationName("SchweineSystem");
 
-   QSettings::setDefaultFormat(QSettings::IniFormat);
-   Populated::Abstract::printSettingsLocation();
+   XX::Populated::Abstract::printSettingsLocation();
 
    QApplication app(argc, argv);
    app.setAttribute(Qt::AA_DontShowIconsInMenus, true);
 
    // only allow one instance
-   using HelpForMax = Shared<"HelpForMax">;
+   using HelpForMax = XX::Shared<"HelpForMax">;
    if (HelpForMax::isServerActive())
    {
       QMessageBox::critical(nullptr, "HelpForMax", "Only one running instance allowed");

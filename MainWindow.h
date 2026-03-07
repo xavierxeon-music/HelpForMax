@@ -1,7 +1,7 @@
 #ifndef MainWindowH
 #define MainWindowH
 
-#include <PopulatedMainWindow.h>
+#include <XXPopulatedMainWindow.h>
 
 #include "PackageContainer.h"
 #include "PatchContainer.h"
@@ -10,7 +10,7 @@
 #include "TestClient.h"
 #endif // TEST_CLIENT_AVAILABLE
 
-class MainWindow : public Populated::MainWindow
+class MainWindow : public XX::Populated::MainWindow
 {
    Q_OBJECT
 

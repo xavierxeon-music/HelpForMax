@@ -12,7 +12,7 @@ Package::Widget::Widget(QWidget* parent, const Info* info)
    model = new Model(this, info);
    model->create();
    packageTree->setModel(model);
-   packageTree->setIndentation(0);
+   packageTree->setIndentation(5);
 
    connect(packageTree, &QTreeView::doubleClicked, this, &Widget::slotItemDoubleClicked);
    connect(packageTree, &QTreeView::collapsed, this, &Widget::slotItemCollapsed);
@@ -41,7 +41,7 @@ void Package::Widget::checkUpToDate()
 void Package::Widget::slotItemDoubleClicked(const QModelIndex& index)
 {
    QStandardItem* item = model->itemFromIndex(index);
-   const QString path = item->data().toString();
+   const QString path = item->data(Model::RolePath).toString();
    if (path.isEmpty())
       return;
 

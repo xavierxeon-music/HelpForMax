@@ -2,7 +2,8 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QSettings>
+
+#include <XXSettings.h>
 
 #include "FileRef.h"
 #include "PackageInfo.h"
@@ -42,13 +43,13 @@ void Package::Model::create()
          folderMap[patchInfo.getFolder()] = folderItem;
       }
 
-      QStandardItem* dirItem = folderMap[patchInfo.getFolder()];
-
       QStandardItem* patchItem = new QStandardItem(patchInfo.getName());
       patchItem->setEditable(false);
-      dirItem->appendRow(patchItem);
-
       patchItem->setData(it.key(), RoleKey);
+      patchItem->setData(patchPath, RolePath);
+
+      QStandardItem* dirItem = folderMap[patchInfo.getFolder()];
+      dirItem->appendRow(patchItem);
    }
 
    updateIcons();
@@ -56,12 +57,12 @@ void Package::Model::create()
 
 void Package::Model::updateIcons()
 {
-   static const QIcon currentIcon(":/HelpCurrent.svg");
-   static const QIcon outdatedIcon(":/HelpOutdated.svg");
+   static const QIcon currentIcon(":/Icons/HelpCurrent.svg");
+   static const QIcon outdatedIcon(":/Icons/HelpOutdated.svg");
 
-   static const QIcon closedIcon(":/TreeClosed.svg");
-   static const QIcon closedOutdatedIcon(":/TreeClosedOutdated.svg");
-   static const QIcon openIcon(":/TreeOpen.svg");
+   static const QIcon closedIcon(":/Icons/TreeClosed.svg");
+   static const QIcon closedOutdatedIcon(":/Icons/TreeClosedOutdated.svg");
+   static const QIcon openIcon(":/Icons/TreeOpen.svg");
 
    const Patch::Info::Map& infoMap = packageInfo->getPatchInfoMap();
    for (int folderRow = 0; folderRow < invisibleRootItem()->rowCount(); folderRow++)

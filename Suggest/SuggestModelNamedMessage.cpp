@@ -1,6 +1,6 @@
 #include "SuggestModelNamedMessage.h"
 
-#include "GraphAlgorithm.h"
+#include <XXGraphAlgorithm.h>
 
 Suggest::Model::NamedMessage::NamedMessage(QObject* parent, Ref::Structure& structure, Max::Patcher& suggest)
    : Abstract(parent, structure, suggest, Ref::Structure::PatchPart::MessageNamed)
@@ -55,7 +55,7 @@ void Suggest::Model::NamedMessage::rebuild()
       QStandardItem* isAttributeItem = new QStandardItem();
       isAttributeItem->setEditable(false);
       isAttributeItem->setCheckable(false);
-      isAttributeItem->setIcon(QIcon(":/DocAttribute.svg"));
+      isAttributeItem->setIcon(QIcon(":/Icons/DocAttribute.svg"));
 
       if (0 != (messageNamed.patchParts & Ref::Structure::PatchPart::Attribute))
          isAttributeItem->setCheckState(Qt::Checked);
@@ -65,7 +65,7 @@ void Suggest::Model::NamedMessage::rebuild()
       QStandardItem* isMessageItem = new QStandardItem();
       isMessageItem->setEditable(false);
       isMessageItem->setCheckable(false);
-      isMessageItem->setIcon(QIcon(":/DocMessageNamed.svg"));
+      isMessageItem->setIcon(QIcon(":/Icons/DocMessageNamed.svg"));
 
       if (0 != (messageNamed.patchParts & Ref::Structure::PatchPart::MessageNamed))
          isMessageItem->setCheckState(Qt::Checked);
@@ -137,7 +137,7 @@ void Suggest::Model::NamedMessage::buildStructure()
    }
 
    // messages
-   Graph::Algorithm algo(&suggest);
+   XX::Graph::Algorithm algo(&suggest);
 
    const Max::Object::List inlets = suggest.findAll(Max::Object::Type::Inlet, false);
    auto connectedToInlet = [&](const Max::Object* object) -> bool
@@ -145,7 +145,7 @@ void Suggest::Model::NamedMessage::buildStructure()
       const int objectIndex = suggest.vertexIndex(object);
       for (const Max::Object* inlet : inlets)
       {
-         Graph::Algorithm::Tree tree = algo.breadthFirst(inlet);
+         XX::Graph::Algorithm::Tree tree = algo.breadthFirst(inlet);
          const int depth = tree.compileDepth(objectIndex);
 
          if (0 < depth)

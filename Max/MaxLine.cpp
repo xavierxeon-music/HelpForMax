@@ -5,7 +5,7 @@
 #include "MaxObject.h"
 
 Max::Line::Line(const QJsonObject& lineObject, const IdMap& idMap)
-   : Graph::Edge()
+   : XX::Graph::Edge()
    , isParamLine(false)
    , source()
    , dest()

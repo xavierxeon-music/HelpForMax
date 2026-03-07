@@ -8,8 +8,9 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QMouseEvent>
-#include <QSettings>
 #include <QWheelEvent>
+
+#include <XXSettings.h>
 
 #include "MaxLine.h"
 #include "MaxObject.h"
@@ -35,7 +36,7 @@ Max::Widget::Widget(QWidget* parent)
    setViewportMargins(10, 10, 0, 0);
 
    {
-      QSettings settings;
+      XX::Settings settings;
       zoomLevel = settings.value("Graph/Zoom", 1.0).toDouble();
    }
 
@@ -139,6 +140,6 @@ void Max::Widget::updateZoom(bool save)
    if (!save)
       return;
 
-   QSettings settings;
+   XX::Settings settings;
    settings.setValue("Graph/Zoom", zoomLevel);
 }

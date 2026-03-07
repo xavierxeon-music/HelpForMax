@@ -5,11 +5,11 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 
-#include "GraphAlgorithm.h"
+#include <XXGraphAlgorithm.h>
 
 Max::Patcher::Patcher()
    : Ref::Structure()
-   , Graph()
+   , XX::Graph()
    , typeBuffer()
    , styleMap()
 {
@@ -101,14 +101,14 @@ void Max::Patcher::analyse()
    const Object::List sources = findAll(sourceTypeList, false);
    const Object::List processors = findAll(processTypeList, false);
 
-   Graph::Algorithm algo(this);
+   XX::Graph::Algorithm algo(this);
    for (Object* source : sources)
    {
-      const Graph::Algorithm::Tree tree = algo.breadthFirst(source);
+      const XX::Graph::Algorithm::Tree tree = algo.breadthFirst(source);
       for (Object* processor : processors)
       {
          const int targetIndex = vertexIndex(processor);
-         const Graph::Algorithm::Path path = tree.compilePath(targetIndex);
+         const XX::Graph::Algorithm::Path path = tree.compilePath(targetIndex);
          const int depth = path.verticies.count();
 
          auto pathIsValid = [&]()

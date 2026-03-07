@@ -61,12 +61,12 @@ void PatchRef::Model::NamedMessage::rebuild()
       QStandardItem* isAttributeItem = new QStandardItem();
       isAttributeItem->setEditable(false);
       isAttributeItem->setCheckable(true);
-      isAttributeItem->setIcon(QIcon(":/DocAttribute.svg"));
+      isAttributeItem->setIcon(QIcon(":/Icons/DocAttribute.svg"));
 
       QStandardItem* isMessageItem = new QStandardItem();
       isMessageItem->setEditable(false);
       isMessageItem->setCheckable(true);
-      isMessageItem->setIcon(QIcon(":/DocMessageNamed.svg"));
+      isMessageItem->setIcon(QIcon(":/Icons/DocMessageNamed.svg"));
 
       QStandardItem* digestItem = new QStandardItem();
       digestItem->setEditable(false);

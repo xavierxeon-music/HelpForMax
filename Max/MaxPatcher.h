@@ -1,15 +1,15 @@
 #ifndef MaxPatcherH
 #define MaxPatcherH
 
-#include "Graph.h"
 #include "RefStructure.h"
+#include <XXGraph.h>
 
 #include "MaxLine.h"
 #include "MaxObject.h"
 
 namespace Max
 {
-   class Patcher : public Ref::Structure, public Graph
+   class Patcher : public Ref::Structure, public XX::Graph
    {
    public:
       Patcher();

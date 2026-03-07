@@ -2,12 +2,12 @@
 
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QSettings>
 #include <QTabBar>
 #include <QTimer>
 
-#include <Logger.h>
-#include <PopulatedMainWindow.h>
+#include <XXLogger.h>
+#include <XXPopulatedMainWindow.h>
+#include <XXSettings.h>
 
 #include "PackageContainer.h"
 #include "PackageInfo.h"
@@ -19,53 +19,51 @@ Patch::Container::Container(QWidget* parent)
    , splitterSizes()
 {
    {
-      QSettings settings;
+      XX::Settings settings;
 
       toolsVisible = settings.value("Patch/Tools", static_cast<int>(ToolVisibility::None)).value<ToolsVisible>();
 
-      const int count = settings.beginReadArray("Patch/Splitter");
-      for (int index = 0; index < count; index++)
+      const QJsonArray splitterWidth = settings.jsonValue("Patch/Splitter").toArray();
+      for (int index = 0; index < splitterWidth.size(); index++)
       {
-         settings.setArrayIndex(index);
-         const int value = settings.value("Width").toInt();
+         const int value = splitterWidth.at(index).toInt();
          splitterSizes.append(value);
       }
-      settings.endArray();
    }
 }
 
 void Patch::Container::createActions()
 {
    //
-   Populated::Abstract::addAction(QIcon(":/PatchLoad.svg"), "Load", "Patch.Load", this, &Container::slotPromptLoadPatch);
+   XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchLoad.svg"), "Load", "Patch.Load", this, &Container::slotPromptLoadPatch);
 
-   QAction* saveAction = Populated::Abstract::addAction(QIcon(":/PatchSave.svg"), "Save", "Patch.Save", this, &Container::slotWriteRef);
+   QAction* saveAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchSave.svg"), "Save", "Patch.Save", this, &Container::slotWriteRef);
    saveAction->setShortcut(QKeySequence::Save);
 
-   QAction* saveAllAction = Populated::Abstract::addAction(QIcon(":/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", this, &Container::slotWriteAllRefs);
+   QAction* saveAllAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchSaveAll.svg"), "Save All", "Patch.SaveAll", this, &Container::slotWriteAllRefs);
    saveAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_S);
 
-   QAction* closeAction = Populated::Abstract::addAction(QIcon(":/PatchClose.svg"), "Close", "Patch.Close", this, &Container::slotClosePatch);
+   QAction* closeAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchClose.svg"), "Close", "Patch.Close", this, &Container::slotClosePatch);
    closeAction->setShortcut(QKeySequence::Close);
 
    //
-   QAction* suggestAction = Populated::Abstract::addAction(QIcon(":/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", this, &Container::slotShowSuggestions);
+   QAction* suggestAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchSuggest.svg"), "Suggestions", "Patch.ShowSuggesions", this, &Container::slotShowSuggestions);
    suggestAction->setCheckable(true);
    suggestAction->setChecked(toolsVisible & ToolVisibility::Suggestions);
    suggestAction->setShortcut(QKeySequence::Find);
 
-   QAction* structureAction = Populated::Abstract::addAction(QIcon(":/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", this, &Container::slotShowStructure);
+   QAction* structureAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/OverviewGeneral.svg"), "Structure", "Patch.ShowStructure", this, &Container::slotShowStructure);
    structureAction->setCheckable(true);
    structureAction->setChecked(toolsVisible & ToolVisibility::Structure);
    structureAction->setShortcut(QKeySequence::Print);
 
-   QAction* openInMaxAction = Populated::Abstract::addAction(QIcon(":/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", this, &Container::slotOpenInMax);
+   QAction* openInMaxAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchOpenInMax.svg"), "Open In Max", "Patch.Max", this, &Container::slotOpenInMax);
    openInMaxAction->setShortcuts(QKeySequence::Italic);
 
-   QAction* showXMLAction = Populated::Abstract::addAction(QIcon(":/PatchOpenRef.svg"), "Open XML", "Patch.XML", this, &Container::slotOpenXML);
+   QAction* showXMLAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchOpenRef.svg"), "Open XML", "Patch.XML", this, &Container::slotOpenXML);
    showXMLAction->setShortcut(QKeySequence::Open);
 
-   QAction* transferAllAction = Populated::Abstract::addAction(QIcon(":/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", this, &Container::slotTranferAllSuggestions);
+   QAction* transferAllAction = XX::Populated::Abstract::addAction(QIcon(":/Icons/PatchTransferAll.svg"), "Use All Suggestions", "Patch.TransferAllSuggestions", this, &Container::slotTranferAllSuggestions);
    //transferAllAction->setShortcut(Qt::ShiftModifier | Qt::ControlModifier | Qt::Key_T);
    transferAllAction->setShortcut(Qt::ControlModifier | Qt::Key_T);
 }
@@ -97,7 +95,7 @@ void Patch::Container::slotShowPatch(const QString& patchFileName)
    Package::Info* info = Package::Container::findOrCreate(patchFileName);
    if (!info)
    {
-      Logger::stream(Qt::red) << "PATCH does not belong to a package" << patchFileName;
+      XX::Logger::stream(Qt::red) << "PATCH does not belong to a package" << patchFileName;
       this->deleteLater();
       return;
    }
@@ -290,15 +288,13 @@ void Patch::Container::toggleVisibility(bool enabled, const ToolVisibility& valu
 
 void Patch::Container::writeSettings()
 {
-   QSettings settings;
+   XX::Settings settings;
 
    settings.setValue("Patch/Tools", static_cast<int>(toolsVisible));
 
-   settings.beginWriteArray("Patch/Splitter");
+   QJsonArray splitterWidth;
    for (int index = 0; index < splitterSizes.count(); index++)
-   {
-      settings.setArrayIndex(index);
-      settings.setValue("Width", splitterSizes.at(index));
-   }
-   settings.endArray();
+      splitterWidth.append(splitterSizes.at(index));
+
+   settings.setJsonValue("Patch/Splitter", splitterWidth);
 }

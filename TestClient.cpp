@@ -6,9 +6,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include <Shared.h>
+#include <XXShared.h>
 
-using HelpForMax = Shared<"HelpForMax">;
+using HelpForMax = XX::Shared<"HelpForMax">;
 
 TestClient::TestClient()
    : QDialog(nullptr)

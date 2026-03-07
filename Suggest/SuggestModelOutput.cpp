@@ -28,7 +28,7 @@ void Suggest::Model::Output::rebuild()
       QStandardItem* activeItem = new QStandardItem();
       activeItem->setEditable(false);
       activeItem->setCheckable(false);
-      activeItem->setIcon(QIcon(":/DocOutput.svg"));
+      activeItem->setIcon(QIcon(":/Icons/DocOutput.svg"));
       activeItem->setCheckState(output.active ? Qt::Checked : Qt::Unchecked);
 
       invisibleRootItem()->appendRow({typeItem, activeItem});

@@ -3,17 +3,17 @@
 
 #include "RefModel.h"
 
-template <CompileTimeString Category>
+template <XX::CompileTimeString Category>
 ListedRefModel<Category>::InstanceMap ListedRefModel<Category>::instanceMap;
 
-template <CompileTimeString Category>
+template <XX::CompileTimeString Category>
 ListedRefModel<Category>::ListedRefModel(QObject* parent, Ref::Structure& structure, const Ref::Structure::PatchPart& part)
    : RefModel(parent, structure, part)
 {
    instanceMap[parent].append(this);
 }
 
-template <CompileTimeString Category>
+template <XX::CompileTimeString Category>
 ListedRefModel<Category>::~ListedRefModel()
 {
    for (InstanceMap::iterator it = instanceMap.begin(); it != instanceMap.end(); it++)
@@ -22,7 +22,7 @@ ListedRefModel<Category>::~ListedRefModel()
    }
 }
 
-template <CompileTimeString Category>
+template <XX::CompileTimeString Category>
 template <typename ModelClass>
 void ListedRefModel<Category>::callOnAllInstances(QObject* parent, void (ModelClass::*function)())
 {

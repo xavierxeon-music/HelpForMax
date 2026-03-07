@@ -13,7 +13,7 @@ void PatchRef::Model::Abstract::updateDigestItem(QStandardItem* digestItem, cons
    if (digest.description.isEmpty())
       digestItem->setIcon(QIcon());
    else
-      digestItem->setIcon(QIcon(":/DocDescription.svg"));
+      digestItem->setIcon(QIcon(":/Icons/DocDescription.svg"));
 }
 
 void PatchRef::Model::Abstract::createBeforeItem(const QModelIndex& index)
