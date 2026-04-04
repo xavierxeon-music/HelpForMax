@@ -130,7 +130,7 @@ int main(int argc, char** argv)
    QApplication::setOrganizationDomain("schweinesystem.ddns.org");
    QApplication::setOrganizationName("SchweineSystem");
 
-   XX::Populated::Abstract::printSettingsLocation();
+   XX::Settings::printSettingsLocation();
 
    QApplication app(argc, argv);
    app.setAttribute(Qt::AA_DontShowIconsInMenus, true);
